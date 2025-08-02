@@ -1,0 +1,58 @@
+[
+    {
+      "banner": "https://res.cloudinary.com/upwork-cloud/image/upload/c_scale,w_1000/v1690383373/catalog/1684212490015363072/diszt1zxtjqnixyjx27f.jpg",
+      "bookName": "Book Name",
+      "author": "Author Name",
+      "category": "Category Name",
+      "audio": "./rain.wav"
+    },
+    {
+      "banner": "https://d1csarkz8obe9u.cloudfront.net/posterpreviews/book-cover-design-template-a05cb2dab05b38c6908380d50b075150_screen.jpg?ts=1637031724",
+      "bookName": "Book Name",
+      "author": "Author Name",
+      "category": "Category Name",
+      "audio": "./rain.wav"
+    },
+    {
+      "banner": "https://d1csarkz8obe9u.cloudfront.net/posterpreviews/mountain-survival-book-cover-template-design-5d7d298dc21cc8bf45e36a3c7caa732e_screen.jpg?ts=1636993242",
+      "bookName": "Book Name",
+      "author": "Author Name",
+      "category": "Category Name",
+      "audio": "./rain.wav"
+    },
+    {
+      "banner": "https://img.freepik.com/premium-vector/abstract-creative-artistic-templates-minimalis-artistic-design-suitable-cover-book-poster_1114474-320.jpg?semt=ais_hybrid&w=740",
+      "bookName": "Book Name",
+      "author": "Author Name",
+      "category": "Category Name",
+      "audio": "./rain.wav"
+    },
+    {
+      "banner": "https://fiverr-res.cloudinary.com/images/t_main1,q_auto,f_auto/gigs/268651902/original/2139c7cd59e1236748803c68fb86e918550874db/be-creating-book-covers.jpg",
+      "bookName": "Book Name",
+      "author": "Author Name",
+      "category": "Category Name",
+      "audio": "./rain.wav"
+    },
+    {
+      "banner": "https://res.cloudinary.com/upwork-cloud/image/upload/c_scale,w_1000/v1690383373/catalog/1684212490015363072/diszt1zxtjqnixyjx27f.jpg",
+      "bookName": "Book Name",
+      "author": "Author Name",
+      "category": "Category Name",
+      "audio": "./rain.wav"
+    },
+    {
+      "banner": "https://res.cloudinary.com/upwork-cloud/image/upload/c_scale,w_1000/v1690383373/catalog/1684212490015363072/diszt1zxtjqnixyjx27f.jpg",
+      "bookName": "Book Name",
+      "author": "Author Name",
+      "category": "Category Name",
+      "audio": "./rain.wav"
+    },
+    {
+      "banner": "https://res.cloudinary.com/upwork-cloud/image/upload/c_scale,w_1000/v1690383373/catalog/1684212490015363072/diszt1zxtjqnixyjx27f.jpg",
+      "bookName": "Book Name",
+      "author": "Author Name",
+      "category": "Category Name",
+      "audio": "./rain.wav"
+    }
+  ]
