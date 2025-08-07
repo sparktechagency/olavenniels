@@ -88,18 +88,6 @@ const SliderImage = () => {
                     }}
                   />
                 </Popconfirm>
-                <Button
-                  type="primary"
-                  icon={<FaEdit />}
-                  style={{
-                    backgroundColor: 'var(--primary-color)',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '50%',
-                    cursor: 'pointer',
-                    padding: '5px',
-                  }}
-                />
               </div>
             </div>
           </div>
