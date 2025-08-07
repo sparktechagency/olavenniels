@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Button } from 'antd';
 import { FaEye, FaEdit, FaTrash } from 'react-icons/fa';
 
-const ActionButtons = React.memo(({ onView, onEdit, onDelete }) => (
+const ActionButtons = React.memo(({ onView, onEdit, onDelete, e_book }) => (
     <motion.div
         className='flex items-center gap-2 mt-3'
         initial={{ opacity: 0, y: 20 }}
@@ -27,6 +27,7 @@ const ActionButtons = React.memo(({ onView, onEdit, onDelete }) => (
             icon={<FaTrash className='text-xs' />}
             onClick={onDelete}
             shape='circle'
+            disabled={e_book}
         />
     </motion.div>
 ));

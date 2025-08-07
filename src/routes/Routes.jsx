@@ -14,6 +14,9 @@ import AllUser from "../features/user/ui/AllUser";
 import SliderImage from "../features/home-slides/SliderImage";
 import AudioBook from "../features/audio-book/AudioBook";
 import Ebook from "../features/audio-book/Ebook";
+import BothFormatBook from "../features/audio-book/BothFormatBook";
+import NotificationPage from "../features/notifications/NotificationPage";
+import Contact from "../features/setting/Contact";
 export const Routes = createBrowserRouter([
   {
     path: "/",
@@ -44,6 +47,10 @@ export const Routes = createBrowserRouter([
         element: <Ebook />,
       },
       {
+        path: "/both-format-book",
+        element: <BothFormatBook />,
+      },
+      {
         path: "/terms",
         element: <Terms />,
       },
@@ -56,8 +63,32 @@ export const Routes = createBrowserRouter([
         element: <Profile />,
       },
       {
+        path: "/make-admin",
+        element: <Profile />,
+      },
+      {
+        path: "/notifications",
+        element: <NotificationPage />,
+      },
+      {
+        path: "/dashboard/Settings/ContactUs",
+        element: <Contact />,
+      },
+      {
         path: "/dashboard/Settings/faq",
         element: <FAQ />,
+      },
+      {
+        path: "/dashboard/Settings/Terms&Condition",
+        element: <Terms />,
+      },
+      {
+        path: "/dashboard/Settings/PrivacyPolicy",
+        element: <PrivacyPolicy />,
+      },
+      {
+        path: "/dashboard/Settings/profile",
+        element: <Profile />,
       },
     ],
   },

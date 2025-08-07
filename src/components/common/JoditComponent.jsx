@@ -14,7 +14,7 @@ const JoditComponent = ({ content, setContent }) => {
     () => ({
       readonly: false,
       toolbarSticky: false,
-      minHeight: 500,
+      minHeight: 600,
       buttons: [
         "bold",
         "italic",
@@ -65,7 +65,7 @@ const JoditComponent = ({ content, setContent }) => {
   );
 
   if (!isReady) {
-    return <div className="h-40 bg-gray-100 rounded animate-pulse"></div>;
+    return <div className="h-60 bg-gray-100 rounded animate-pulse"></div>;
   }
 
   return (

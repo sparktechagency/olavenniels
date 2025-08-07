@@ -25,7 +25,7 @@ const Profile = () => {
       ? imageUrl(profileData.data.profile_image)
       : 'https://placehold.co/400';
   return (
-    <>
+    <div className='bg-[var(--primary-color)] rounded p-4'>
       <div className="max-w-[700px] mx-auto  p-4 rounded-md">
         <div className="w-full flex items-center justify-center">
           <div
@@ -62,20 +62,20 @@ const Profile = () => {
             />
           </div>
         </div>
-        <p className="text-2xl text-center text-black mt-2">
+        <p className="text-2xl text-center text-white mt-2">
           {profileData?.data?.name || 'User Name'}
         </p>
       </div>
 
       {/* Tabs Section */}
-      <div className="mx-auto p-1 border rounded-sm !w-fit flex items-center justify-center my-3">
+      <div className="mx-auto p-1 border border-white rounded-sm !w-fit flex items-center justify-center my-3">
         {Tabs.map((item) => (
           <Button
             key={item}
             style={{ width: '200px', justifyContent: 'center' }}
             className={`${item === tab
-                ? '!bg-[var(--primary-color)] !text-white !border-0 !rounded-sm'
-                : '!border-0 !rounded-none !text-black !border-black !bg-transparent'
+                ? '!bg-[var(--secondary-color)] !text-white !border-0 !rounded-sm'
+                : '!border-0 !rounded-none !text-white !border-white !bg-transparent'
               }`}
             onClick={() => setTab(item)}
           >
@@ -84,7 +84,7 @@ const Profile = () => {
         ))}
       </div>
 
-      <div className="max-w-[700px] mx-auto bg-[var(--black-200)] p-4 rounded-md">
+      <div className="max-w-lg mx-auto bg-[var(--black-200)] p-4 rounded-md">
         {tab === 'Edit Profile' ? (
           <ProfileEdit
             image={image}
@@ -95,7 +95,7 @@ const Profile = () => {
           <ChangePassword />
         )}
       </div>
-    </>
+    </div>
   );
 };
 

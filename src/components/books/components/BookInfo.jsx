@@ -16,7 +16,8 @@ const BookInfo = React.memo(({
     onPlayClick,
     onView,
     onEdit,
-    onDelete
+    onDelete,
+    e_book
 }) => (
     <motion.div
         key="book-info"
@@ -76,6 +77,7 @@ const BookInfo = React.memo(({
             onView={onView}
             onEdit={onEdit}
             onDelete={onDelete}
+            e_book={e_book}
         />
     </motion.div>
 ));

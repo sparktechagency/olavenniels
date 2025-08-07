@@ -1,10 +1,10 @@
 import React from "react";
 import { MdDashboard, MdOutlineSupport } from "react-icons/md";
-import { FaCog, FaList } from "react-icons/fa";
+import { FaCog } from "react-icons/fa";
 import { FaRegCircleUser } from "react-icons/fa6";
 import { BiCategory } from "react-icons/bi";
-import { RiAdminFill } from "react-icons/ri";
 import { GiBookshelf } from "react-icons/gi";
+import { RiAdminFill } from "react-icons/ri";
 
 export const SidebarRoutes = [
   {
@@ -55,20 +55,31 @@ export const SidebarRoutes = [
     link: "/banner-management",
   },
   {
+    key: "make-admin",
+    label: "Make Admin",
+    icon: RiAdminFill,
+    link: "/make-admin",
+  },
+  {
     key: "settings",
     label: "Settings",
     icon: FaCog,
     link: "/dashboard/Settings/profile",
     children: [
       {
-        key: "terms",
-        label: "Terms & Condition",
-        link: "/dashboard/Settings/Terms&Condition",
+        key: "contact",
+        label: "Contact Us",
+        link: "/dashboard/Settings/ContactUs",
       },
       {
         key: "privacy",
         label: "Privacy Policy",
         link: "/dashboard/Settings/PrivacyPolicy",
+      },
+      {
+        key: "terms",
+        label: "Terms & Condition",
+        link: "/dashboard/Settings/Terms&Condition",
       },
       {
         key: "faq",

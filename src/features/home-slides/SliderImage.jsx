@@ -1,6 +1,7 @@
 import React from 'react';
-import { Button, Popconfirm, Upload, message } from 'antd';
+import { Button, Popconfirm, Upload } from 'antd';
 import { FaEdit, FaTrash, FaUpload } from 'react-icons/fa';
+import toast from 'react-hot-toast';
 
 const SliderImage = () => {
   const [slides, setSlides] = React.useState([
@@ -16,16 +17,16 @@ const SliderImage = () => {
         Math.random() * 100
       )}`;
       setSlides((prev) => [...prev, newImage]);
-      message.success('Image added successfully');
+      toast.success('Image added successfully');
     } catch (error) {
-      message.error('Failed to add image');
+      toast.error('Failed to add image');
       console.error('Error:', error);
     }
   };
 
   const handleDelete = (url) => {
     setSlides(slides.filter((slide) => slide !== url));
-    message.success('Image deleted successfully');
+    toast.success('Image deleted successfully');
   };
 
   return (

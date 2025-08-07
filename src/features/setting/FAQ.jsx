@@ -88,12 +88,12 @@ function FrequentlyAskedQuestions() {
   return (
     <div className="w-full">
       <div className="flex items-center justify-between !w-full mb-12">
-        <div className="w-full p-2 bg-white flex items-center justify-between pr-12 shadow-sm rounded-lg">
-          <h1 className="text-2xl font-bold">FAQ</h1>
+        <div className="w-full p-2  flex items-center justify-between pr-12 shadow-sm rounded-lg">
+          <h1 className="text-2xl text-white font-bold">FAQ</h1>
           <Button
             style={{
               width: '200px',
-              backgroundColor: 'var(--primary-color)',
+              backgroundColor: 'var(--secondary-color)',
               color: 'white',
             }}
             onClick={handleAddClick}
@@ -174,7 +174,7 @@ function FrequentlyAskedQuestions() {
           <Form.Item>
             <div className="flex items-center justify-end">
               <Button
-                className="!bg-[var(--primary-color)] !text-white"
+                className="!bg-[var(--secondary-color)] !text-white"
                 htmlType="submit"
               >
                 {editingIndex !== null ? 'Update FAQ' : 'Save FAQ'}

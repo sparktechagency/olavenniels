@@ -1,9 +1,13 @@
 import React from "react";
-import { Table, Button, Space, message, Input, Tag, ConfigProvider } from "antd";
+import { Table, Button, Space, message, Input, Tag, ConfigProvider, Modal } from "antd";
 import { LockOutlined, UnlockOutlined } from "@ant-design/icons";
 import { FaEye } from "react-icons/fa";
+import UserDetails from "./UserDetails";
+import toast from "react-hot-toast";
 
 function AllUser() {
+  const [showUserDetails, setShowUserDetails] = React.useState(false)
+  const [selectedItem, setSelectedItem] = React.useState(null)
   const [userData, setUserData] = React.useState([
     {
       key: "1",
@@ -108,13 +112,14 @@ function AllUser() {
         : user
     );
     setUserData(updatedData);
-    message.success(
+    toast.success(
       `User ${record.name} is now ${record.isBlocked ? "unblocked" : "blocked"}`
     );
   };
 
   const handleViewUser = (record) => {
-    console.log(record)
+    setShowUserDetails(true)
+    setSelectedItem(record)
   };
 
   const handleSearch = (value) => {
@@ -161,6 +166,16 @@ function AllUser() {
           }}
           dataSource={userData}
         /></ConfigProvider>
+      <Modal
+        open={showUserDetails}
+        onCancel={() => setShowUserDetails(false)}
+        centered
+        footer={null}
+        width={600}
+        destroyOnClose
+      >
+        <UserDetails selectedItem={selectedItem} />
+      </Modal>
     </div>
   );
 }

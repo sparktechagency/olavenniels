@@ -6,12 +6,12 @@ function Terms() {
   const [content, setContent] = React.useState('');
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4">Terms & Condition</h1>
+      <h1 className="text-2xl text-white font-bold mb-4">Terms & Condition</h1>
       <JoditComponent content={content} setContent={setContent} />
       <Button
         style={{
           width: '200px',
-          backgroundColor: 'var(--primary-color)',
+          backgroundColor: 'var(--secondary-color)',
           color: 'white',
           marginTop: '1rem',
         }}

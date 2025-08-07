@@ -4,7 +4,7 @@ import BookImage from "./components/BookImage";
 import BookInfo from "./components/BookInfo";
 import AudioControls from "./components/AudioControls";
 
-function BookCard({ item, onView, onEdit, onDelete }) {
+function BookCard({ item, onView, onEdit, onDelete ,e_book }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [showAudio, setShowAudio] = useState(false);
   const audioRef = useRef(null);
@@ -34,12 +34,18 @@ function BookCard({ item, onView, onEdit, onDelete }) {
     setIsPlaying(false);
   }, []);
 
-  const handleView = useCallback(() => {}, []);
+  const handleView = useCallback(() => {
+    onView(item);
+  }, []);
 
-  const handleEdit = useCallback(() => {}, []);
+  const handleEdit = useCallback(() => {
+    onEdit(item);
+  }, []);
 
-  const handleDelete = useCallback(() => {}, []);
-console.log(item?.banner)
+  const handleDelete = useCallback(() => {
+    onDelete(item);
+  }, []);
+
   return (
     <div className="p-4 bg-[var(--primary-color)] rounded border border-gray-200/40 shadow-md">
       <BookImage banner={item?.banner} bookName={item?.bookName} />
@@ -63,6 +69,7 @@ console.log(item?.banner)
               onView={handleView}
               onEdit={handleEdit}
               onDelete={handleDelete}
+              e_book={e_book}
             />
           )}
         </AnimatePresence>

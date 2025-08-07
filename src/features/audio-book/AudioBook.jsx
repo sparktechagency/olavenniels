@@ -1,25 +1,32 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import BookCard from "../../components/books/BookCard";
-import { Select, Input, Button, ConfigProvider, Modal } from "antd";
-import BookCreate from "../../components/books/components/BookCreate";
+import { Select, Input, ConfigProvider, Modal } from "antd";
+import AudioBookCreate from "../../components/books/components/AudioBookCreate";
+import BookInfoModal from "../../components/books/components/BookInfoModal";
 
 function AudioBook() {
   const [data, setData] = useState([]);
-  const [showModal, setShowModal] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [showBookDetails, setShowBookDetails] = useState(false)
+  const [selectedItem, setSelectedItem] = useState(null)
   useEffect(() => {
     fetch("/dummy.json")
       .then((res) => res.json())
       .then((data) => setData(data));
   }, []);
-  const handleView = (item) => {
-    console.log(item);
-  };
-  const handleEdit = (item) => {
-    console.log(item);
-  };
-  const handleDelete = (item) => {
-    console.log(item);
-  };
+
+  const handleView = useCallback((item) => {
+    setSelectedItem(item)
+    setShowBookDetails(true)
+  }, [])
+  const handleEdit = useCallback((item) => {
+    setSelectedItem(item)
+    setShowBookDetails(true)
+  }, [])
+  const handleDelete = useCallback((item) => {
+    setSelectedItem(item)
+    setShowBookDetails(true)
+  }, [])
   return (
     <div>
       <div className="flex items-center justify-between">
@@ -71,8 +78,22 @@ function AudioBook() {
         centered
         footer={null}
         width={800}
+        closeIcon={false}
+        maskClosable={false}
+        destroyOnClose
       >
-        <BookCreate />
+        <AudioBookCreate setShowModal={setShowModal} />
+      </Modal>
+      <Modal
+        open={showBookDetails}
+        onCancel={() => setShowBookDetails(false)}
+        centered
+        footer={null}
+        width={600}
+        maskClosable={false}
+        destroyOnClose
+      >
+        <BookInfoModal item={selectedItem} />
       </Modal>
     </div>
   );

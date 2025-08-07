@@ -1,14 +1,16 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Form, Input, Select, Button, Tabs } from "antd";
-import { motion } from "framer-motion";
 import { CloseOutlined } from "@ant-design/icons";
-
-function BookCreate({ setShowModal }) {
+import { motion } from "framer-motion";
+function BothFormateBookCreate({ setShowModal }) {
   const [preview, setPreview] = useState(null);
   const [image, setImage] = useState(null);
+  const [audioFile, setAudioFile] = useState(null);
+  const [audioUrl, setAudioUrl] = useState(null);
+  const [form] = Form.useForm();
+  const audioInputRef = useRef(null);
   const [pdfFile, setPdfFile] = useState(null);
   const [pdfUrl, setPdfUrl] = useState(null);
-  const [form] = Form.useForm();
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -19,6 +21,30 @@ function BookCreate({ setShowModal }) {
         setPreview(reader.result);
       };
       reader.readAsDataURL(file);
+    }
+  };
+
+  const handleAudioUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.type === "audio/mpeg") {
+        setAudioFile(file);
+        setAudioUrl(URL.createObjectURL(file));
+        form.setFields([
+          {
+            name: "audio",
+            errors: [],
+          },
+        ]);
+      } else {
+        form.setFields([
+          {
+            name: "audio",
+            errors: ["Please upload a valid audio file"],
+          },
+        ]);
+        e.target.value = "";
+      }
     }
   };
 
@@ -51,7 +77,7 @@ function BookCreate({ setShowModal }) {
   const onFinish = (values) => {
     const data = {
       ...values,
-      pdf: pdfFile,
+      audio: audioFile,
       image: image,
     };
     console.log("Received values of form:", data);
@@ -85,7 +111,10 @@ function BookCreate({ setShowModal }) {
             )}
             {preview && (
               <button
-                onClick={() => setPreview(null)}
+                onClick={() => {
+                  setImage(null);
+                  setPreview(null);
+                }}
                 className="absolute top-2 right-2 w-6 h-6 flex items-center justify-center cursor-pointer bg-white rounded-full shadow p-1"
               >
                 <CloseOutlined className="!text-red-500" />
@@ -93,7 +122,7 @@ function BookCreate({ setShowModal }) {
             )}
           </div>
           <Button
-            className="!bg-[var(--secondary-color)] !mt-2 hover:!bg-[var(--secondary-color)] border-none !text-white"
+            className="!bg-[var(--secondary-color)] !mt-3 hover:!bg-[var(--secondary-color)] border-none !text-white"
             onClick={() => setShowModal(false)}
           >
             Close
@@ -137,7 +166,6 @@ function BookCreate({ setShowModal }) {
                   <Select.Option value="finished">Finished</Select.Option>
                 </Select>
               </Form.Item>
-
               <Form.Item
                 label="Add PDF File"
                 name="pdf"
@@ -169,7 +197,6 @@ function BookCreate({ setShowModal }) {
                   <span className="text-blue-600 text-sm">Browse</span>
                 </div>
               </Form.Item>
-
               {pdfUrl && (
                 <div className="border border-gray-300 rounded mt-2 relative">
                   <iframe
@@ -190,14 +217,49 @@ function BookCreate({ setShowModal }) {
               )}
 
               <Form.Item
-                label="Total Page"
-                name="totalPage"
+                label="Add Audio File"
+                name="audio"
                 rules={[{ required: true }]}
               >
-                <Input type="number" placeholder="Type here" />
+                <input
+                  type="file"
+                  accept="audio/mpeg"
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                  onChange={handleAudioUpload}
+                  ref={audioInputRef} // Add this ref
+                />
+
+                {/* Styled fake input area */}
+                <div className="flex items-center justify-between border px-4 py-2 rounded bg-white">
+                  <span className="text-gray-600">
+                    {audioFile?.name || "Upload book audio"}
+                  </span>
+                  <span className="text-blue-600 text-sm">Browse</span>
+                </div>
               </Form.Item>
 
-              <Form.Item>
+              {audioUrl && (
+                <div className="border border-gray-300 rounded mt-2 relative">
+                  <audio
+                    src={audioUrl}
+                    controls
+                    className="w-full h-[100px] rounded"
+                  ></audio>
+                  <button
+                    onClick={() => {
+                      setAudioFile(null);
+                      setAudioUrl(null);
+                      if (audioInputRef.current) {
+                        audioInputRef.current.value = "";
+                      }
+                    }}
+                    className="absolute top-2 right-2 w-6 h-6 flex items-center justify-center cursor-pointer bg-white rounded-full shadow"
+                  >
+                    <CloseOutlined className="!text-red-500" />
+                  </button>
+                </div>
+              )}
+              <Form.Item className="!mt-3">
                 <Button
                   className="!bg-[var(--secondary-color)] !mr-2 hover:!bg-[var(--secondary-color)] border-none !text-white"
                   onClick={() => setShowModal(false)}
@@ -220,4 +282,4 @@ function BookCreate({ setShowModal }) {
   );
 }
 
-export default BookCreate;
+export default BothFormateBookCreate;

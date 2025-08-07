@@ -34,11 +34,11 @@ const ChangePassword = () => {
     >
       <Form.Item
         name="oldPassword"
-        label={<span className="text-black">Old Password</span>}
+        label={<span className="text-white">Old Password</span>}
         rules={[
           {
             required: true,
-            message: "name is required",
+            message: "Old Password is required",
           },
         ]}
       >
@@ -59,11 +59,11 @@ const ChangePassword = () => {
 
       <Form.Item
         name="newPassword"
-        label={<span className="text-black">New Password</span>}
+        label={<span className="text-white">New Password</span>}
         rules={[
           {
             required: true,
-            message: "name is required",
+            message: "New Password is required",
           },
         ]}
       >
@@ -84,11 +84,11 @@ const ChangePassword = () => {
 
       <Form.Item
         name="confirmPassword"
-        label={<span className="text-black">Confirm Password</span>}
+        label={<span className="text-white">Confirm Password</span>}
         rules={[
           {
             required: true,
-            message: "phone number is required",
+            message: "Confirm Password is required",
           },
         ]}
       >
@@ -112,7 +112,7 @@ const ChangePassword = () => {
         htmlType="submit"
         disabled={isNewPassChange}
         style={{
-          backgroundColor: "var(--primary-color)",
+          backgroundColor: "var(--secondary-color)",
           color: "#fff",
           height: 40,
         }}

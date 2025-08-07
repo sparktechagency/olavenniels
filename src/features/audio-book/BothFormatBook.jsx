@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import BookCard from "../../components/books/BookCard";
-import { ConfigProvider, Input, Modal, Select } from "antd";
-import BookCreate from "../../components/books/components/BookCreate";
+import { Select, Input, ConfigProvider, Modal } from "antd";
+import BothFormateBookCreate from "../../components/books/components/BothFormateBookCreate";
 import BookInfoModal from "../../components/books/components/BookInfoModal";
 
-function Ebook() {
+function BothFormatBook() {
   const [data, setData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [showBookDetails, setShowBookDetails] = useState(false)
   const [selectedItem, setSelectedItem] = useState(null)
 
   useEffect(() => {
-    fetch("/dummy2.json")
+    fetch("/dummy3.json")
       .then((res) => res.json())
       .then((data) => setData(data));
   }, []);
@@ -28,7 +28,7 @@ function Ebook() {
   return (
     <div>
       <div className="flex items-center justify-between">
-        <h2 className="titleStyle">E - Book</h2>
+        <h2 className="titleStyle">Both Format Book</h2>
         <div className="flex items-center gap-2">
           <ConfigProvider
             theme={{
@@ -70,16 +70,17 @@ function Ebook() {
           />
         ))}
       </div>
-
       <Modal
         open={showModal}
         onCancel={() => setShowModal(false)}
         centered
         footer={null}
         width={800}
+        destroyOnClose
       >
-        <BookCreate setShowModal={setShowModal} />
+        <BothFormateBookCreate setShowModal={setShowModal} />
       </Modal>
+
       <Modal
         open={showBookDetails}
         onCancel={() => setShowBookDetails(false)}
@@ -95,4 +96,4 @@ function Ebook() {
   );
 }
 
-export default Ebook;
+export default BothFormatBook;
