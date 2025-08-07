@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import JoditComponent from '../../components/common/JoditComponent';
 import { Button } from 'antd';
 
 function PrivacyPolicy() {
-  const [content, setContent] = React.useState('');
+  const [content, setContent] = useState('');
   return (
     <div>
       <h1 className="text-2xl text-white font-bold mb-4">Privacy Policy</h1>

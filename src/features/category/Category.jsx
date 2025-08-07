@@ -1,11 +1,11 @@
-import React, { useCallback } from "react";
+import React, {useState } from "react";
 import { Table, Button, Space, Input, ConfigProvider, Popconfirm } from "antd";
 import { FaEdit, FaPlus, FaTrash } from "react-icons/fa";
 import toast from "react-hot-toast";
 import CategoryCreateModal from "./components/CategoryCreateModal";
 
 function Category() {
-  const [categoryData, setCategoryData] = React.useState([
+  const [categoryData, setCategoryData] = useState([
     {
       key: "1",
       name: "John Doe",
@@ -26,8 +26,8 @@ function Category() {
     },
   ]);
 
-  const [isModalOpen, setIsModalOpen] = React.useState(false);
-  const [data, setData] = React.useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [data, setData] = useState(null);
 
   const columns = [
     {

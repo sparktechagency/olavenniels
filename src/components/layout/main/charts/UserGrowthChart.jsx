@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   BarChart,
   Bar,
@@ -26,7 +26,7 @@ const months = [
 ];
 
 function UserGrowthChart() {
-  const [year, setYear] = React.useState('2025');
+  const [year, setYear] = useState('2025');
   const handleSelectChange = (value) => {
     setYear(value);
   };

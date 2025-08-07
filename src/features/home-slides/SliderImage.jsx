@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Popconfirm, Upload } from 'antd';
 import { FaEdit, FaTrash, FaUpload } from 'react-icons/fa';
 import toast from 'react-hot-toast';
 
 const SliderImage = () => {
-  const [slides, setSlides] = React.useState([
+  const [slides, setSlides] = useState([
     'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&auto=format',
     'https://images.unsplash.com/photo-1481349518771-20055b2a7b24?w=800&auto=format',
     'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&auto=format',

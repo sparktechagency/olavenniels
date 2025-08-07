@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Table, Button, Space, message, Input, Tag, ConfigProvider, Modal } from "antd";
 import { LockOutlined, UnlockOutlined } from "@ant-design/icons";
 import { FaEye } from "react-icons/fa";
@@ -6,9 +6,9 @@ import UserDetails from "./UserDetails";
 import toast from "react-hot-toast";
 
 function AllUser() {
-  const [showUserDetails, setShowUserDetails] = React.useState(false)
-  const [selectedItem, setSelectedItem] = React.useState(null)
-  const [userData, setUserData] = React.useState([
+  const [showUserDetails, setShowUserDetails] = useState(false)
+  const [selectedItem, setSelectedItem] = useState(null)
+  const [userData, setUserData] = useState([
     {
       key: "1",
       name: "John Doe",

@@ -17,6 +17,7 @@ import Ebook from "../features/audio-book/Ebook";
 import BothFormatBook from "../features/audio-book/BothFormatBook";
 import NotificationPage from "../features/notifications/NotificationPage";
 import Contact from "../features/setting/Contact";
+import MakeAdmin from "../features/user/ui/MakeAdmin";
 export const Routes = createBrowserRouter([
   {
     path: "/",
@@ -64,7 +65,7 @@ export const Routes = createBrowserRouter([
       },
       {
         path: "/make-admin",
-        element: <Profile />,
+        element: <MakeAdmin />,
       },
       {
         path: "/notifications",
