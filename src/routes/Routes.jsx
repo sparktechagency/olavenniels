@@ -18,6 +18,7 @@ import BothFormatBook from "../features/audio-book/BothFormatBook";
 import NotificationPage from "../features/notifications/NotificationPage";
 import Contact from "../features/setting/Contact";
 import MakeAdmin from "../features/user/ui/MakeAdmin";
+import SubscriptionManagement from "../features/subscription/SubscriptionManagement";
 export const Routes = createBrowserRouter([
   {
     path: "/",
@@ -50,6 +51,10 @@ export const Routes = createBrowserRouter([
       {
         path: "/both-format-book",
         element: <BothFormatBook />,
+      },
+      {
+        path: "/subscription-management",
+        element: <SubscriptionManagement />,
       },
       {
         path: "/terms",
