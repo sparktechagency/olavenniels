@@ -19,6 +19,7 @@ import NotificationPage from "../features/notifications/NotificationPage";
 import Contact from "../features/setting/Contact";
 import MakeAdmin from "../features/user/ui/MakeAdmin";
 import SubscriptionManagement from "../features/subscription/SubscriptionManagement";
+import CongratulationPage from "../features/auth/CongratulationPage";
 export const Routes = createBrowserRouter([
   {
     path: "/",
@@ -97,6 +98,10 @@ export const Routes = createBrowserRouter([
         element: <Profile />,
       },
     ],
+  },
+  {
+    path: "/auth/congratulation",
+    element: <CongratulationPage />,
   },
   {
     path: "/auth/login",

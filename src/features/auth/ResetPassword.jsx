@@ -25,7 +25,7 @@ const ResetPassword = () => {
         confirmPassword: values?.confirmPassword,
       };
       console.log(data);
-      route('/auth/login');
+      route('/auth/congratulation');
       // const res = await resetPassword({ data }).unwrap();
       // if (res?.success) {
       //   toast.success('Password reset successfully');
@@ -51,7 +51,7 @@ const ResetPassword = () => {
             Reset Password
           </Title>
           <Text type="secondary">
-            Enter your email address to reset your password
+            Your password must be at least 8-10 characters long.
           </Text>
         </div>
         <Form requiredMark={false} layout="vertical" onFinish={onFinish}>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Input, Button, Card } from 'antd';
+import { Form, Input, Button, Card, Checkbox } from 'antd';
 import 'antd/dist/reset.css';
 import { Link } from 'react-router-dom';
 import authA1 from '../../assets/auth-assets.png';
@@ -99,6 +99,17 @@ const Login = () => {
           </Form.Item>
 
           <div className="flex items-center justify-between">
+            <Form.Item
+              name="remember"
+              valuePropName="checked"
+              style={{
+                marginBottom: 10,
+              }}
+            >
+              <Checkbox>Remember me</Checkbox>
+            </Form.Item>
+
+
             <Link
               to="/auth/forgot-password"
               className="!text-[var(--primary-color)] hover:!underline"

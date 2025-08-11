@@ -8,25 +8,12 @@ const toast = {
 };
 
 function SubscriptionManagement() {
-  const initialPlans = {
-    bronze: {
-      id: "bronze",
-      name: "bronze",
-      displayName: "Bronze Plan",
-      price: "2.99",
-      period: "month",
-      features: [
-        { id: 1, text: "Priority listing" },
-        { id: 2, text: "Customer messaging" },
-        { id: 3, text: "Basic analytics" },
-        { id: 4, text: "Email support" },
-      ],
-    },
-    silver: {
-      id: "silver",
-      name: "silver",
-      displayName: "Silver Plan",
-      price: "24.99",
+  const initialPlan = {
+    premium: {
+      id: "premium",
+      name: "premium",
+      displayName: "Premium Plan",
+      price: "8.99",
       period: "month",
       features: [
         { id: 1, text: "Priority listing" },
@@ -34,27 +21,12 @@ function SubscriptionManagement() {
         { id: 3, text: "Advanced analytics" },
         { id: 4, text: "Premium support" },
         { id: 5, text: "Unlimited listings" },
-      ],
-    },
-    gold: {
-      id: "gold",
-      name: "gold",
-      displayName: "Gold Plan",
-      price: "232.99",
-      period: "year",
-      features: [
-        { id: 1, text: "Priority listing" },
-        { id: 2, text: "Customer messaging" },
-        { id: 3, text: "Advanced analytics" },
-        { id: 4, text: "Premium support" },
-        { id: 5, text: "Unlimited listings" },
-        { id: 6, text: "Dedicated account manager" },
       ],
     },
   };
 
-  const [selectedPlan, setSelectedPlan] = useState("bronze");
-  const [plans, setPlans] = useState(initialPlans);
+  const [selectedPlan, setSelectedPlan] = useState("premium");
+  const [plans, setPlans] = useState(initialPlan);
 
   // Modals state
   const [isPriceModalOpen, setIsPriceModalOpen] = useState(false);
@@ -164,92 +136,66 @@ function SubscriptionManagement() {
           Subscription Management
         </h1>
         <p className="text-white mt-2">
-          Manage your subscription plans, pricing, and features
+          Manage your subscription plan, pricing, and features
         </p>
       </div>
 
-      {/* Plan Tabs */}
-      <div className="w-full">
-        <div className="grid grid-cols-3 mb-8 border rounded-md overflow-hidden">
-          {Object.keys(plans).map((planKey) => (
-            <button
-              key={planKey}
-              onClick={() => setSelectedPlan(planKey)}
-              className={`py-3 px-4 text-center transition-colors ${
-                selectedPlan === planKey
-                  ? "bg-[var(--secondary-color)] !text-white"
-                  : "bg-white hover:bg-gray-50"
-              } cursor-pointer`}
-            >
-              {planKey.charAt(0).toUpperCase() + planKey.slice(1)}
-            </button>
-          ))}
-        </div>
-
-        {/* Plan Content */}
-        {Object.keys(plans).map((planKey) => (
-          <div
-            key={planKey}
-            className={`mt-0 ${selectedPlan !== planKey ? "hidden" : ""}`}
-          >
-            <div className="border-2 border-white rounded-lg shadow-sm">
-              <div className="p-6 border-b">
-                <div>
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <h2 className="text-2xl text-white font-bold">
-                        {plans[planKey].displayName}
-                      </h2>
-                      <p className="text-white">
-                        Subscription details and features
-                      </p>
-                    </div>
-                    <button
-                      onClick={handleOpenPriceModal}
-                      className="bg-[var(--secondary-color)] hover:bg-[var(--secondary-color)] cursor-pointer !text-white px-4 py-2 rounded-md flex items-center"
-                    >
-                      <Pencil className="mr-2 h-4 w-4" />
-                      Update Price
-                    </button>
-                  </div>
-                  <div className="mb-6">
-                    <span className="text-white text-4xl font-bold">
-                      $ {plans[planKey].price}
-                    </span>
-                    <span className="text-white ml-1">
-                      /{plans[planKey].period}
-                    </span>
-                  </div>
-                </div>
+      {/* Plan Content */}
+      <div className="border-2 border-white rounded-lg shadow-sm">
+        <div className="p-6 border-b">
+          <div>
+            <div className="flex justify-between items-center">
+              <div>
+                <h2 className="text-2xl text-white font-bold">
+                  {plans.premium.displayName}
+                </h2>
+                <p className="text-white">
+                  Subscription details and features
+                </p>
               </div>
-              <div className="p-6">
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <h3 className="text-2xl font-bold text-white">Features</h3>
-                    <button
-                      onClick={handleOpenFeatureModal}
-                      className="border bg-[var(--secondary-color)] !text-white border-[var(--secondary-color)] cursor-pointer hover:bg-[var(--secondary-color)] hover:!text-white px-4 py-2 rounded-md flex items-center"
-                    >
-                      <Pencil className="mr-2 h-4 w-4" />
-                      Manage Features
-                    </button>
-                  </div>
-
-                  <ul className="space-y-3 mt-4">
-                    {plans[planKey].features.map((feature) => (
-                      <li key={feature.id} className="flex items-center gap-2">
-                        <div className="flex-shrink-0 h-5 w-5 rounded-full bg-[var(--secondary-color)] flex items-center justify-center">
-                          <Check className="h-3 w-3 text-white" />
-                        </div>
-                        <span className="text-white">{feature.text}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
+              <button
+                onClick={handleOpenPriceModal}
+                className="bg-[var(--secondary-color)] hover:bg-[var(--secondary-color)] cursor-pointer !text-white px-4 py-2 rounded-md flex items-center"
+              >
+                <Pencil className="mr-2 h-4 w-4" />
+                Update Price
+              </button>
+            </div>
+            <div className="mb-6">
+              <span className="text-white text-4xl font-bold">
+                $ {plans.premium.price}
+              </span>
+              <span className="text-white ml-1">
+                /{plans.premium.period}
+              </span>
             </div>
           </div>
-        ))}
+        </div>
+        <div className="p-6">
+          <div className="space-y-2">
+            <div className="flex justify-between items-center">
+              <h3 className="text-2xl font-bold text-white">Features</h3>
+              <button
+                onClick={handleOpenFeatureModal}
+                className="border bg-[var(--secondary-color)] !text-white border-[var(--secondary-color)] cursor-pointer hover:bg-[var(--secondary-color)] hover:!text-white px-4 py-2 rounded-md flex items-center"
+              >
+                <Pencil className="mr-2 h-4 w-4" />
+                Manage Features
+              </button>
+            </div>
+
+            <ul className="space-y-3 mt-4">
+              {plans.premium.features.map((feature) => (
+                <li key={feature.id} className="flex items-center gap-2">
+                  <div className="flex-shrink-0 h-5 w-5 rounded-full bg-[var(--secondary-color)] flex items-center justify-center">
+                    <Check className="h-3 w-3 text-white" />
+                  </div>
+                  <span className="text-white">{feature.text}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
       </div>
 
       {/* Price Update Modal */}
@@ -259,31 +205,11 @@ function SubscriptionManagement() {
             <div className="mb-4">
               <h2 className="text-xl font-bold">Update Subscription Price</h2>
               <p className="text-gray-600">
-                Update the price and billing period for the{" "}
-                {plans[selectedPlan]?.displayName}.
+                Update the price and billing period for the Premium Plan.
               </p>
             </div>
 
             <div className="space-y-4 py-4">
-              <div className="space-y-2">
-                <label
-                  htmlFor="plan-type"
-                  className="block text-sm font-medium"
-                >
-                  Plan Type
-                </label>
-                <select
-                  id="plan-type"
-                  value={selectedPlan}
-                  onChange={(e) => setSelectedPlan(e.target.value)}
-                  className="w-full border rounded-md p-2"
-                >
-                  <option value="bronze">Bronze Plan</option>
-                  <option value="silver">Silver Plan</option>
-                  <option value="gold">Gold Plan</option>
-                </select>
-              </div>
-
               <div className="space-y-2">
                 <label htmlFor="price" className="block text-sm font-medium">
                   Price ($)
@@ -323,7 +249,7 @@ function SubscriptionManagement() {
               </button>
               <button
                 onClick={handleSavePrice}
-                className="bg-[var(--secondary-color] hover:bg-[var(--secondary-color)] cursor-pointer !text-white py-2 rounded-md"
+                className="bg-[var(--secondary-color)] hover:bg-[var(--secondary-color)] cursor-pointer !text-white py-2 rounded-md"
               >
                 Save Changes
               </button>
@@ -339,8 +265,7 @@ function SubscriptionManagement() {
             <div className="mb-4">
               <h2 className="text-xl font-bold">Manage Features</h2>
               <p className="text-gray-600">
-                Add, edit, or remove features for the{" "}
-                {plans[selectedPlan]?.displayName}.
+                Add, edit, or remove features for the Premium Plan.
               </p>
               <p className="p-1 flex items-center animate-pulse gap-1 bg-yellow-100 rounded-md text-xs mt-2">
                 <AlertTriangle size={18} />
@@ -369,13 +294,12 @@ function SubscriptionManagement() {
                 {tempFeatures.map((feature) => (
                   <div
                     key={feature.id}
-                    className={`flex items-center justify-between p-3 border rounded-md ${
-                      !plans[selectedPlan].features.some(
-                        (f) => f.id === feature.id
-                      )
+                    className={`flex items-center justify-between p-3 border rounded-md ${!plans.premium.features.some(
+                      (f) => f.id === feature.id
+                    )
                         ? "bg-green-50 border-green-200"
                         : ""
-                    }`}
+                      }`}
                   >
                     <span>{feature.text}</span>
                     <button
