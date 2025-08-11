@@ -3,6 +3,7 @@ import BookCard from "../../components/books/BookCard";
 import { ConfigProvider, Input, Modal, Select } from "antd";
 import BookCreate from "../../components/books/components/BookCreate";
 import BookInfoModal from "../../components/books/components/BookInfoModal";
+import toast from "react-hot-toast";
 
 function Ebook() {
   const [data, setData] = useState([]);
@@ -20,10 +21,12 @@ function Ebook() {
     setShowBookDetails(true)
   };
   const handleEdit = (item) => {
-    console.log(item);
+    setSelectedItem(item)
+    setShowModal(true)
   };
   const handleDelete = (item) => {
     console.log(item);
+    toast.success("Delete functionality is not implemented yet")
   };
   return (
     <div>

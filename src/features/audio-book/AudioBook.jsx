@@ -3,6 +3,7 @@ import BookCard from "../../components/books/BookCard";
 import { Select, Input, ConfigProvider, Modal } from "antd";
 import AudioBookCreate from "../../components/books/components/AudioBookCreate";
 import BookInfoModal from "../../components/books/components/BookInfoModal";
+import toast from "react-hot-toast";
 
 function AudioBook() {
   const [data, setData] = useState([]);
@@ -21,7 +22,7 @@ function AudioBook() {
   }, [])
   const handleEdit = useCallback((item) => {
     setSelectedItem(item)
-    setShowBookDetails(true)
+    setShowModal(true)
   }, [])
   const handleDelete = useCallback((item) => {
     setSelectedItem(item)
