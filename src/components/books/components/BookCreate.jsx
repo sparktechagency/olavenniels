@@ -1,66 +1,60 @@
 import React, { useState } from "react";
-import { Form, Input, Select, Button, Tabs } from "antd";
+import { Form, Input, Select, Button, Tabs, Upload } from "antd";
 import { motion } from "framer-motion";
 import { CloseOutlined } from "@ant-design/icons";
+import ImgCrop from "antd-img-crop";
 
 function BookCreate({ setShowModal }) {
   const [preview, setPreview] = useState(null);
   const [image, setImage] = useState(null);
   const [pdfFile, setPdfFile] = useState(null);
   const [pdfUrl, setPdfUrl] = useState(null);
+  const [fileList, setFileList] = useState([]);
   const [form] = Form.useForm();
 
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    setImage(file);
-    if (file) {
+  // Handle cropped image selection
+  const handleImageChange = ({ fileList: newFileList }) => {
+    setFileList(newFileList);
+
+    if (newFileList.length > 0) {
+      const file = newFileList[0].originFileObj;
+      setImage(file);
+
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreview(reader.result);
-      };
+      reader.onload = () => setPreview(reader.result);
       reader.readAsDataURL(file);
+    } else {
+      setImage(null);
+      setPreview(null);
     }
   };
 
+  // PDF upload handler
   const handlePdfUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
       if (file.type === "application/pdf") {
         setPdfFile(file);
         setPdfUrl(URL.createObjectURL(file));
-
-        form.setFields([
-          {
-            name: "pdf",
-            errors: [],
-          },
-        ]);
+        form.setFields([{ name: "pdf", errors: [] }]);
       } else {
         form.setFields([
-          {
-            name: "pdf",
-            errors: ["Please upload a valid PDF file"],
-          },
+          { name: "pdf", errors: ["Please upload a valid PDF file"] },
         ]);
-
         e.target.value = "";
       }
     }
   };
 
   const onFinish = (values) => {
-    const data = {
-      ...values,
-      pdf: pdfFile,
-      image: image,
-    };
+    const data = { ...values, pdf: pdfFile, image: image };
     console.log("Received values of form:", data);
   };
 
   return (
     <div className="flex gap-6 w-full">
-      {/* Upload book cover image */}
       <Tabs style={{ width: "100%" }}>
+        {/* Upload Tab */}
         <Tabs.TabPane tab="Upload Book Cover Image" key="1">
           <div className="w-full border border-dashed border-gray-300 rounded flex items-center justify-center relative !h-[300px]">
             {preview ? (
@@ -69,23 +63,36 @@ function BookCreate({ setShowModal }) {
                 animate={{ opacity: 1, scale: 1 }}
                 src={preview}
                 alt="Preview"
-                className="object-cover !h-[300px] w-full rounded"
+                className="object-cover !w-[178px] !h-[200px] rounded"
               />
             ) : (
-              <label className="cursor-pointer flex flex-col items-center justify-center w-full !h-[300px] p-4 text-gray-400">
-                <span className="text-2xl">📷</span>
-                <span>Upload book cover image</span>
-                <input
-                  type="file"
+              <ImgCrop
+                rotationSlider
+                aspect={178 / 200} // Fixed ratio
+                quality={1}
+              >
+                <Upload
                   accept="image/*"
-                  className="hidden"
-                  onChange={handleImageUpload}
-                />
-              </label>
+                  listType="picture-card"
+                  fileList={fileList}
+                  onChange={handleImageChange}
+                  beforeUpload={() => false} // prevent auto-upload
+                >
+                  <div className="flex flex-col items-center justify-center">
+                    <span className="text-2xl">📷</span>
+                    <span>Upload book cover image</span>
+                  </div>
+                </Upload>
+              </ImgCrop>
             )}
+
             {preview && (
               <button
-                onClick={() => setPreview(null)}
+                onClick={() => {
+                  setPreview(null);
+                  setImage(null);
+                  setFileList([]);
+                }}
                 className="absolute top-2 right-2 w-6 h-6 flex items-center justify-center cursor-pointer bg-white rounded-full shadow p-1"
               >
                 <CloseOutlined className="!text-red-500" />
@@ -99,6 +106,8 @@ function BookCreate({ setShowModal }) {
             Close
           </Button>
         </Tabs.TabPane>
+
+        {/* Details Tab */}
         <Tabs.TabPane tab="Fill Details" key="2">
           <div className="w-full">
             <h2 className="text-xl font-semibold mb-4">Add E-Book</h2>
@@ -143,7 +152,7 @@ function BookCreate({ setShowModal }) {
                 name="pdf"
                 rules={[
                   {
-                    validator: (_, value) => {
+                    validator: () => {
                       if (!pdfFile) {
                         return Promise.reject(
                           new Error("Please upload a PDF file")
@@ -160,8 +169,6 @@ function BookCreate({ setShowModal }) {
                   className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                   onChange={handlePdfUpload}
                 />
-
-                {/* Styled fake input area */}
                 <div className="flex items-center justify-between border px-4 py-2 rounded bg-white">
                   <span className="text-gray-600">
                     {pdfFile?.name || "Upload book pdf"}

@@ -25,8 +25,7 @@ function AudioBook() {
     setShowModal(true)
   }, [])
   const handleDelete = useCallback((item) => {
-    setSelectedItem(item)
-    setShowBookDetails(true)
+    toast.success("Delete functionality is not implemented yet")
   }, [])
   return (
     <div>

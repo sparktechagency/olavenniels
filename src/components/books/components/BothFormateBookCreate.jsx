@@ -1,7 +1,9 @@
 import React, { useRef, useState } from "react";
-import { Form, Input, Select, Button, Tabs } from "antd";
+import { Form, Input, Select, Button, Tabs, Upload } from "antd";
 import { CloseOutlined } from "@ant-design/icons";
 import { motion } from "framer-motion";
+import ImgCrop from "antd-img-crop";
+
 function BothFormateBookCreate({ setShowModal }) {
   const [preview, setPreview] = useState(null);
   const [image, setImage] = useState(null);
@@ -11,6 +13,53 @@ function BothFormateBookCreate({ setShowModal }) {
   const audioInputRef = useRef(null);
   const [pdfFile, setPdfFile] = useState(null);
   const [pdfUrl, setPdfUrl] = useState(null);
+
+  const [fileList, setFileList] = useState([]);
+
+  // Handle cropped image selection
+  const handleImageChange = ({ fileList: newFileList }) => {
+    setFileList(newFileList);
+
+    if (newFileList.length > 0) {
+      const file = newFileList[0].originFileObj;
+      setImage(file);
+
+      const reader = new FileReader();
+      reader.onload = () => setPreview(reader.result);
+      reader.readAsDataURL(file);
+    } else {
+      setImage(null);
+      setPreview(null);
+    }
+  };
+
+  const handleAudioUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.type === "audio/mpeg") {
+        setAudioFile(file);
+        setAudioUrl(URL.createObjectURL(file));
+        form.setFields([{ name: "audio", errors: [] }]);
+      } else {
+        form.setFields([{ name: "audio", errors: ["Please upload a valid audio file"] }]);
+        e.target.value = "";
+      }
+    }
+  };
+
+  const handlePdfUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.type === "application/pdf") {
+        setPdfFile(file);
+        setPdfUrl(URL.createObjectURL(file));
+        form.setFields([{ name: "pdf", errors: [] }]);
+      } else {
+        form.setFields([{ name: "pdf", errors: ["Please upload a valid PDF file"] }]);
+        e.target.value = "";
+      }
+    }
+  };
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -24,60 +73,11 @@ function BothFormateBookCreate({ setShowModal }) {
     }
   };
 
-  const handleAudioUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      if (file.type === "audio/mpeg") {
-        setAudioFile(file);
-        setAudioUrl(URL.createObjectURL(file));
-        form.setFields([
-          {
-            name: "audio",
-            errors: [],
-          },
-        ]);
-      } else {
-        form.setFields([
-          {
-            name: "audio",
-            errors: ["Please upload a valid audio file"],
-          },
-        ]);
-        e.target.value = "";
-      }
-    }
-  };
-
-  const handlePdfUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      if (file.type === "application/pdf") {
-        setPdfFile(file);
-        setPdfUrl(URL.createObjectURL(file));
-
-        form.setFields([
-          {
-            name: "pdf",
-            errors: [],
-          },
-        ]);
-      } else {
-        form.setFields([
-          {
-            name: "pdf",
-            errors: ["Please upload a valid PDF file"],
-          },
-        ]);
-
-        e.target.value = "";
-      }
-    }
-  };
-
   const onFinish = (values) => {
     const data = {
       ...values,
       audio: audioFile,
+      pdf: pdfFile,
       image: image,
     };
     console.log("Received values of form:", data);
@@ -85,7 +85,6 @@ function BothFormateBookCreate({ setShowModal }) {
 
   return (
     <div className="flex gap-6 w-full">
-      {/* Upload book cover image */}
       <Tabs style={{ width: "100%" }}>
         <Tabs.TabPane tab="Upload Book Cover Image" key="1">
           <div className="w-full border border-dashed border-gray-300 rounded flex items-center justify-center relative !h-[300px]">
@@ -95,25 +94,35 @@ function BothFormateBookCreate({ setShowModal }) {
                 animate={{ opacity: 1, scale: 1 }}
                 src={preview}
                 alt="Preview"
-                className="object-cover !h-[300px] w-full rounded"
+                className="object-cover !w-[178px] !h-[200px] rounded"
               />
             ) : (
-              <label className="cursor-pointer flex flex-col items-center justify-center w-full !h-[300px] p-4 text-gray-400">
-                <span className="text-2xl">📷</span>
-                <span>Upload book cover image</span>
-                <input
-                  type="file"
+              <ImgCrop
+                rotationSlider
+                aspect={178 / 200} // Fixed ratio
+                quality={1}
+              >
+                <Upload
                   accept="image/*"
-                  className="hidden"
-                  onChange={handleImageUpload}
-                />
-              </label>
+                  listType="picture-card"
+                  fileList={fileList}
+                  onChange={handleImageChange}
+                  beforeUpload={() => false} // prevent auto-upload
+                >
+                  <div className="flex flex-col items-center justify-center">
+                    <span className="text-2xl">📷</span>
+                    <span>Upload book cover image</span>
+                  </div>
+                </Upload>
+              </ImgCrop>
             )}
+
             {preview && (
               <button
                 onClick={() => {
-                  setImage(null);
                   setPreview(null);
+                  setImage(null);
+                  setFileList([]);
                 }}
                 className="absolute top-2 right-2 w-6 h-6 flex items-center justify-center cursor-pointer bg-white rounded-full shadow p-1"
               >
@@ -122,34 +131,22 @@ function BothFormateBookCreate({ setShowModal }) {
             )}
           </div>
           <Button
-            className="!bg-[var(--secondary-color)] !mt-3 hover:!bg-[var(--secondary-color)] border-none !text-white"
+            className="!bg-[var(--secondary-color)] !mt-2 hover:!bg-[var(--secondary-color)] border-none !text-white"
             onClick={() => setShowModal(false)}
           >
             Close
           </Button>
         </Tabs.TabPane>
+
         <Tabs.TabPane tab="Fill Details" key="2">
           <div className="w-full">
             <h2 className="text-xl font-semibold mb-4">Add E-Book</h2>
-            <Form
-              layout="vertical"
-              requiredMark={false}
-              onFinish={onFinish}
-              form={form}
-            >
-              <Form.Item
-                label="Book Name"
-                name="bookName"
-                rules={[{ required: true }]}
-              >
+            <Form layout="vertical" requiredMark={false} onFinish={onFinish} form={form}>
+              <Form.Item label="Book Name" name="bookName" rules={[{ required: true }]}>
                 <Input placeholder="Type here" />
               </Form.Item>
 
-              <Form.Item
-                label="Synopsis"
-                name="synopsis"
-                rules={[{ required: true }]}
-              >
+              <Form.Item label="Synopsis" name="synopsis" rules={[{ required: true }]}>
                 <Input.TextArea rows={3} placeholder="Type here" />
               </Form.Item>
 
@@ -166,19 +163,15 @@ function BothFormateBookCreate({ setShowModal }) {
                   <Select.Option value="finished">Finished</Select.Option>
                 </Select>
               </Form.Item>
+
+              {/* PDF Upload */}
               <Form.Item
                 label="Add PDF File"
                 name="pdf"
                 rules={[
                   {
-                    validator: (_, value) => {
-                      if (!pdfFile) {
-                        return Promise.reject(
-                          new Error("Please upload a PDF file")
-                        );
-                      }
-                      return Promise.resolve();
-                    },
+                    validator: () =>
+                      pdfFile ? Promise.resolve() : Promise.reject(new Error("Please upload a PDF file")),
                   },
                 ]}
               >
@@ -188,22 +181,15 @@ function BothFormateBookCreate({ setShowModal }) {
                   className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                   onChange={handlePdfUpload}
                 />
-
-                {/* Styled fake input area */}
                 <div className="flex items-center justify-between border px-4 py-2 rounded bg-white">
-                  <span className="text-gray-600">
-                    {pdfFile?.name || "Upload book pdf"}
-                  </span>
+                  <span className="text-gray-600">{pdfFile?.name || "Upload book pdf"}</span>
                   <span className="text-blue-600 text-sm">Browse</span>
                 </div>
               </Form.Item>
+
               {pdfUrl && (
                 <div className="border border-gray-300 rounded mt-2 relative">
-                  <iframe
-                    src={pdfUrl}
-                    className="w-full h-[300px] rounded"
-                    title="PDF Preview"
-                  ></iframe>
+                  <iframe src={pdfUrl} className="w-full h-[300px] rounded" title="PDF Preview"></iframe>
                   <button
                     onClick={() => {
                       setPdfFile(null);
@@ -216,35 +202,24 @@ function BothFormateBookCreate({ setShowModal }) {
                 </div>
               )}
 
-              <Form.Item
-                label="Add Audio File"
-                name="audio"
-                rules={[{ required: true }]}
-              >
+              {/* Audio Upload */}
+              <Form.Item label="Add Audio File" name="audio" rules={[{ required: true }]}>
                 <input
                   type="file"
                   accept="audio/mpeg"
                   className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                   onChange={handleAudioUpload}
-                  ref={audioInputRef} // Add this ref
+                  ref={audioInputRef}
                 />
-
-                {/* Styled fake input area */}
                 <div className="flex items-center justify-between border px-4 py-2 rounded bg-white">
-                  <span className="text-gray-600">
-                    {audioFile?.name || "Upload book audio"}
-                  </span>
+                  <span className="text-gray-600">{audioFile?.name || "Upload book audio"}</span>
                   <span className="text-blue-600 text-sm">Browse</span>
                 </div>
               </Form.Item>
 
               {audioUrl && (
                 <div className="border border-gray-300 rounded mt-2 relative">
-                  <audio
-                    src={audioUrl}
-                    controls
-                    className="w-full h-[100px] rounded"
-                  ></audio>
+                  <audio src={audioUrl} controls className="w-full h-[100px] rounded"></audio>
                   <button
                     onClick={() => {
                       setAudioFile(null);
@@ -259,6 +234,7 @@ function BothFormateBookCreate({ setShowModal }) {
                   </button>
                 </div>
               )}
+
               <Form.Item className="!mt-3">
                 <Button
                   className="!bg-[var(--secondary-color)] !mr-2 hover:!bg-[var(--secondary-color)] border-none !text-white"
