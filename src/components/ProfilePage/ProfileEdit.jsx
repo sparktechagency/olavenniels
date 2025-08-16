@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import { Button, ConfigProvider, Form, Input } from "antd";
 import toast from "react-hot-toast";
-import { useUpdateProfileDataMutation } from "../../src/Redux/services/profileApis";
+import { useUpdateProfileDataMutation } from "../../Redux/services/profileApis";
+import CustomInput from "../form-component/CustomInput";
 const ProfileEdit = ({ image, data }) => {
-  console.log(image);
   const [form] = Form.useForm();
   const [setProfileUpdate, { isLoading: isProfileUpdate }] =
     useUpdateProfileDataMutation();
@@ -36,6 +36,25 @@ const ProfileEdit = ({ image, data }) => {
       console.error("Failed to update profile:", error);
     }
   };
+
+  const inputData = [
+    {
+      label: "Name",
+      name: "name",
+      rules: [{ required: true, message: "Name is required" }],
+      type: "text",
+      placeholder: "Name",
+      disabled: false,
+      },
+    {
+      label: "Email",
+      name: "email",
+      type: "text",
+      placeholder: "Email",
+      className: "cursor-not-allowed p-2 w-full outline-none border-none !bg-white text-white",
+      disabled: true,
+    },
+  ];
   return (
     <div>
       <p className="text-white text-3xl text-center">
@@ -48,30 +67,39 @@ const ProfileEdit = ({ image, data }) => {
         onFinish={onFinish}
         layout="vertical"
       >
-        <Form.Item
+        {/* <CustomInput
+          form={form}
           name="name"
           label={<span className="text-white">Name</span>}
           rules={[{ required: true, message: "Name is required" }]}
-        >
-          <Input
-            placeholder="Name"
-            size="large"
-            className="p-2 w-full outline-none border-none !text-white"
-          />
-        </Form.Item>
+          type="text"
+          placeholder="Name"
+          disabled={false}
+        /> */}
 
-        <Form.Item
+        {/* <CustomInput
+          form={form}
           name="email"
           label={<span className="text-white">Email</span>}
-        >
-          <Input
-            disabled
-            type="email"
-            size="large"
-            placeholder="Email"
-            className="cursor-not-allowed p-2 w-full outline-none border-none !bg-white text-white"
+          type="text"
+          placeholder="Email"
+          className="cursor-not-allowed p-2 w-full outline-none border-none !bg-white text-white"
+          disabled={true}
+        /> */}
+
+        {inputData.map((item) => (
+          <CustomInput
+            key={item.name}
+            form={form}
+            name={item.name}
+            label={<span className="text-white">{item.label}</span>}
+            rules={item.rules}
+            type={item.type}
+            placeholder={item.placeholder}
+            disabled={item.disabled}
+            className={item.className}
           />
-        </Form.Item>
+        ))}
         <Button
           htmlType="submit"
           disabled={isProfileUpdate}

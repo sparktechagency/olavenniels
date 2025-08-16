@@ -1,13 +1,14 @@
-import { Form, Input, Select, DatePicker, InputNumber } from 'antd';
+import { Form, Input, Select, InputNumber } from 'antd';
 import React from 'react';
 
 const CustomInput = ({
+    form,
     type = 'text',
     name,
     label,
     placeholder,
     rules,
-    options, // For select dropdown
+    options,
     disabled,
     style,
     className,
@@ -16,14 +17,14 @@ const CustomInput = ({
     const renderInput = () => {
         switch (type) {
             case 'text':
-                return <Input placeholder={placeholder} {...restProps} />;
+                return <Input className={className} disabled={disabled} size='large' placeholder={placeholder} {...restProps} />;
             case 'password':
-                return <Input.Password placeholder={placeholder} {...restProps} />;
+                return <Input.Password className={className} disabled={disabled} size='large' placeholder={placeholder} {...restProps} />;
             case 'textarea':
-                return <Input.TextArea placeholder={placeholder} {...restProps} />;
+                return <Input.TextArea className={className} disabled={disabled} size='large' placeholder={placeholder} {...restProps} />;
             case 'select':
                 return (
-                    <Select placeholder={placeholder} {...restProps}>
+                    <Select className={className} disabled={disabled} size='large' placeholder={placeholder} {...restProps}>
                         {options?.map((option) => (
                             <Select.Option key={option.value} value={option.value}>
                                 {option.label}
@@ -32,21 +33,20 @@ const CustomInput = ({
                     </Select>
                 );
             case 'number':
-                return <InputNumber placeholder={placeholder} {...restProps} />;
-            case 'date':
-                return <DatePicker placeholder={placeholder} {...restProps} />;
+                return <InputNumber className={className} disabled={disabled} size='large' placeholder={placeholder} {...restProps} />;
             default:
-                return <Input placeholder={placeholder} {...restProps} />;
+                return <Input className={className} disabled={disabled} size='large' placeholder={placeholder} {...restProps} />;
         }
     };
 
     return (
         <Form.Item
+            form={form}
             name={name}
             label={label}
             rules={rules}
             style={style}
-            className={className}
+            disabled={disabled}
         >
             {renderInput()}
         </Form.Item>

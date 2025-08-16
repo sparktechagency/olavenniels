@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Form, Input, Spin } from "antd";
-import { useChangePasswordMutation } from "../../src/Redux/Apis/auth/changePasswordApis";
+import { useChangePasswordMutation } from "../../Redux/Apis/auth/changePasswordApis";
 import toast from "react-hot-toast";
 
 const ChangePassword = () => {
