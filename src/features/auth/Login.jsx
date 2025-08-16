@@ -4,36 +4,30 @@ import 'antd/dist/reset.css';
 import { Link } from 'react-router-dom';
 import authA1 from '../../assets/auth-assets.png';
 import toast from 'react-hot-toast';
-// import { useLoginMutation } from '../../Redux/Apis/auth/loginApis';
+import { useLoginMutation } from '../../Redux/Apis/auth/loginApis';
 const Login = () => {
-  // const [loginUser, { isLoading }] = useLoginMutation();
+  const [loginUser, { isLoading }] = useLoginMutation();
   const onFinish = async (values) => {
-    const data = { email: values.email, password: values.password };
-    if (data.email && data.password) {
-      toast.success('Login successfully');
-      window.location.href = '/';
+    const data = { email: values?.email, password: values?.password };
+    if (data?.email && data?.password) {
+      await loginUser(data).unwrap().then((res) => {
+        console.log(res)
+        if (res?.success) {
+          const accessToken = res?.token;
+          if (accessToken) {
+            localStorage.setItem('accessToken', accessToken);
+            toast.success("Login successfully");
+            window.location.href = '/';
+          }
+        }
+      }).catch((error) => {
+        console.log(error)
+        toast.error(error?.data?.message || 'Something went wrong');
+      });
     } else {
       toast.error('Please enter email and password');
     }
-    // try {
-    //   await loginUser({ data }).unwrap().then((res) => {
-    //     if (res?.success) {
-    //       const accessToken = res?.data?.accessToken;
-    //       if (accessToken) {
-    //         localStorage.setItem('accessToken', accessToken);
-    //         toast.success(res?.message);
-    //         window.location.href = '/';
-    //       }
-    //     }
-    //   }).catch((error) => {
-    //     console.log(error)
-    //     toast.error(error?.data?.message || 'Something went wrong');
-    //   });
-    // } catch (error) {
-    //   console.log(error)
-    //   toast.error(error?.data?.message || 'Something went wrong');
-    // }
-  };
+  }
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-[var(--primary-color)] p-4">
@@ -98,8 +92,8 @@ const Login = () => {
             />
           </Form.Item>
 
-          <div className="flex items-center justify-between">
-            <Form.Item
+          <div className="flex items-center justify-end">
+            {/* <Form.Item
               name="remember"
               valuePropName="checked"
               style={{
@@ -107,7 +101,7 @@ const Login = () => {
               }}
             >
               <Checkbox>Remember me</Checkbox>
-            </Form.Item>
+            </Form.Item> */}
 
 
             <Link
@@ -118,7 +112,7 @@ const Login = () => {
             </Link>
           </div>
           <Button
-            // loading={isLoading}
+            loading={isLoading}
             type="primary"
             size='large'
             htmlType="submit"
@@ -134,6 +128,6 @@ const Login = () => {
       </div>
     </div>
   );
-};
+}
 
 export default Login;

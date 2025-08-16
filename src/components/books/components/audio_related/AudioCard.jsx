@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { imageUrl } from '../../../utils/server';
 
 const transition = {
     default: { duration: 0.3, ease: "easeInOut" }
@@ -22,9 +23,9 @@ const AudioCard = React.memo(({ audio, audioRef, onEnded }) => (
                 borderRadius: '8px'
             }}
         >
-            <source src={audio} type="audio/mpeg" />
-            <source src={audio} type="audio/ogg" />
-            <source src={audio} type="audio/wav" />
+            <source src={imageUrl(audio)} type="audio/mpeg" />
+            <source src={imageUrl(audio)} type="audio/ogg" />
+            <source src={imageUrl(audio)} type="audio/wav" />
             Your browser does not support the audio element.
         </audio>
     </motion.div>

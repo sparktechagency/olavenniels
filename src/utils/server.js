@@ -1,9 +1,11 @@
+export const baseUrl = "http://10.10.20.52:3000";
+
 export const imageUrl = (image) => {
   return image
     ? image?.startsWith("http")
       ? image
       : image?.startsWith("/")
-      ? `${url}${image}`
-      : `${url}/${image}`
-    : "https://placehold.co/400";
+      ? `${baseUrl}${image}`
+      : `${baseUrl}/${image}`
+    : "https://placehold.co/178x200";
 };

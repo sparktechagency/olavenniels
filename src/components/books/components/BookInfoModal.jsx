@@ -1,12 +1,13 @@
 import React from 'react';
 import { FaHeadphonesAlt } from 'react-icons/fa';
+import { imageUrl } from '../../../utils/server';
 
 function BookInfoModal({ item }) {
   return (
     <div className="relative rounded-xl overflow-hidden w-full mx-auto">
       <div className="relative w-full h-64">
         <img
-          src={item?.banner}
+          src={imageUrl(item?.bookCover)}
           alt="banner"
           className="w-full h-full object-cover blur-sm"
         />
@@ -14,7 +15,7 @@ function BookInfoModal({ item }) {
         {/* Book Image */}
         <div className="absolute left-1/2 transform -translate-x-1/2 top-24">
           <img
-            src={item?.banner}
+            src={imageUrl(item?.bookCover)}
             alt="book"
             className="w-48 h-56 object-cover rounded-md shadow-md"
           />
@@ -29,7 +30,7 @@ function BookInfoModal({ item }) {
         {/* Category + Audio Icon */}
         <div className="flex justify-center items-center gap-2 mt-4">
           <span className="bg-gray-100 px-4 py-1 rounded-full text-sm font-medium">
-            {item?.category}
+            {item?.category?.name}
           </span>
           {item?.audio && (
             <FaHeadphonesAlt className="text-gray-600 text-lg" />

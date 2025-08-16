@@ -2,15 +2,16 @@ import React, { useState, useRef, useCallback } from "react";
 import { AnimatePresence } from "framer-motion";
 import BookImage from "./components/BookImage";
 import BookInfo from "./components/BookInfo";
-import AudioControls from "./components/AudioControls";
+import { imageUrl } from "../../utils/server";
+import AudioControls from "./components/audio_related/AudioControls";
 
-function BookCard({ item, onView, onEdit, onDelete ,e_book }) {
+function BookCard({ item, onView, onEdit, onDelete, e_book }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [showAudio, setShowAudio] = useState(false);
   const audioRef = useRef(null);
 
   const handlePlayClick = useCallback(() => {
-    if (!item?.audio) return;
+    if (!item?.audioFile) return;
 
     setShowAudio(true);
     setIsPlaying(true);
@@ -18,7 +19,7 @@ function BookCard({ item, onView, onEdit, onDelete ,e_book }) {
     requestAnimationFrame(() => {
       audioRef.current?.play()?.catch(console.error);
     });
-  }, [item?.audio]);
+  }, [item?.audioFile]);
 
   const handleCloseClick = useCallback(() => {
     setShowAudio(false);
@@ -48,13 +49,13 @@ function BookCard({ item, onView, onEdit, onDelete ,e_book }) {
 
   return (
     <div className="p-4 bg-[var(--primary-color)] rounded border border-gray-200/40 shadow-md">
-      <BookImage banner={item?.banner} bookName={item?.bookName} />
+      <BookImage banner={imageUrl(item?.bookCover)} bookName={item?.bookName} />
 
       <div className="mt-3 relative overflow-hidden">
         <AnimatePresence mode="wait">
           {showAudio ? (
             <AudioControls
-              audio={item?.audio}
+              audio={item?.audioFile}
               audioRef={audioRef}
               onEnded={handleAudioEnded}
               onClose={handleCloseClick}
@@ -63,8 +64,8 @@ function BookCard({ item, onView, onEdit, onDelete ,e_book }) {
             <BookInfo
               bookName={item?.bookName}
               author={item?.author}
-              category={item?.category}
-              hasAudio={!!item?.audio}
+              category={item?.category?.name}
+              hasAudio={!!item?.audioFile}
               onPlayClick={handlePlayClick}
               onView={handleView}
               onEdit={handleEdit}

@@ -4,50 +4,47 @@ const categoryApis = baseApi.injectEndpoints({
   endpoints: (build) => ({
     getCategories: build.query({
       query: () => ({
-        url: "/category/all-categories",
+        url: "/api/book-categories/get",
         method: "GET",
       }),
       providesTags: ["Categories"],
     }),
-    getSubCategories: build.query({
-      query: ({ id }) => ({
-        url: `/category/all-categories`,
+    singleCategory: build.query({
+      query: (id) => ({
+        url: `/api/book-categories/get/${id}`,
         method: "GET",
-        params: {
-          parentCategory: id,
-        },
       }),
-      providesTags: ["SubCategories"],
+      providesTags: ["Categories"],
     }),
     createCategory: build.mutation({
       query: ({ data }) => ({
-        url: "/category/create-category",
+        url: "/api/book-categories/create",
         method: "POST",
         body: data,
       }),
-      invalidatesTags: ["Categories", "SubCategories"],
+      invalidatesTags: ["Categories"],
     }),
     updateCategory: build.mutation({
       query: ({ id, data }) => ({
-        url: `/category/update-category/${id}`,
+        url: `/api/book-categories/update/${id}`,
         method: "PATCH",
         body: data,
       }),
-      invalidatesTags: ["Categories", "SubCategories"],
+      invalidatesTags: ["Categories"],
     }),
     deleteCategory: build.mutation({
       query: ({ id }) => ({
-        url: `/category/delete-category/${id}`,
+        url: `/api/book-categories/delete/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["Categories", "SubCategories"],
+      invalidatesTags: ["Categories"],
     }),
   }),
 });
 
 export const {
   useGetCategoriesQuery,
-  useGetSubCategoriesQuery,
+  useSingleCategoryQuery,
   useCreateCategoryMutation,
   useUpdateCategoryMutation,
   useDeleteCategoryMutation,

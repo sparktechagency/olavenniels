@@ -1,10 +1,14 @@
-import React, {useState } from "react";
+import React, { useState } from "react";
 import { Table, Button, Space, Input, ConfigProvider, Popconfirm } from "antd";
 import { FaEdit, FaPlus, FaTrash } from "react-icons/fa";
 import toast from "react-hot-toast";
 import CategoryCreateModal from "./components/CategoryCreateModal";
+import { useGetCategoriesQuery, useDeleteCategoryMutation } from "../../Redux/Apis/service/categoryApis";
+import { imageUrl } from "../../utils/server";
 
 function Category() {
+  const { data: categories, isLoading: isCategoriesLoading } = useGetCategoriesQuery();
+  const [deleteCategory, { isLoading: isDeleteLoading }] = useDeleteCategoryMutation();
   const [categoryData, setCategoryData] = useState([
     {
       key: "1",
@@ -25,7 +29,6 @@ function Category() {
         "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?semt=ais_hybrid&w=740",
     },
   ]);
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [data, setData] = useState(null);
 
@@ -41,7 +44,7 @@ function Category() {
       key: "image",
       render: (text, record) => (
         <img
-          src={record.image}
+          src={imageUrl(record?.image)}
           alt="User"
           style={{ width: 50, height: 50, borderRadius: "5%" }}
         />
@@ -59,7 +62,9 @@ function Category() {
           />
           <Popconfirm
             placement="bottomRight"
-            title="Are you sure to delete this user?"
+            title="Are you sure to delete this category?"
+            okText="Yes"
+            cancelText="No"
             onConfirm={() => handleDelete(record)}>
             <Button shape="circle" icon={<FaTrash />} />
           </Popconfirm>
@@ -68,12 +73,16 @@ function Category() {
     },
   ];
 
-  const handleDelete = (record) => {
-    const updatedData = categoryData.filter((user) => user.key !== record.key);
-    setCategoryData(updatedData);
-    toast.success(
-      `User ${record.name} is now deleted`
-    );
+  const handleDelete = async (record) => {
+    try {
+      await deleteCategory({ id: record?._id }).unwrap().then((res) => {
+        if (res?.success) {
+          toast.success(res?.message);
+        }
+      })
+    } catch (error) {
+      toast.error("Failed to delete category");
+    }
   };
 
   const handleEdit = (record) => {
@@ -120,6 +129,7 @@ function Category() {
         }
       }}>
         <Table
+          loading={isCategoriesLoading || isDeleteLoading}
           scroll={{ x: "max-content" }}
           columns={columns}
           bordered
@@ -131,15 +141,16 @@ function Category() {
             position: ["bottomCenter"],
             size: "large",
             defaultCurrent: 1,
-            total: categoryData?.length,
+            total: categories?.data?.pagination?.total,
+            current: categories?.data?.pagination?.page,
             onChange: (page, pageSize) => {
               console.log("Page:", page);
               console.log("Page Size:", pageSize);
             },
           }}
-          dataSource={categoryData}
+          dataSource={categories?.data?.bookCategories}
         /></ConfigProvider>
-      <CategoryCreateModal data={data} open={isModalOpen} onCancel={() => setIsModalOpen(false)} />
+      <CategoryCreateModal categoryData={data} open={isModalOpen} onCancel={() => setIsModalOpen(false)} />
     </div>
   );
 }

@@ -1,20 +1,16 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import BookCard from "../../components/books/BookCard";
 import { Select, Input, ConfigProvider, Modal } from "antd";
-import AudioBookCreate from "../../components/books/components/AudioBookCreate";
+import AudioBookCreate from "../../components/books/components/audio_related/AudioBookCreate";
 import BookInfoModal from "../../components/books/components/BookInfoModal";
 import toast from "react-hot-toast";
+import { useAllAudioBooksQuery } from "../../Redux/Apis/books/audioBookApi";
 
 function AudioBook() {
-  const [data, setData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [showBookDetails, setShowBookDetails] = useState(false)
   const [selectedItem, setSelectedItem] = useState(null)
-  useEffect(() => {
-    fetch("/dummy.json")
-      .then((res) => res.json())
-      .then((data) => setData(data));
-  }, []);
+  const { data: audioBooks, isLoading: isAudioBooksLoading } = useAllAudioBooksQuery();
 
   const handleView = useCallback((item) => {
     setSelectedItem(item)
@@ -27,6 +23,11 @@ function AudioBook() {
   const handleDelete = useCallback((item) => {
     toast.success("Delete functionality is not implemented yet")
   }, [])
+
+  if (isAudioBooksLoading) {
+    return <p>Loading...</p>
+  }
+
   return (
     <div>
       <div className="flex items-center justify-between">
@@ -62,15 +63,16 @@ function AudioBook() {
         </div>
       </div>
       <div className="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {data?.map((item, i) => (
+        {Array.isArray(audioBooks?.data?.audioBooks) && audioBooks?.data?.audioBooks?.length > 0 ? audioBooks?.data?.audioBooks?.map((item) => (
           <BookCard
-            key={i}
+            key={item?._id}
             item={item}
             onView={handleView}
             onEdit={handleEdit}
             onDelete={handleDelete}
+            e_book={false}
           />
-        ))}
+        )) : <p>No Audio Books Found</p>}
       </div>
       <Modal
         open={showModal}

@@ -54,12 +54,12 @@ export const SidebarRoutes = [
     icon: MdOutlineSupport,
     link: "/banner-management",
   },
-  {
-    key: "subscription-management",
-    label: "Subscription management",
-    icon: RiAdminFill,
-    link: "/subscription-management",
-  },
+  // {
+  //   key: "subscription-management",
+  //   label: "Subscription management",
+  //   icon: RiAdminFill,
+  //   link: "/subscription-management",
+  // },
   {
     key: "make-admin",
     label: "Make Admin",

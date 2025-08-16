@@ -3,6 +3,7 @@ import { Form, Input, Select, Button, Tabs, Upload } from "antd";
 import { motion } from "framer-motion";
 import { CloseOutlined } from "@ant-design/icons";
 import ImgCrop from "antd-img-crop";
+import CustomInput from "../../form-component/CustomInput";
 
 function BookCreate({ setShowModal }) {
   const [preview, setPreview] = useState(null);
@@ -117,13 +118,19 @@ function BookCreate({ setShowModal }) {
               onFinish={onFinish}
               form={form}
             >
-              <Form.Item
+              {/* <Form.Item
                 label="Book Name"
                 name="bookName"
                 rules={[{ required: true }]}
               >
                 <Input placeholder="Type here" />
-              </Form.Item>
+              </Form.Item> */}
+              <CustomInput
+                placeholder="Type here"
+                name="bookName"
+                rules={[{ required: true }]}
+                label="Book Name"
+              />
 
               <Form.Item
                 label="Synopsis"

@@ -1,132 +1,160 @@
-import React, { useEffect } from 'react';
-import { Form, Input, Modal, Upload, Button } from 'antd';
+import React, { useEffect, useCallback, useMemo } from 'react';
+import { Form, Input, Modal, Upload, Button, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
-import toast from 'react-hot-toast';
+import { useAddBookCategoryMutation, useUpdateBookCategoryMutation } from '../../../Redux/Apis/books/bookCategory';
 
-function CategoryCreateModal({ open, onCancel, data }) {
+const CategoryCreateModal = ({
+    open,
+    onCancel,
+    categoryData: initialData
+}) => {
     const [form] = Form.useForm();
+    const [addCategory, { isLoading: isAddLoading }] = useAddBookCategoryMutation();
+    const [updateCategory, { isLoading: isUpdateLoading }] = useUpdateBookCategoryMutation();
 
-    // Convert single image string to Upload-compatible array
-    const getInitialImageList = (imageUrl) => {
+    const getInitialImageList = useCallback((imageUrl) => {
         if (!imageUrl) return [];
-        return [
-            {
-                uid: '-1',
-                name: 'category-image.png',
-                status: 'done',
-                url: imageUrl,
-            },
-        ];
-    };
+        return [{
+            uid: '-1',
+            name: 'category-image.png',
+            status: 'done',
+            url: imageUrl,
+        }];
+    }, []);
 
     useEffect(() => {
-        form.setFieldsValue({
-            name: data?.name || '',
-            image: getInitialImageList(data?.image || ''),
-        });
-    }, [form, data]);
+        if (open) {
+            form.setFieldsValue({
+                name: initialData?.name || '',
+                image: getInitialImageList(initialData?.image),
+            });
+        } else {
+            form.resetFields();
+        }
+    }, [open, initialData, form, getInitialImageList]);
 
-    const close = () => {
+    const handleClose = useCallback(() => {
         form.resetFields();
         onCancel();
-    };
+    }, [form, onCancel]);
 
-    const handleSubmit = (values) => {
-        const imageFile = values.image?.[0]?.originFileObj || values.image?.[0];
-        const payload = {
-            name: values.name,
-            image: imageFile,
+    const handleUploadChange = useCallback((info) => {
+        const { status, name } = info.file;
+        const statusMessages = {
+            done: `${name} uploaded successfully`,
+            removed: `${name} removed successfully`,
+            error: `${name} upload failed`,
         };
 
-        console.log('📦 Submitted Payload:', payload);
-        toast.success('Category submitted successfully!');
-        close(); // Optionally close modal after submit
-    };
-
-    const handleUploadChange = (info) => {
-        const { status, name } = info.file;
-
-        if (status === 'done' || status === 'removed') {
-            toast.success(`${name} uploaded/removed successfully`);
-        } else if (status === 'error') {
-            toast.error(`${name} upload failed`);
+        if (statusMessages[status]) {
+            message[status === 'error' ? 'error' : 'success'](statusMessages[status]);
         }
+    }, []);
 
-        console.log('🖼 Upload Info:', info.fileList);
-    };
+    const handleSubmit = useCallback(async (values) => {
+        try {
+            const formData = new FormData();
+            formData.append('name', values.name);
+
+            if (values.image?.[0]?.originFileObj) {
+                formData.append('image', values.image[0].originFileObj);
+            }
+
+            const mutation = initialData?.id
+                ? updateCategory({ id: initialData.id, data: formData })
+                : addCategory({ data: formData });
+
+            const response = await mutation.unwrap();
+
+            if (response?.success) {
+                message.success(response.message);
+                handleClose();
+            }
+        } catch (error) {
+            message.error(error?.data?.message || 'An unexpected error occurred');
+        }
+    }, [initialData, addCategory, updateCategory, handleClose]);
+
+    const uploadProps = useMemo(() => ({
+        name: "image",
+        listType: "picture",
+        maxCount: 1,
+        accept: "image/*",
+        beforeUpload: () => false,
+        onChange: handleUploadChange,
+    }), [handleUploadChange]);
+
+    const isSubmitting = isAddLoading || isUpdateLoading;
 
     return (
         <Modal
             centered
-            footer={null}
             open={open}
-            onCancel={onCancel}
+            onCancel={handleClose}
             destroyOnClose
             maskClosable={false}
             closable={false}
+            footer={null}
+            title={initialData?.id ? "Update Category" : "Create Category"}
         >
             <Form
                 layout="vertical"
                 form={form}
                 requiredMark={false}
                 onFinish={handleSubmit}
+                initialValues={{
+                    name: initialData?.name || '',
+                    image: getInitialImageList(initialData?.image),
+                }}
             >
-                {/* Image Upload */}
                 <Form.Item
                     name="image"
                     label="Category Image"
                     valuePropName="fileList"
-                    getValueFromEvent={(e) => Array.isArray(e) ? e : e?.fileList}
-                    rules={[{ required: true, message: 'Please upload an image!' }]}
+                    getValueFromEvent={(e) => e?.fileList || []}
+                    rules={[{ required: true, message: 'Please upload an image' }]}
+                    validateTrigger="onBlur"
                 >
-                    <Upload
-                        name="image"
-                        listType="picture"
-                        maxCount={1}
-                        accept="image/*"
-                        beforeUpload={() => false} // prevent auto-upload
-                        onChange={handleUploadChange}
-                    >
-                        <Button icon={<UploadOutlined className="!text-black" />} >
+                    <Upload {...uploadProps}>
+                        <Button icon={<UploadOutlined />}>
                             Click to Upload
                         </Button>
                     </Upload>
                 </Form.Item>
 
-                {/* Category Name */}
                 <Form.Item
                     label="Category Name"
                     name="name"
-                    rules={[{ required: true, message: 'Please enter category name!' }]}
+                    rules={[
+                        { required: true, message: 'Please enter category name' },
+                        { min: 3, message: 'Name must be at least 3 characters' },
+                        { max: 50, message: 'Name must be less than 50 characters' }
+                    ]}
                 >
                     <Input placeholder="Enter category name" />
                 </Form.Item>
 
-                {/* Action Buttons */}
-                <div className="flex justify-end gap-3 mt-4">
-                    <Button
-                        htmlType="submit"
-                        type="primary"
-                        style={{
-                            backgroundColor: 'var(--secondary-color)',
-                            color: 'white',
-                        }}
-                    >
-                        Submit
-                    </Button>
-                    <Button
-                        onClick={()=>close()}
-                        style={{
-                            backgroundColor: 'var(--secondary-color)',
-                            color: 'white',
-                        }}
-                    >
-                        Cancel
-                    </Button>
-                </div>
+                <Form.Item className="mb-0">
+                    <div className="flex justify-end gap-3">
+                        <Button
+                            onClick={handleClose}
+                            disabled={isSubmitting}
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            type="primary"
+                            htmlType="submit"
+                            loading={isSubmitting}
+                            disabled={isSubmitting}
+                        >
+                            {initialData?.id ? 'Update' : 'Create'}
+                        </Button>
+                    </div>
+                </Form.Item>
             </Form>
         </Modal>
     );
-}
+};
 
-export default CategoryCreateModal;
+export default React.memo(CategoryCreateModal);

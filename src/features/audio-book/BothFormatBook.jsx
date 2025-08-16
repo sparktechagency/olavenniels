@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import BookCard from "../../components/books/BookCard";
 import { Select, Input, ConfigProvider, Modal } from "antd";
-import BothFormateBookCreate from "../../components/books/components/BothFormateBookCreate";
 import BookInfoModal from "../../components/books/components/BookInfoModal";
 import toast from "react-hot-toast";
+import BothFormateBookCreate from "../../components/books/components/book-creation/BothFormateBookCreate";
 
 function BothFormatBook() {
   const [data, setData] = useState([]);
