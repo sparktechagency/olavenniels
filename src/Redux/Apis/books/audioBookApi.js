@@ -17,7 +17,7 @@ const audioBookApi = baseApis.injectEndpoints({
       providesTags: ["AudioBook"],
     }),
     addAudioBook: build.mutation({
-      query: (data) => ({
+      query: ({ data }) => ({
         url: "/api/audio-books/create",
         method: "POST",
         body: data,
@@ -33,7 +33,7 @@ const audioBookApi = baseApis.injectEndpoints({
       invalidatesTags: ["AudioBook"],
     }),
     deleteAudioBook: build.mutation({
-      query: (id) => ({
+      query: ({ id }) => ({
         url: `/api/audio-books/delete/${id}`,
         method: "DELETE",
       }),

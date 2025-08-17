@@ -4,9 +4,13 @@ import { baseUrl } from "../utils/server";
 const baseApis = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
-    baseUrl: baseUrl,
-    headers: {
-      Authorization: `${localStorage.getItem("accessToken")}`,
+    baseUrl,
+    prepareHeaders: (headers) => {
+      const token = localStorage.getItem("accessToken");
+      if (token) {
+        headers.set("Authorization", `Bearer ${token}`);
+      }
+      return headers;
     },
   }),
   tagTypes: [

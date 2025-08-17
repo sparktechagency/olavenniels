@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { FaHeadphones, FaTimes } from 'react-icons/fa';
+import AudioCard from './AudioCard';
 
 const transition = {
   default: { duration: 0.3, ease: "easeInOut" },

@@ -41,7 +41,7 @@ function BookInfoModal({ item }) {
         <div className="text-left mt-6">
           <h3 className="text-md font-semibold mb-1">Synopsis</h3>
           <p className="text-gray-700 text-sm">
-            {item?.Synopsis}{' '}
+            {item?.synopsis}{' '}
             <span className="text-orange-600 font-semibold cursor-pointer">
               Read More..
             </span>

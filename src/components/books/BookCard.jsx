@@ -6,16 +6,12 @@ import { imageUrl } from "../../utils/server";
 import AudioControls from "./components/audio_related/AudioControls";
 
 function BookCard({ item, onView, onEdit, onDelete, e_book }) {
-  const [isPlaying, setIsPlaying] = useState(false);
   const [showAudio, setShowAudio] = useState(false);
   const audioRef = useRef(null);
 
   const handlePlayClick = useCallback(() => {
     if (!item?.audioFile) return;
-
     setShowAudio(true);
-    setIsPlaying(true);
-
     requestAnimationFrame(() => {
       audioRef.current?.play()?.catch(console.error);
     });
@@ -23,8 +19,6 @@ function BookCard({ item, onView, onEdit, onDelete, e_book }) {
 
   const handleCloseClick = useCallback(() => {
     setShowAudio(false);
-    setIsPlaying(false);
-
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
@@ -32,7 +26,6 @@ function BookCard({ item, onView, onEdit, onDelete, e_book }) {
   }, []);
 
   const handleAudioEnded = useCallback(() => {
-    setIsPlaying(false);
   }, []);
 
   const handleView = useCallback(() => {

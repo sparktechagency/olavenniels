@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Table, Button, Space, message, Input, Tag, ConfigProvider, Modal } from "antd";
 import { LockOutlined, UnlockOutlined } from "@ant-design/icons";
 import { FaEye } from "react-icons/fa";
 import UserDetails from "./UserDetails";
 import toast from "react-hot-toast";
+import CircleButton from "../../../components/buttons/CircleButton";
 
 function AllUser() {
   const [showUserDetails, setShowUserDetails] = useState(false)
@@ -82,20 +83,15 @@ function AllUser() {
       key: "action",
       render: (_, record) => (
         <Space>
-          <Button
-            shape="circle"
-            icon={<FaEye />}
-            onClick={() => handleViewUser(record)}
-          />
-          <Button
-            shape="circle"
+          <CircleButton btnIcon={<FaEye />} btnOnClick={() => handleViewUser(record)} />
+          <CircleButton
             danger={!record.isBlocked}
-            style={{
+            btnClassName={{
               backgroundColor: record.isBlocked ? "#1890ff" : "#ff4d4f",
               color: record.isBlocked ? "white" : "white",
             }}
-            icon={record.isBlocked ? <UnlockOutlined /> : <LockOutlined />}
-            onClick={() => handleToggleBlock(record)}
+            btnIcon={record.isBlocked ? <UnlockOutlined /> : <LockOutlined />}
+            btnOnClick={() => handleToggleBlock(record)}
           />
         </Space>
       ),
@@ -117,14 +113,15 @@ function AllUser() {
     );
   };
 
-  const handleViewUser = (record) => {
+
+  const handleViewUser = useCallback((record) => {
     setShowUserDetails(true)
     setSelectedItem(record)
-  };
+  }, [setShowUserDetails, setSelectedItem]);
 
-  const handleSearch = (value) => {
+  const handleSearch = useCallback((value) => {
     console.log(value);
-  };
+  }, [setShowUserDetails]);
 
   return (
     <div className="p-4">

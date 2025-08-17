@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Button } from 'antd';
+import { Button, Popconfirm } from 'antd';
 import { FaEye, FaEdit, FaTrash } from 'react-icons/fa';
 
 const ActionButtons = React.memo(({ onView, onEdit, onDelete, e_book }) => (
@@ -23,12 +23,13 @@ const ActionButtons = React.memo(({ onView, onEdit, onDelete, e_book }) => (
             shape='circle'
         />
 
-        <Button
-            icon={<FaTrash className='text-xs' />}
-            onClick={onDelete}
-            shape='circle'
-            disabled={e_book}
-        />
+        <Popconfirm placement='rightBottom' title="Are you sure you want to delete this book?" onConfirm={onDelete} okText="Yes" cancelText="No">
+            <Button
+                icon={<FaTrash className='text-xs' />}
+                shape='circle'
+                disabled={e_book}
+            />
+        </Popconfirm>
     </motion.div>
 ));
 

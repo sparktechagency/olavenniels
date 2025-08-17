@@ -4,14 +4,15 @@ import { Select, Input, ConfigProvider, Modal } from "antd";
 import AudioBookCreate from "../../components/books/components/audio_related/AudioBookCreate";
 import BookInfoModal from "../../components/books/components/BookInfoModal";
 import toast from "react-hot-toast";
-import { useAllAudioBooksQuery } from "../../Redux/Apis/books/audioBookApi";
+import { useAllAudioBooksQuery, useDeleteAudioBookMutation } from "../../Redux/Apis/books/audioBookApi";
 
 function AudioBook() {
   const [showModal, setShowModal] = useState(false);
   const [showBookDetails, setShowBookDetails] = useState(false)
   const [selectedItem, setSelectedItem] = useState(null)
   const { data: audioBooks, isLoading: isAudioBooksLoading } = useAllAudioBooksQuery();
-
+  const [deleteAudioBook, { isLoading }] = useDeleteAudioBookMutation()
+  console.log(selectedItem)
   const handleView = useCallback((item) => {
     setSelectedItem(item)
     setShowBookDetails(true)
@@ -20,9 +21,13 @@ function AudioBook() {
     setSelectedItem(item)
     setShowModal(true)
   }, [])
-  const handleDelete = useCallback((item) => {
-    toast.success("Delete functionality is not implemented yet")
-  }, [])
+  const handleDelete = useCallback(async (item) => {
+    await deleteAudioBook({ id: item?._id }).unwrap().then((res) => {
+      if (res?.success) {
+        toast.success(res?.message || "Audio Book Deleted Successfully")
+      }
+    })
+  }, [deleteAudioBook])
 
   if (isAudioBooksLoading) {
     return <p>Loading...</p>

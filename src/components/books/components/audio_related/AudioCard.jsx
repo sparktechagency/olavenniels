@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { imageUrl } from '../../../utils/server';
+import { imageUrl } from '../../../../utils/server';
 
 const transition = {
     default: { duration: 0.3, ease: "easeInOut" }
