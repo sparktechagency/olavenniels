@@ -10,7 +10,7 @@ const bannerApis = baseApis.injectEndpoints({
       providesTags: ["Banner"],
     }),
     addBanner: build.mutation({
-      query: (data) => ({
+      query: ({data}) => ({
         url: "/api/banner/create",
         method: "POST",
         body: data,
@@ -29,6 +29,10 @@ const bannerApis = baseApis.injectEndpoints({
       query: (id) => ({
         url: `/api/banner/delete/${id}`,
         method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       }),
       invalidatesTags: ["Banner"],
     }),

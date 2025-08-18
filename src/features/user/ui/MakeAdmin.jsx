@@ -3,10 +3,12 @@ import React, { useState } from 'react'
 import { FaPlus, FaTrash } from 'react-icons/fa';
 import MakeAdminForm from './MakeAdminForm';
 import toast from 'react-hot-toast';
+import { useGetAdminsQuery } from '../../../Redux/Apis/service/adminApis';
 
 function MakeAdmin() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const { data: admins } = useGetAdminsQuery({ searchTerm: '', page: 1, limit: 10 })
+  
   const [data, setData] = useState([
     {
       key: '1',

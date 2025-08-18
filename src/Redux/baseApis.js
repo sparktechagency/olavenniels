@@ -7,10 +7,7 @@ const baseApis = createApi({
     baseUrl,
     prepareHeaders: (headers) => {
       const token = localStorage.getItem("accessToken");
-      if (token) {
-        headers.set("Authorization", `Bearer ${token}`);
-      }
-      return headers;
+      headers.set("Authorization", `Bearer ${token}`);
     },
   }),
   tagTypes: [
