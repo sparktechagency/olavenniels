@@ -1,15 +1,9 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { baseUrl } from "../utils/server";
+import { createApi } from "@reduxjs/toolkit/query/react";
+import { baseQueryWithReauth } from "./baseQueryWithReauth";
 
 const baseApis = createApi({
   reducerPath: "api",
-  baseQuery: fetchBaseQuery({
-    baseUrl,
-    prepareHeaders: (headers) => {
-      const token = localStorage.getItem("accessToken");
-      headers.set("Authorization", `Bearer ${token}`);
-    },
-  }),
+  baseQuery: baseQueryWithReauth,
   tagTypes: [
     "BookCategory",
     "AudioBook",
@@ -20,6 +14,7 @@ const baseApis = createApi({
     "Categories",
     "SubCategories",
     "Profile",
+    "PrivacyPolicy",
   ],
   endpoints: () => ({}),
 });

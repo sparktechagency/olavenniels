@@ -3,6 +3,7 @@ import { Form, Input, Modal, Upload, Button, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { useAddBookCategoryMutation, useUpdateBookCategoryMutation } from '../../../Redux/Apis/books/bookCategory';
 import { imageUrl } from '../../../utils/server';
+import toast from 'react-hot-toast';
 
 const CategoryCreateModal = ({
     open,
@@ -65,20 +66,24 @@ const CategoryCreateModal = ({
             if (initialData?._id) {
                 await updateCategory({ id: initialData._id, data: formData }).unwrap().then((res) => {
                     if (res?.success) {
-                        message.success(res?.message);
+                        toast.success(res?.message);
                         handleClose();
+                    } else {
+                        toast.error(res?.message);
                     }
                 })
             } else {
                 await addCategory({ data: formData }).unwrap().then((res) => {
                     if (res?.success) {
-                        message.success(res?.message);
+                        toast.success(res?.message);
                         handleClose();
+                    } else {
+                        toast.error(res?.message);
                     }
                 })
             }
         } catch (error) {
-            message.error(error?.data?.message || 'An unexpected error occurred');
+            toast.error(error?.message || 'An unexpected error occurred');
         }
     }, [initialData, addCategory, updateCategory, handleClose]);
 

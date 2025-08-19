@@ -1,17 +1,18 @@
 import baseApis from "../baseApis";
 
+
 const profileApis = baseApis.injectEndpoints({
   endpoints: (build) => ({
     getProfileData: build.query({
       query: () => ({
-        url: "/user/get-my-profile",
+        url: "/api/admin/profile/get",
         method: "GET",
       }),
       providesTags: ["Profile"],
     }),
     updateProfileData: build.mutation({
       query: ({ data }) => ({
-        url: "/user/update-profile",
+        url: "/api/admin/profile/update",
         method: "PATCH",
         body: data,
       }),

@@ -21,8 +21,8 @@ const Profile = () => {
   };
   const profileImage = image
     ? URL.createObjectURL(image)
-    : profileData?.data?.profile_image
-      ? imageUrl(profileData.data.profile_image)
+    : profileData?.admin?.profilePicture
+      ? imageUrl(profileData.admin.profilePicture)
       : 'https://placehold.co/400';
   return (
     <div className='bg-[var(--primary-color)] rounded p-4'>
@@ -89,7 +89,7 @@ const Profile = () => {
           <ProfileEdit
             image={image}
             defaultImage={'https://placehold.co/400'}
-            data={profileData?.data}
+            data={profileData?.admin}
           />
         ) : (
           <ChangePassword />

@@ -10,24 +10,32 @@ const Login = () => {
   const onFinish = async (values) => {
     const data = { email: values?.email, password: values?.password };
     if (data?.email && data?.password) {
-      await loginUser(data).unwrap().then((res) => {
-        console.log(res)
-        if (res?.success) {
-          const accessToken = res?.token;
-          if (accessToken) {
-            localStorage.setItem('accessToken', accessToken);
+      await loginUser(data)
+        .unwrap()
+        .then((res) => {
+          if (res?.success) {
+            const accessToken = res?.token;
+            const refreshToken = res?.refreshToken;
+
+            if (accessToken) {
+              localStorage.setItem("accessToken", accessToken);
+            }
+            if (refreshToken) {
+              localStorage.setItem("refreshToken", refreshToken);
+            }
+
             toast.success("Login successfully");
-            window.location.href = '/';
+            window.location.href = "/";
           }
-        }
-      }).catch((error) => {
-        console.log(error)
-        toast.error(error?.data?.message || 'Something went wrong');
-      });
+        })
+        .catch((error) => {
+          toast.error(error?.data?.message || "Something went wrong");
+        });
     } else {
-      toast.error('Please enter email and password');
+      toast.error("Please enter email and password");
     }
-  }
+  };
+
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-[var(--primary-color)] p-4">

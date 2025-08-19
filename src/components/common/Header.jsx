@@ -4,21 +4,23 @@ import { UserOutlined, LogoutOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import logo from '../../assets/brand-black.png';
 import { FaBell } from 'react-icons/fa';
-// import { useGetProfileDataQuery } from '../../Redux/services/profileApis';
+import { useGetProfileDataQuery } from '../../Redux/services/profileApis';
+import { imageUrl } from '../../utils/server';
 
 function Header() {
-  // const { data, isLoading } = useGetProfileDataQuery()
-  // if (isLoading) {
-  //   return <div className='w-full h-16 animate-pulse bg-gray-200' ></div>;
-  // }
+  const { data, isLoading } = useGetProfileDataQuery()
+  if (isLoading) {
+    return <div className='w-full h-16 animate-pulse bg-gray-200' ></div>;
+  }
   const user = {
-    fullName: 'Hosain',
-    email: 'hosain@gmail.com',
-    img: 'https://avatar.iran.liara.run/public/19'
+    fullName: data?.admin?.name,
+    email: data?.admin?.email,
+    img: imageUrl(data?.admin?.profilePicture)
   };
 
   const handleSignOut = () => {
     localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
     window.location.href = '/auth/login';
   };
 

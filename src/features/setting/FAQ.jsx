@@ -14,60 +14,45 @@ import { AiTwotoneDelete } from 'react-icons/ai';
 import { FaPlus } from 'react-icons/fa6';
 import TextArea from 'antd/es/input/TextArea';
 import toast from 'react-hot-toast';
+import { useFaqQuery, useAddFaqMutation, useUpdateFaqMutation, useDeleteFaqMutation } from '../../Redux/Apis/service/faqApis';
 
 function FrequentlyAskedQuestions() {
+  const { data, isLoading } = useFaqQuery()
+  const [addFaq] = useAddFaqMutation()
+  const [updateFaq] = useUpdateFaqMutation()
+  const [deleteFaq] = useDeleteFaqMutation()
+  const [isEditing, setIsEditing] = useState(false)
   const [showModal, setShowModal] = useState(false);
-  const [editingIndex, setEditingIndex] = useState(null);
-  const [faqs, setFaqs] = useState([
-    { question: 'What is the meaning of life?', answer: 'nothing', _id: '1' },
-    {
-      question: 'What is the best programming language?',
-      answer: 'JavaScript',
-      _id: '2',
-    },
-    {
-      question: 'What is the best way to make a cup of coffee?',
-      answer: 'French press',
-      _id: '3',
-    },
-  ]);
+  const [form] = Form.useForm();
 
   const handleAddClick = () => {
-    setEditingIndex(null);
     setShowModal(true);
+    setIsEditing(false);
   };
 
-  const handleEdit = (index) => {
-    setEditingIndex(index);
+  const handleEdit = (faq) => {
+    form.setFieldsValue(faq);
     setShowModal(true);
+    setIsEditing(true);
   };
 
   const handleSubmit = async (values) => {
     try {
-      if (editingIndex !== null) {
-        // Update existing FAQ
-        const faqToUpdate = faqs[editingIndex];
-        const updatedFaqs = [...faqs];
-        updatedFaqs[editingIndex] = {
-          ...updatedFaqs[editingIndex],
-          question: values.question,
-          answer: values.description,
-        };
-        setFaqs(updatedFaqs);
-        toast.success('FAQ updated successfully!');
+      if (isEditing) {
+        await updateFaq(values).unwrap().then((res) => {
+          console.log(res)
+          setShowModal(false);
+          setIsEditing(false);
+          toast.success('FAQ updated successfully!');
+        })
       } else {
-        // Create new FAQ
-        setFaqs([
-          ...faqs,
-          {
-            question: values.question,
-            answer: values.description,
-            _id: `new-${faqs.length + 1}`,
-          },
-        ]);
-        toast.success('FAQ added successfully!');
+        await addFaq(values).unwrap().then((res) => {
+          console.log(res)
+          setShowModal(false);
+          setIsEditing(false);
+          toast.success('FAQ added successfully!');
+        })
       }
-      setShowModal(false);
     } catch (error) {
       toast.error('An error occurred while saving FAQ.');
       console.error(error);
@@ -76,14 +61,25 @@ function FrequentlyAskedQuestions() {
 
   const handleDelete = async (index) => {
     try {
-      const updatedFaqs = faqs.filter((_, i) => i !== index);
-      setFaqs(updatedFaqs);
-      toast.success('FAQ deleted successfully!');
+      await deleteFaq(index).unwrap().then((res) => {
+        console.log(res)
+        toast.success('FAQ deleted successfully!');
+      })
     } catch (error) {
       toast.error('Failed to delete FAQ.');
       console.error(error);
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="grid grid-cols-2 gap-4">
+        {Array.from({ length: 4 }).map((_, index) => (
+          <Card loading key={index} />
+        ))}
+      </div>
+    );
+  }
 
   return (
     <div className="w-full">
@@ -104,13 +100,13 @@ function FrequentlyAskedQuestions() {
         </div>
       </div>
       <div className="grid grid-cols-2 gap-4">
-        {faqs.length > 0 ? (
-          faqs.map((item, index) => (
-            <Card key={item._id}>
+        {data?.data?.length > 0 ? (
+          data?.data?.map((faq) => (
+            <Card key={faq?._id}>
               <div className="flex items-center justify-between my-4">
-                <h1>{item.question}</h1>
+                <h1>{faq?.question}</h1>
                 <Space>
-                  <Button onClick={() => handleEdit(index)}>
+                  <Button onClick={() => handleEdit(faq)}>
                     <FaEdit />
                   </Button>
                   <Popconfirm
@@ -118,7 +114,7 @@ function FrequentlyAskedQuestions() {
                     description="Are you sure you want to delete this FAQ?"
                     okText="Yes"
                     cancelText="No"
-                    onConfirm={() => handleDelete(index)}
+                    onConfirm={() => handleDelete(faq?._id)}
                   >
                     <Button danger>
                       <AiTwotoneDelete />
@@ -126,7 +122,7 @@ function FrequentlyAskedQuestions() {
                   </Popconfirm>
                 </Space>
               </div>
-              <p>{item.answer}</p>
+              <p>{faq?.answer}</p>
             </Card>
           ))
         ) : (
@@ -139,21 +135,14 @@ function FrequentlyAskedQuestions() {
         open={showModal}
         onCancel={() => setShowModal(false)}
         footer={null}
-        title={editingIndex !== null ? 'Edit FAQ' : 'Add New FAQ'}
+        title="Add New FAQ"
         destroyOnClose
       >
         <Form
           requiredMark={false}
+          form={form}
           onFinish={handleSubmit}
           layout="vertical"
-          initialValues={
-            editingIndex !== null
-              ? {
-                  question: faqs[editingIndex].question,
-                  description: faqs[editingIndex].answer,
-                }
-              : { question: '', description: '' }
-          }
         >
           <Form.Item
             label="Question"
@@ -165,7 +154,7 @@ function FrequentlyAskedQuestions() {
 
           <Form.Item
             label="Answer"
-            name="description"
+            name="answer"
             rules={[{ required: true, message: 'Please enter an answer' }]}
           >
             <TextArea placeholder="Enter your answer" rows={4} />
@@ -177,7 +166,7 @@ function FrequentlyAskedQuestions() {
                 className="!bg-[var(--secondary-color)] !text-white"
                 htmlType="submit"
               >
-                {editingIndex !== null ? 'Update FAQ' : 'Save FAQ'}
+                Save FAQ
               </Button>
             </div>
           </Form.Item>
