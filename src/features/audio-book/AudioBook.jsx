@@ -5,6 +5,7 @@ import AudioBookCreate from "../../components/books/components/audio_related/Aud
 import BookInfoModal from "../../components/books/components/BookInfoModal";
 import toast from "react-hot-toast";
 import { useAllAudioBooksQuery, useDeleteAudioBookMutation } from "../../Redux/Apis/books/audioBookApi";
+import Loader from "../../components/Loader/Loader";
 
 function AudioBook() {
   const [showModal, setShowModal] = useState(false);
@@ -30,7 +31,7 @@ function AudioBook() {
   }, [deleteAudioBook])
 
   if (isAudioBooksLoading) {
-    return <p>Loading...</p>
+    return <Loader message="Loading Audio Books..." />
   }
 
   return (
