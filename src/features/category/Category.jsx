@@ -86,7 +86,6 @@ function Category() {
   };
 
   const handleEdit = (record) => {
-    console.log(record)
     setIsModalOpen(true);
     setData(record);
   };
@@ -95,7 +94,6 @@ function Category() {
     console.log(value);
   };
   const handleAddCategory = () => {
-    console.log("Add Category");
     setIsModalOpen(true);
     setData(null);
   }

@@ -3,20 +3,16 @@ import baseApis from "../../baseApis";
 const adminApis = baseApis.injectEndpoints({
   endpoints: (build) => ({
     getAdmins: build.query({
-      query: ({ searchTerm, page, limit }) => ({
-        url: "/admin/all-admins",
+      query: ({ page }) => ({
+        url: "/api/admin/get-all-admins",
         method: "GET",
-        params: {
-          searchTerm,
-          page,
-          limit,
-        },
+        params: { page },
       }),
       providesTags: ["Admins"],
     }),
     createAdmin: build.mutation({
       query: ({ data }) => ({
-        url: "/admin/create-admin",
+        url: "/api/admin/register-admin",
         method: "POST",
         body: data,
       }),
@@ -24,7 +20,7 @@ const adminApis = baseApis.injectEndpoints({
     }),
     updateAdmin: build.mutation({
       query: ({ id, data }) => ({
-        url: `/admin/update-admin/${id}`,
+        url: `/api/admin/update-admin/${id}`,
         method: "PATCH",
         body: data,
       }),
@@ -32,7 +28,7 @@ const adminApis = baseApis.injectEndpoints({
     }),
     deleteAdmin: build.mutation({
       query: ({ id }) => ({
-        url: `/admin/delete-admin/${id}`,
+        url: `/api/admin/delete-admin/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["Admins"],

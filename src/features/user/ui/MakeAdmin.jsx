@@ -3,29 +3,13 @@ import React, { useState } from 'react'
 import { FaPlus, FaTrash } from 'react-icons/fa';
 import MakeAdminForm from './MakeAdminForm';
 import toast from 'react-hot-toast';
-import { useGetAdminsQuery } from '../../../Redux/Apis/service/adminApis';
+import { useDeleteAdminMutation, useGetAdminsQuery } from '../../../Redux/Apis/service/adminApis';
 
 function MakeAdmin() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { data: admins } = useGetAdminsQuery({ searchTerm: '', page: 1, limit: 10 })
-  
-  const [data, setData] = useState([
-    {
-      key: '1',
-      name: 'John Doe',
-      email: 'john.doe@example.com',
-    },
-    {
-      key: '2',
-      name: 'Jane Smith',
-      email: 'jane.smith@example.com',
-    },
-    {
-      key: '3',
-      name: 'John Doe',
-      email: 'john.doe@example.com',
-    },
-  ]);
+  const [page, setPage] = useState(1)
+  const { data } = useGetAdminsQuery({ page })
+  const [deleteAdminMutation] = useDeleteAdminMutation();
   const columns = [
     {
       title: 'Name',
@@ -41,19 +25,28 @@ function MakeAdmin() {
       title: 'Action',
       key: 'action',
       render: (text, record) => (
-        <Popconfirm title="Are you sure to delete this Admin?" onConfirm={() => deleteAdmin(record.key)}>
+        <Popconfirm title="Are you sure to delete this Admin?" onConfirm={() => deleteAdmin(record?._id)}>
           <Button size='large' shape='circle' icon={<FaTrash />} />
         </Popconfirm>
       ),
     },
   ];
-  const deleteAdmin = (key) => {
-    setData((prev) => prev.filter((item) => item.key !== key));
-    toast.success('Admin deleted successfully');
+  const deleteAdmin = async (key) => {
+    console.log(key)
+    try {
+      await deleteAdminMutation({ id: key }).unwrap().then((res) => {
+        if (res?.success) {
+          toast.success(res?.message);
+          setPage(1);
+        }
+      });
+    } catch (error) {
+      toast.error(error?.data?.message || 'Something went wrong');
+    }
   };
 
   const handleSearch = (value) => {
-    setData((prev) => prev.filter((item) => item.name.toLowerCase().includes(value.toLowerCase())));
+    // setData((prev) => prev.filter((item) => item.name.toLowerCase().includes(value.toLowerCase())));
   };
   return (
     <div>
@@ -87,7 +80,7 @@ function MakeAdmin() {
         <Table
           bordered
           columns={columns}
-          dataSource={data}
+          dataSource={data?.admins}
           size='large'
           pagination={{
             pageSize: 10,
@@ -97,16 +90,16 @@ function MakeAdmin() {
             position: ["bottomCenter"],
             size: "large",
             defaultCurrent: 1,
-            total: data?.length,
+            total: data?.admins?.length,
             onChange: (page, pageSize) => {
               console.log("Page:", page);
               console.log("Page Size:", pageSize);
             },
           }}
           scroll={{ x: "max-content" }}
-          rowKey="key" />
+          rowKey="_id" />
       </ConfigProvider>
-      <MakeAdminForm setData={setData} open={isModalOpen} onCancel={() => setIsModalOpen(false)} />
+      <MakeAdminForm open={isModalOpen} onCancel={() => setIsModalOpen(false)} />
     </div>
   )
 }

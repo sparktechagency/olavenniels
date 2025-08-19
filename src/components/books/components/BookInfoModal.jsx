@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FaHeadphonesAlt } from 'react-icons/fa';
 import { imageUrl } from '../../../utils/server';
 
 function BookInfoModal({ item }) {
+  const [synopsisAll, setSynopsisAll] = useState(false)
   return (
     <div className="relative rounded-xl overflow-hidden w-full mx-auto">
       <div className="relative w-full h-64">
@@ -41,9 +42,9 @@ function BookInfoModal({ item }) {
         <div className="text-left mt-6">
           <h3 className="text-md font-semibold mb-1">Synopsis</h3>
           <p className="text-gray-700 text-sm">
-            {item?.synopsis}{' '}
-            <span className="text-orange-600 font-semibold cursor-pointer">
-              Read More..
+            {synopsisAll ? item?.synopsis : item?.synopsis?.slice(0, 100)}{' '}
+            <span onClick={() => setSynopsisAll(!synopsisAll)} className="text-orange-600 font-semibold cursor-pointer">
+              {synopsisAll ? "Read Less.." : "Read More.."}
             </span>
           </p>
         </div>

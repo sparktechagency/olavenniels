@@ -73,13 +73,34 @@ export const useAudioBookForm = () => {
   };
 };
 
-export const prepareFormData = (values, audioFile, image) => {
+export const prepareFormData = (values, audioFile, image, existingAudioUrl = null, existingImageUrl = null) => {
   const formData = new FormData();
-  const data = { ...values, audioFile: audioFile, bookCover: image };
+  const data = { ...values };
+  
+  // Handle audio file
+  if (audioFile instanceof File) {
+    // New audio file uploaded
+    formData.append('audioFile', audioFile);
+  } else if (existingAudioUrl && typeof existingAudioUrl === 'string') {
+    // Keep existing audio URL
+    formData.append('audioUrl', existingAudioUrl);
+  }
+  
+  // Handle image file
+  if (image instanceof File) {
+    // New image uploaded
+    formData.append('bookCover', image);
+  } else if (existingImageUrl && typeof existingImageUrl === 'string') {
+    // Keep existing image URL
+    formData.append('existingImageUrl', existingImageUrl);
+  }
 
+  // Append other form data
   Object.keys(data).forEach((key) => {
-    if (data[key] !== undefined && data[key] !== null) {
-      formData.append(key, data[key]);
+    if (data[key] !== undefined && data[key] !== null && key !== 'audioFile' && key !== 'bookCover') {
+      // Convert non-file fields to string if they're not already
+      const value = typeof data[key] === 'object' ? JSON.stringify(data[key]) : data[key];
+      formData.append(key, value);
     }
   });
 

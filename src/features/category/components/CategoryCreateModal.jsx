@@ -2,6 +2,7 @@ import React, { useEffect, useCallback, useMemo } from 'react';
 import { Form, Input, Modal, Upload, Button, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { useAddBookCategoryMutation, useUpdateBookCategoryMutation } from '../../../Redux/Apis/books/bookCategory';
+import { imageUrl } from '../../../utils/server';
 
 const CategoryCreateModal = ({
     open,
@@ -12,13 +13,13 @@ const CategoryCreateModal = ({
     const [addCategory, { isLoading: isAddLoading }] = useAddBookCategoryMutation();
     const [updateCategory, { isLoading: isUpdateLoading }] = useUpdateBookCategoryMutation();
 
-    const getInitialImageList = useCallback((imageUrl) => {
-        if (!imageUrl) return [];
+    const getInitialImageList = useCallback((url) => {
+        if (!url) return [];
         return [{
             uid: '-1',
             name: 'category-image.png',
             status: 'done',
-            url: imageUrl,
+            url: imageUrl(url),
         }];
     }, []);
 
@@ -51,6 +52,7 @@ const CategoryCreateModal = ({
         }
     }, []);
 
+
     const handleSubmit = useCallback(async (values) => {
         try {
             const formData = new FormData();
@@ -60,15 +62,20 @@ const CategoryCreateModal = ({
                 formData.append('image', values.image[0].originFileObj);
             }
 
-            const mutation = initialData?.id
-                ? updateCategory({ id: initialData.id, data: formData })
-                : addCategory({ data: formData });
-
-            const response = await mutation.unwrap();
-
-            if (response?.success) {
-                message.success(response.message);
-                handleClose();
+            if (initialData?._id) {
+                await updateCategory({ id: initialData._id, data: formData }).unwrap().then((res) => {
+                    if (res?.success) {
+                        message.success(res?.message);
+                        handleClose();
+                    }
+                })
+            } else {
+                await addCategory({ data: formData }).unwrap().then((res) => {
+                    if (res?.success) {
+                        message.success(res?.message);
+                        handleClose();
+                    }
+                })
             }
         } catch (error) {
             message.error(error?.data?.message || 'An unexpected error occurred');

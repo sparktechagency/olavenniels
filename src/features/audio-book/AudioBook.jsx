@@ -89,11 +89,14 @@ function AudioBook() {
         maskClosable={false}
         destroyOnClose
       >
-        <AudioBookCreate setShowModal={setShowModal} />
+        <AudioBookCreate item={selectedItem} setShowModal={setShowModal} />
       </Modal>
       <Modal
         open={showBookDetails}
-        onCancel={() => setShowBookDetails(false)}
+        onCancel={() => {
+          setSelectedItem(null)
+          setShowBookDetails(false)
+        }}
         centered
         footer={null}
         width={600}

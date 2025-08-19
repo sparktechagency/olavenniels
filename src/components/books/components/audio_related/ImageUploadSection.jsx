@@ -1,13 +1,32 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { motion } from 'framer-motion'
 import ImgCrop from 'antd-img-crop'
 import { Upload } from 'antd'
 import { CloseOutlined } from '@ant-design/icons'
+import { imageUrl } from '../../../../utils/server'
 
 function ImageUploadSection({ preview,
     fileList,
     handleImageChange,
-    resetImageState, }) {
+    resetImageState,
+    item }) {
+    useEffect(() => {
+        if (item) {
+
+        }
+    }, [item]);
+
+    const onPreview = async file => {
+        let src = file.url;
+        if (!src) {
+            src = await new Promise(resolve => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file.originFileObj);
+                reader.onload = () => resolve(reader.result);
+            });
+        }
+    }
+
     return (
         <div className="w-full border border-dashed border-gray-300 rounded flex items-center justify-center relative !h-[300px]">
             {preview ? (
@@ -19,19 +38,14 @@ function ImageUploadSection({ preview,
                     className="object-fill !w-[178px] !h-[200px] rounded"
                 />
             ) : (
-                <ImgCrop rotationSlider aspect={178 / 200} quality={1}>
+                <ImgCrop rotationSlider>
                     <Upload
-                        accept="image/*"
                         listType="picture-card"
                         fileList={fileList}
                         onChange={handleImageChange}
-                        beforeUpload={() => false}
-                        maxCount={1}
+                        onPreview={onPreview}
                     >
-                        <div className="flex flex-col items-center justify-center">
-                            <span className="text-2xl">📷</span>
-                            <span>Upload book cover image</span>
-                        </div>
+                        {fileList.length < 5 && '+ Upload'}
                     </Upload>
                 </ImgCrop>
             )}

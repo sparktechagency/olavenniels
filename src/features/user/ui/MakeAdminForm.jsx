@@ -1,11 +1,26 @@
 import { Button, Form, Input, Modal } from 'antd'
 import React from 'react'
-
-function MakeAdminForm({ open, onCancel, setData }) {
-    const onFinish = (values) => {
+import { useCreateAdminMutation } from '../../../Redux/Apis/service/adminApis'
+import toast from 'react-hot-toast';
+function MakeAdminForm({ open, onCancel }) {
+    const [createAdmin] = useCreateAdminMutation()
+    const onFinish = async (values) => {
         console.log(values)
-        setData((prev) => [...prev, values])
-        onCancel()
+        const information = {
+            name: values.name,
+            email: values.email,
+            password: values.password
+        }
+        try {
+            await createAdmin({ data: information }).unwrap().then((res) => {
+                if (res?.success) {
+                    toast.success(res?.message)
+                    onCancel()
+                }
+            })
+        } catch (error) {
+            toast.error(error?.data?.message || 'Something went wrong')
+        }
     }
     return (
         <Modal
@@ -31,7 +46,7 @@ function MakeAdminForm({ open, onCancel, setData }) {
                 >
                     <Input size='large' placeholder="Enter your email" />
                 </Form.Item>
-                
+
                 <Form.Item
                     name="password"
                     label="Password"
