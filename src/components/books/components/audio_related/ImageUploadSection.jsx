@@ -3,7 +3,6 @@ import { motion } from 'framer-motion'
 import ImgCrop from 'antd-img-crop'
 import { Upload } from 'antd'
 import { CloseOutlined } from '@ant-design/icons'
-import { imageUrl } from '../../../../utils/server'
 
 function ImageUploadSection({ preview,
     fileList,
@@ -38,7 +37,7 @@ function ImageUploadSection({ preview,
                     className="object-fill !w-[178px] !h-[200px] rounded"
                 />
             ) : (
-                <ImgCrop rotationSlider>
+                <ImgCrop aspectSlider={true} showReset={true} aspect={178 / 200} rotationSlider={true}>
                     <Upload
                         listType="picture-card"
                         fileList={fileList}

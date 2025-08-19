@@ -4,13 +4,15 @@ import { ConfigProvider, Input, Modal, Select } from "antd";
 import BookCreate from "../../components/books/components/BookCreate";
 import BookInfoModal from "../../components/books/components/BookInfoModal";
 import toast from "react-hot-toast";
+import { useAllBooksQuery } from "../../Redux/Apis/books/eBookApi";
 
 function Ebook() {
   const [data, setData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [showBookDetails, setShowBookDetails] = useState(false)
   const [selectedItem, setSelectedItem] = useState(null)
-
+  const { data: booksData } = useAllBooksQuery()
+  console.log(booksData?.ebooks)
   useEffect(() => {
     fetch("/dummy2.json")
       .then((res) => res.json())
@@ -63,10 +65,10 @@ function Ebook() {
         </div>
       </div>
       <div className="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {data?.map((item, i) => (
+        {booksData?.ebooks?.map((book) => (
           <BookCard
-            key={i}
-            item={item}
+            key={book?._id}
+            book={book}
             onView={handleView}
             onEdit={handleEdit}
             onDelete={handleDelete}

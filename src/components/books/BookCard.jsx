@@ -5,17 +5,17 @@ import BookInfo from "./components/BookInfo";
 import { imageUrl } from "../../utils/server";
 import AudioControls from "./components/audio_related/AudioControls";
 
-function BookCard({ item, onView, onEdit, onDelete, e_book }) {
+function BookCard({ book, onView, onEdit, onDelete, e_book }) {
   const [showAudio, setShowAudio] = useState(false);
   const audioRef = useRef(null);
 
   const handlePlayClick = useCallback(() => {
-    if (!item?.audioFile) return;
+    if (!book?.audioFile) return;
     setShowAudio(true);
     requestAnimationFrame(() => {
       audioRef.current?.play()?.catch(console.error);
     });
-  }, [item?.audioFile]);
+  }, [book?.audioFile]);
 
   const handleCloseClick = useCallback(() => {
     setShowAudio(false);
@@ -29,36 +29,36 @@ function BookCard({ item, onView, onEdit, onDelete, e_book }) {
   }, []);
 
   const handleView = useCallback(() => {
-    onView(item);
+    onView(book);
   }, []);
 
   const handleEdit = useCallback(() => {
-    onEdit(item);
+    onEdit(book);
   }, []);
 
   const handleDelete = useCallback(() => {
-    onDelete(item);
+    onDelete(book);
   }, []);
-
+console.log(book?.audioFile)
   return (
     <div className="p-4 bg-[var(--primary-color)] rounded border border-gray-200/40 shadow-md">
-      <BookImage banner={imageUrl(item?.bookCover)} bookName={item?.bookName} />
+      <BookImage banner={imageUrl(book?.bookCover)} bookName={book?.bookName} />
 
       <div className="mt-3 relative overflow-hidden">
         <AnimatePresence mode="wait">
           {showAudio ? (
             <AudioControls
-              audio={item?.audioFile}
+              audio={book?.audioFile}
               audioRef={audioRef}
               onEnded={handleAudioEnded}
               onClose={handleCloseClick}
             />
           ) : (
             <BookInfo
-              bookName={item?.bookName}
-              author={item?.author}
-              category={item?.category?.name}
-              hasAudio={!!item?.audioFile}
+              bookName={book?.bookName}
+              author={book?.author}
+              category={book?.category?.name}
+              hasAudio={!!book?.audioFile}
               onPlayClick={handlePlayClick}
               onView={handleView}
               onEdit={handleEdit}

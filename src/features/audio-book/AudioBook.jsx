@@ -68,10 +68,10 @@ function AudioBook() {
         </div>
       </div>
       <div className="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {Array.isArray(audioBooks?.data?.audioBooks) && audioBooks?.data?.audioBooks?.length > 0 ? audioBooks?.data?.audioBooks?.map((item) => (
+        {Array.isArray(audioBooks?.data?.audioBooks) && audioBooks?.data?.audioBooks?.length > 0 ? audioBooks?.data?.audioBooks?.map((book) => (
           <BookCard
-            key={item?._id}
-            item={item}
+            key={book?._id}
+            book={book}
             onView={handleView}
             onEdit={handleEdit}
             onDelete={handleDelete}
