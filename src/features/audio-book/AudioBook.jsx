@@ -22,16 +22,19 @@ function AudioBook() {
     setShowBookDetails(true)
   }, [])
   const handleEdit = (item) => {
-    console.log(item)
     setSelectedItem(item)
     setShowModal(true)
   }
   const handleDelete = useCallback(async (item) => {
-    await deleteAudioBook({ id: item?._id }).unwrap().then((res) => {
-      if (res?.success) {
-        toast.success(res?.message || "Audio Book Deleted Successfully")
-      }
-    })
+    try {
+      await deleteAudioBook({ id: item }).unwrap().then((res) => {
+        if (res?.success) {
+          toast.success(res?.message || "Audio Book Deleted Successfully")
+        }
+      })
+    } catch (error) {
+      toast.error(error?.data?.message || "Failed to delete audio book");
+    }
   }, [deleteAudioBook])
 
   if (isAudioBooksLoading) {

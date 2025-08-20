@@ -37,14 +37,16 @@ function ImageUploadSection({ preview,
                     className="object-fill !w-[178px] !h-[200px] rounded"
                 />
             ) : (
-                <Upload
-                    listType="picture-card"
-                    fileList={fileList}
-                    onChange={handleImageChange}
-                    onPreview={onPreview}
-                >
-                    {fileList.length < 5 && '+ Upload'}
-                </Upload>
+            <ImgCrop rotate aspect={178 / 200}>
+                    <Upload
+                        listType="picture-card"
+                        fileList={fileList}
+                        onChange={handleImageChange}
+                        onPreview={onPreview}
+                    >
+                        {fileList.length < 5 && '+ Upload'}
+                    </Upload>
+                </ImgCrop>
             )}
 
             {preview && (
