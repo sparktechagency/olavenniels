@@ -3,6 +3,7 @@ import JoditComponent from '../../components/common/JoditComponent';
 import { Button } from 'antd';
 import toast from 'react-hot-toast';
 import { useGetPrivacyPolicyQuery, useUpdatePrivacyPolicyMutation } from '../../Redux/Apis/service/policyApis';
+import Loader from '../../components/Loader/Loader';
 
 function PrivacyPolicy() {
   const [content, setContent] = useState('');
@@ -13,6 +14,11 @@ function PrivacyPolicy() {
       setContent(privacyPolicy?.privacies?.description || 'description');
     }
   }, [privacyPolicy]);
+
+  if (isLoading) {
+    return <Loader message="Loading Privacy Policy..." />;
+  }
+
   const updatePrivacyPolicyHandle = async () => {
     try {
       const data = {

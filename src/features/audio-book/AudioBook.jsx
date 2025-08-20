@@ -6,14 +6,15 @@ import BookInfoModal from "../../components/books/components/BookInfoModal";
 import toast from "react-hot-toast";
 import { useAllAudioBooksQuery, useDeleteAudioBookMutation } from "../../Redux/Apis/books/audioBookApi";
 import Loader from "../../components/Loader/Loader";
+import CategorSelect from "../../components/books/components/share/CategorSelect";
 
 function AudioBook() {
   const [showModal, setShowModal] = useState(false);
   const [showBookDetails, setShowBookDetails] = useState(false)
   const [selectedItem, setSelectedItem] = useState(null)
+  const [search, setSearch] = useState("")
   const { data: audioBooks, isLoading: isAudioBooksLoading } = useAllAudioBooksQuery();
   const [deleteAudioBook, { isLoading }] = useDeleteAudioBookMutation()
-  console.log(selectedItem)
   const handleView = useCallback((item) => {
     setSelectedItem(item)
     setShowBookDetails(true)
@@ -33,33 +34,15 @@ function AudioBook() {
   if (isAudioBooksLoading) {
     return <Loader message="Loading Audio Books..." />
   }
-
+  const handleCategoryChange = (value) => {
+    console.log(value)
+  }
   return (
     <div>
       <div className="flex items-center justify-between">
         <h2 className="titleStyle">Audio Book</h2>
         <div className="flex items-center gap-2">
-          <ConfigProvider
-            theme={{
-              components: {
-                Select: {
-                  colorBgElevated: "rgb(250,186,0)",
-                  colorBgContainer: "rgb(87,87,87)",
-                  colorBorder: "rgb(255,255,255)",
-                  colorText: "rgb(255,255,255)",
-                  optionSelectedBg: "rgb(250,140,22)",
-                },
-              },
-            }}
-          >
-            <Input placeholder="Search" style={{ width: 250 }} />
-            <Select placeholder="Category" style={{ width: 170 }}>
-              <Select.Option value="fiction">Fiction</Select.Option>
-              <Select.Option value="download">Downloaded</Select.Option>
-              <Select.Option value="inProgress">In Progress</Select.Option>
-              <Select.Option value="finished">Finished</Select.Option>
-            </Select>
-          </ConfigProvider>
+          <CategorSelect onChange={handleCategoryChange} setSearch={setSearch} />
           <button
             onClick={() => setShowModal(true)}
             className="px-4 cursor-pointer py-[6px] rounded-md !text-sm !text-[var(--font-color)] !bg-[var(--secondary-color)]"

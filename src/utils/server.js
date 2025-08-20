@@ -1,5 +1,5 @@
-// export const baseUrl = "http://10.10.20.52:3000";
-export const baseUrl = "http://192.168.0.101:3000";
+export const baseUrl = "http://10.10.20.52:3000";
+// export const baseUrl = "http://192.168.0.101:3000";
 
 export const imageUrl = (image) => {
   return image
