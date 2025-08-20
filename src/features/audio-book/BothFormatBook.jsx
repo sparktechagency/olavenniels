@@ -1,21 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import BookCard from "../../components/books/BookCard";
-import { Select, Input, ConfigProvider, Modal } from "antd";
+import { Modal } from "antd";
 import BookInfoModal from "../../components/books/components/BookInfoModal";
 import toast from "react-hot-toast";
-import BothFormateBookCreate from "../../components/books/components/book-creation/BothFormateBookCreate";
+import CategorSelect from "../../components/books/components/share/CategorSelect";
+import { useBothFormatBooksQuery, useDeleteBothFormatBookMutation } from "../../Redux/Apis/books/bothFormatBook";
+import Loader from "../../components/Loader/Loader";
+import NoBookFound from "../../components/common/NoBookFound";
+import BothFormateBookCreate from "../../components/books/components/both-formate-book/BothFormateBookCreate";
 
 function BothFormatBook() {
-  const [data, setData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [showBookDetails, setShowBookDetails] = useState(false)
   const [selectedItem, setSelectedItem] = useState(null)
+  const [category, setCategory] = useState("")
+  const [search, setSearch] = useState("")
+  const { data: bothFormatBooks, isLoading: isBothFormatBooksLoading } = useBothFormatBooksQuery({ categoryName: category, search: search })
+  const [deleteBothFormatBook, { isLoading: isDeleting }] = useDeleteBothFormatBookMutation();
 
-  useEffect(() => {
-    fetch("/dummy3.json")
-      .then((res) => res.json())
-      .then((data) => setData(data));
-  }, []);
   const handleView = (item) => {
     setSelectedItem(item)
     setShowBookDetails(true)
@@ -24,36 +26,32 @@ function BothFormatBook() {
     setSelectedItem(item)
     setShowModal(true)
   };
-  const handleDelete = (item) => {
-    console.log(item);
-    toast.success("Delete functionality is not implemented yet")
+  const handleDelete = async (item) => {
+    try {
+      await deleteBothFormatBook({ id: item }).unwrap().then((res) => {
+        if (res?.success) {
+          toast.success(res?.message || "Book Deleted Successfully")
+        }
+      })
+    } catch (error) {
+      toast.error(error?.data?.message || "Failed to delete book");
+    }
   };
+
+  const handleCategoryChange = (value) => {
+    setCategory(value)
+  }
+
+  if (isBothFormatBooksLoading) {
+    return <Loader message="Loading..." />
+  }
+
   return (
     <div>
       <div className="flex items-center justify-between">
         <h2 className="titleStyle">Both Format Book</h2>
         <div className="flex items-center gap-2">
-          <ConfigProvider
-            theme={{
-              components: {
-                Select: {
-                  colorBgElevated: "rgb(250,186,0)",
-                  colorBgContainer: "rgb(87,87,87)",
-                  colorBorder: "rgb(255,255,255)",
-                  colorText: "rgb(255,255,255)",
-                  optionSelectedBg: "rgb(250,140,22)",
-                },
-              },
-            }}
-          >
-            <Input placeholder="Search" style={{ width: 250 }} />
-            <Select placeholder="Category" style={{ width: 170 }}>
-              <Select.Option value="fiction">Fiction</Select.Option>
-              <Select.Option value="download">Downloaded</Select.Option>
-              <Select.Option value="inProgress">In Progress</Select.Option>
-              <Select.Option value="finished">Finished</Select.Option>
-            </Select>
-          </ConfigProvider>
+          <CategorSelect style={{ width: "200px" }} onChange={handleCategoryChange} setSearch={setSearch} /> {/*for filter by category*/}
           <button
             onClick={() => setShowModal(true)}
             className="px-4 cursor-pointer py-[6px] rounded-md !text-sm !text-[var(--font-color)] !bg-[var(--secondary-color)]"
@@ -63,15 +61,16 @@ function BothFormatBook() {
         </div>
       </div>
       <div className="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {data?.map((item, i) => (
+        {bothFormatBooks?.books?.length > 0 ? bothFormatBooks?.books?.map((book, i) => (
           <BookCard
             key={i}
-            item={item}
+            book={book}
             onView={handleView}
             onEdit={handleEdit}
             onDelete={handleDelete}
+            e_book={book?.pdfFile}
           />
-        ))}
+        )) : <div className="col-span-4"> <NoBookFound /></div>}
       </div>
       <Modal
         open={showModal}
@@ -81,7 +80,7 @@ function BothFormatBook() {
         width={800}
         destroyOnClose
       >
-        <BothFormateBookCreate setShowModal={setShowModal} />
+        <BothFormateBookCreate item={selectedItem} setShowModal={setShowModal} />
       </Modal>
 
       <Modal

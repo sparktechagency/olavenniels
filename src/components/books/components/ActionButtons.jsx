@@ -35,7 +35,7 @@ const ActionButtons = React.memo(({ onView, onEdit, onDelete, e_book }) => (
         </Popconfirm>
         {
             e_book && (
-                <Tooltip title="View Ebook">
+                <Tooltip title="Read Ebook">
                     <Link target='_blank' to={`${imageUrl(e_book)}`}>
                         <Button
                             icon={<FaBook className='text-xs' />}

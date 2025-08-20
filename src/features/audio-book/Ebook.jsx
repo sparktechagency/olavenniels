@@ -6,14 +6,16 @@ import toast from "react-hot-toast";
 import { useAllBooksQuery, useDeleteEBookMutation, useUpdateEBookMutation } from "../../Redux/Apis/books/eBookApi";
 import CategorSelect from "../../components/books/components/share/CategorSelect";
 import Loader from "../../components/Loader/Loader";
-import EbookCreate from "../../components/books/components/book-creation/next/EbookCreate";
+import EbookCreate from "../../components/books/components/book-creation/EbookCreate";
+import NoBookFound from "../../components/common/NoBookFound";
 
 function Ebook() {
   const [showModal, setShowModal] = useState(false);
   const [search, setSearch] = useState("")
   const [showBookDetails, setShowBookDetails] = useState(false)
   const [selectedItem, setSelectedItem] = useState(null)
-  const { data: ebooks, isLoading } = useAllBooksQuery()
+  const [category, setCategory] = useState("")
+  const { data: ebooks, isLoading } = useAllBooksQuery({ categoryName: category })
   const [updateEBook] = useUpdateEBookMutation()
   const [deleteEBook] = useDeleteEBookMutation()
   const handleView = (item) => {
@@ -38,7 +40,7 @@ function Ebook() {
   };
   //for filter by category
   const handleCategoryChange = (value) => {
-    console.log(value)
+    setCategory(value)
   }
 
   if (isLoading) {
@@ -47,7 +49,7 @@ function Ebook() {
   return (
     <div>
       <div className="flex items-center justify-between">
-        <h2 className="titleStyle">Audio Book</h2>
+        <h2 className="titleStyle">E-book</h2>
         <div className="flex items-center gap-2">
           <CategorSelect style={{ width: "200px" }} onChange={handleCategoryChange} setSearch={setSearch} /> {/*for filter by category*/}
           <button
@@ -70,7 +72,9 @@ function Ebook() {
               e_book={book?.pdfFile}
             />
           )
-        }) : <p className="text-center text-white">No Audio Books Found</p>}
+        }) : <div className="col-span-4">
+          <NoBookFound title="The E-book library appears to be empty right now. Don't worry, great stories are on their way!" />
+        </div>}
       </div>
       <Modal
         open={showModal}

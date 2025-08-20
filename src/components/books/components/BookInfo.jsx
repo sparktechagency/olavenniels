@@ -17,7 +17,7 @@ const BookInfo = React.memo(({
     onView,
     onEdit,
     onDelete,
-    e_book
+    e_book,
 }) => (
     <motion.div
         key="book-info"
@@ -36,7 +36,7 @@ const BookInfo = React.memo(({
                 {bookName}
             </motion.h2>
 
-            {hasAudio ? (
+            {hasAudio  ? (
                 <motion.button
                     className='text-white text-xl cursor-pointer p-2 rounded-full hover:bg-white/10 transition-colors'
                     onClick={onPlayClick}

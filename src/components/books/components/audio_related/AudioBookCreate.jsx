@@ -1,13 +1,14 @@
 import React, { useEffect } from "react";
-import { Form, Input, Select, Button, Tabs, message } from "antd";
+import { Form, Input, Select, Button, Tabs } from "antd";
 import { CloseOutlined } from "@ant-design/icons";
 import { useGetCategoriesQuery } from "../../../../Redux/Apis/service/categoryApis";
 import { useAddAudioBookMutation, useUpdateAudioBookMutation } from "../../../../Redux/Apis/books/audioBookApi";
-import { useAudioBookForm, prepareFormData } from "./AudioBookCreateHelpers.js";
+
 import ImageUploadSection from "./ImageUploadSection.jsx";
 import toast from "react-hot-toast";
 import { imageUrl } from "../../../../utils/server.js";
 import TagsSelect from "../share/TagsSelect.jsx";
+import { prepareFormData, useAudioBookForm } from "../book-creation/AudioBookCreateHelpers.js";
 
 const { TabPane } = Tabs;
 
@@ -94,7 +95,6 @@ const AudioBookCreate = ({ setShowModal, item }) => {
   const { data: categories, isLoading: categoriesLoading } = useGetCategoriesQuery();
   const [addAudioBook, { isLoading: isSubmitting }] = useAddAudioBookMutation();
   const [updateAudioBook, { isLoading: isUpdating }] = useUpdateAudioBookMutation();
-  console.log(item)
   const {
     preview,
     image,

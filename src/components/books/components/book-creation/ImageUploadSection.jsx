@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { motion } from 'framer-motion'
-import ImgCrop from 'antd-img-crop'
 import { Upload } from 'antd'
 import { CloseOutlined } from '@ant-design/icons'
 

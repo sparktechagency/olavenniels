@@ -3,9 +3,12 @@ import baseApis from "../../baseApis";
 const audioBookApi = baseApis.injectEndpoints({
   endpoints: (build) => ({
     allAudioBooks: build.query({
-      query: () => ({
+      query: ({ categoryName }) => ({
         url: "/api/audio-books/get",
         method: "GET",
+        params: {
+          categoryName,
+        },
       }),
       providesTags: ["AudioBook"],
     }),

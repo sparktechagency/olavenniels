@@ -7,28 +7,8 @@ import { useGetCategoriesQuery, useDeleteCategoryMutation } from "../../Redux/Ap
 import { imageUrl } from "../../utils/server";
 
 function Category() {
-  const { data: categories, isLoading: isCategoriesLoading } = useGetCategoriesQuery();
+  const { data: categories, isLoading: isCategoriesLoading, refetch } = useGetCategoriesQuery();
   const [deleteCategory, { isLoading: isDeleteLoading }] = useDeleteCategoryMutation();
-  const [categoryData, setCategoryData] = useState([
-    {
-      key: "1",
-      name: "John Doe",
-      image:
-        "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?semt=ais_hybrid&w=740",
-    },
-    {
-      key: "2",
-      name: "Jane Smith",
-      image:
-        "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?semt=ais_hybrid&w=740",
-    },
-    {
-      key: "3",
-      name: "John Doe",
-      image:
-        "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?semt=ais_hybrid&w=740",
-    },
-  ]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [data, setData] = useState(null);
 
@@ -148,7 +128,7 @@ function Category() {
           }}
           dataSource={categories?.data?.bookCategories}
         /></ConfigProvider>
-      <CategoryCreateModal categoryData={data} open={isModalOpen} onCancel={() => setIsModalOpen(false)} />
+      <CategoryCreateModal refetch={refetch} categoryData={data} open={isModalOpen} onCancel={() => setIsModalOpen(false)} />
     </div>
   );
 }

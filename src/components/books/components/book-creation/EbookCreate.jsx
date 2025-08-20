@@ -1,15 +1,13 @@
 import React, { useEffect } from "react";
-import { Form, Input, Select, Button, Tabs, Upload } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
-import { useAudioBookForm, prepareFormData } from "./AudioBookCreateHelpers.js";
+import { Form, Input, Select, Button, Tabs } from "antd";
+import { useAudioBookForm } from "./AudioBookCreateHelpers.js";
 import ImageUploadSection from "./ImageUploadSection.jsx";
 import toast from "react-hot-toast";
-import TagsSelect from "../../share/TagsSelect.jsx";
-import { imageUrl } from "../../../../../utils/server.js";
-import { useGetCategoriesQuery } from "../../../../../Redux/Apis/service/categoryApis.js";
-import { useAddEBookMutation, useUpdateEBookMutation } from "../../../../../Redux/Apis/books/eBookApi.js";
+import TagsSelect from "../share/TagsSelect.jsx";
+import { imageUrl } from "../../../../utils/server.js";
+import { useGetCategoriesQuery } from "../../../../Redux/Apis/service/categoryApis.js";
+import { useAddEBookMutation, useUpdateEBookMutation } from "../../../../Redux/Apis/books/eBookApi.js";
 import PdfUploadSection from "./PdfUploadSection.jsx";
-import { forEach } from "lodash";
 
 const { TabPane } = Tabs;
 

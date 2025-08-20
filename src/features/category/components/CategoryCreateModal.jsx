@@ -8,7 +8,8 @@ import toast from 'react-hot-toast';
 const CategoryCreateModal = ({
     open,
     onCancel,
-    categoryData: initialData
+    categoryData: initialData,
+    refetch
 }) => {
     const [form] = Form.useForm();
     const [addCategory, { isLoading: isAddLoading }] = useAddBookCategoryMutation();
@@ -67,6 +68,7 @@ const CategoryCreateModal = ({
                 await updateCategory({ id: initialData._id, data: formData }).unwrap().then((res) => {
                     if (res?.success) {
                         toast.success(res?.message);
+                        refetch()
                         handleClose();
                     } else {
                         toast.error(res?.message);

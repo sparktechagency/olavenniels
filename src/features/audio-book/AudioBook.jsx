@@ -7,13 +7,15 @@ import toast from "react-hot-toast";
 import { useAllAudioBooksQuery, useDeleteAudioBookMutation } from "../../Redux/Apis/books/audioBookApi";
 import Loader from "../../components/Loader/Loader";
 import CategorSelect from "../../components/books/components/share/CategorSelect";
+import NoBookFound from "../../components/common/NoBookFound";
 
 function AudioBook() {
   const [showModal, setShowModal] = useState(false);
   const [showBookDetails, setShowBookDetails] = useState(false)
   const [selectedItem, setSelectedItem] = useState(null)
   const [search, setSearch] = useState("")
-  const { data: audioBooks, isLoading: isAudioBooksLoading } = useAllAudioBooksQuery();
+  const [category, setCategory] = useState("")
+  const { data: audioBooks, isLoading: isAudioBooksLoading } = useAllAudioBooksQuery({ categoryName: category });
   const [deleteAudioBook, { isLoading }] = useDeleteAudioBookMutation()
   const handleView = useCallback((item) => {
     setSelectedItem(item)
@@ -35,16 +37,15 @@ function AudioBook() {
   if (isAudioBooksLoading) {
     return <Loader message="Loading Audio Books..." />
   }
-  //for filter by category
   const handleCategoryChange = (value) => {
-    console.log(value)
+    setCategory(value)
   }
   return (
     <div>
       <div className="flex items-center justify-between">
         <h2 className="titleStyle">Audio Book</h2>
         <div className="flex items-center gap-2">
-          <CategorSelect style={{ width: "200px" }} onChange={handleCategoryChange} setSearch={setSearch} /> {/*for filter by category*/}
+          <CategorSelect style={{ width: "200px" }} onChange={handleCategoryChange} setSearch={setSearch} />
           <button
             onClick={() => setShowModal(true)}
             className="px-4 cursor-pointer py-[6px] rounded-md !text-sm !text-[var(--font-color)] !bg-[var(--secondary-color)]"
@@ -63,7 +64,9 @@ function AudioBook() {
             onDelete={handleDelete}
             e_book={false}
           />
-        )) : <p className="text-center text-white">No Audio Books Found</p>}
+        )) : <div className="col-span-4">
+          <NoBookFound title="The audio book library appears to be empty right now. Don't worry, great stories are on their way!" />
+        </div>}
       </div>
       <Modal
         open={showModal}
