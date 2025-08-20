@@ -7,6 +7,7 @@ import { useAudioBookForm, prepareFormData } from "./AudioBookCreateHelpers.js";
 import ImageUploadSection from "./ImageUploadSection.jsx";
 import toast from "react-hot-toast";
 import { imageUrl } from "../../../../utils/server.js";
+import TagsSelect from "../share/TagsSelect.jsx";
 
 const { TabPane } = Tabs;
 
@@ -32,7 +33,6 @@ const AudioUploadField = ({
     e.preventDefault();
     resetAudioState();
     if (existingAudioUrl) {
-      // If we have an existing audio URL, we need to tell the form to remove it
       form.setFieldsValue({ audio: null });
     }
   };
@@ -70,7 +70,7 @@ const AudioUploadField = ({
       {(audioUrl || existingAudioUrl) && (
         <div className="border border-gray-300 p-2 rounded mt-2 relative">
           <audio
-            src={audioUrl || existingAudioUrl}
+            src={audioUrl || imageUrl(existingAudioUrl)}
             controls
             className="w-full h-[100px] rounded"
           />
@@ -87,6 +87,7 @@ const AudioUploadField = ({
   );
 };
 
+// AudioBookCreate
 
 const AudioBookCreate = ({ setShowModal, item }) => {
   const [form] = Form.useForm();
@@ -105,6 +106,7 @@ const AudioBookCreate = ({ setShowModal, item }) => {
     handleAudioUpload,
     resetImageState,
     resetAudioState,
+    resetAllState,
     setPreview,
     setFileList,
     setAudioUrl
@@ -112,26 +114,42 @@ const AudioBookCreate = ({ setShowModal, item }) => {
 
   useEffect(() => {
     if (item) {
-      form.setFields([
-        { name: "bookName", value: item?.bookName },
-        { name: "synopsis", value: item?.synopsis },
-        { name: "category", value: item?.category?._id },
-        { name: "tags", value: item?.tags },
-      ]);
+      // Reset form fields with current item data
+      form.setFieldsValue({
+        bookName: item?.bookName,
+        synopsis: item?.synopsis,
+        category: item?.category?._id,
+        tags: item?.tags,
+      });
 
+      // Reset image preview and file list
       if (item?.bookCover) {
-        setPreview(imageUrl(item.bookCover));
+        const imageUrlStr = imageUrl(item.bookCover);
+        setPreview(imageUrlStr);
         setFileList([{
           uid: '-1',
           name: 'current-image.png',
           status: 'done',
-          url: item.bookCover,
+          url: imageUrlStr,
         }]);
+      } else {
+        setPreview(null);
+        setFileList([]);
       }
 
+      // Reset audio state
       if (item?.audioUrl) {
-        setAudioUrl(item.audioUrl);
+        setAudioUrl(imageUrl(item.audioUrl));
+      } else {
+        setAudioUrl(null);
+        if (audioInputRef.current) {
+          audioInputRef.current.value = "";
+        }
       }
+    } else {
+      // Reset form when not in edit mode
+      form.resetFields();
+      resetAllState();
     }
   }, [item]);
 
@@ -146,33 +164,33 @@ const AudioBookCreate = ({ setShowModal, item }) => {
         values,
         audioFile,
         image,
-        item?.audioUrl, // Pass existing audio URL if in edit mode
-        item?.bookCover // Pass existing image URL if in edit mode
+        item?.audioUrl,
+        item?.bookCover
       );
 
-      if (item) {
-        await updateAudioBook({ id: item._id, data: formData }).unwrap().then((res) => {
-          if (res?.success) {
-            toast.success(res?.message || "Audio Book Updated Successfully");
-            setShowModal(false);
-          }
-        });
-      } else {
-        await addAudioBook({ data: formData }).unwrap().then((res) => {
-          if (res?.success) {
-            toast.success(res?.message || "Audio Book Created Successfully");
-            setShowModal(false);
-          }
-        });
-      }
+      try {
+        let response;
 
-      setShowModal(false);
+        if (item) {
+          response = await updateAudioBook({ id: item._id, data: formData }).unwrap();
+        } else {
+          response = await addAudioBook({ data: formData }).unwrap();
+        }
+
+        if (response?.success) {
+          toast.success(response?.message || (item ? "Audio Book Updated Successfully" : "Audio Book Created Successfully"));
+          form.resetFields();
+          resetAllState();
+          setShowModal(false);
+        }
+      } catch (error) {
+        throw error;
+      }
     } catch (error) {
       toast.error(error?.data?.message || (item ? "Failed to update audio book" : "Failed to create audio book"));
       console.error(`Error ${item ? 'updating' : 'creating'} audio book:`, error);
     }
   };
-
   return (
     <div className="flex gap-6 w-full">
       <Tabs style={{ width: "100%" }}>
@@ -237,18 +255,7 @@ const AudioBookCreate = ({ setShowModal, item }) => {
                 </Select>
               </Form.Item>
 
-              <Form.Item
-                label="Select Type"
-                name="tags"
-                rules={[{ required: true, message: "Please select type" }]}
-              >
-                <Select placeholder="Select Type">
-                  <Select.Option value="recommended">Recommended</Select.Option>
-                  <Select.Option value="new_release">New Release</Select.Option>
-                  <Select.Option value="tranding">Trending</Select.Option>
-                  <Select.Option value="for_you">For You</Select.Option>
-                </Select>
-              </Form.Item>
+              <TagsSelect form={form} item={item} />
 
               <AudioUploadField
                 audioInputRef={audioInputRef}
@@ -257,7 +264,7 @@ const AudioBookCreate = ({ setShowModal, item }) => {
                 audioUrl={audioUrl}
                 resetAudioState={resetAudioState}
                 form={form}
-                existingAudioUrl={item?.audioUrl}
+                existingAudioUrl={item?.audioFile}
               />
 
               <Form.Item className="flex items-center justify-end !mt-2">

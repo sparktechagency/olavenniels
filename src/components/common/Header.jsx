@@ -10,7 +10,7 @@ import { imageUrl } from '../../utils/server';
 function Header() {
   const { data, isLoading } = useGetProfileDataQuery()
   if (isLoading) {
-    return <div className='w-full h-16 animate-pulse bg-gray-200' ></div>;
+    return <div className='w-full h-16 animate-pulse bg-[var(--primary-color)]' ></div>;
   }
   const user = {
     fullName: data?.admin?.name,

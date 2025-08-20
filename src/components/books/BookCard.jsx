@@ -23,23 +23,28 @@ function BookCard({ book, onView, onEdit, onDelete, e_book }) {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
     }
-  }, []);
+  }, [audioRef]);
 
   const handleAudioEnded = useCallback(() => {
-  }, []);
+    setShowAudio(false);
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
+  }, [audioRef]);
 
   const handleView = useCallback(() => {
     onView(book);
-  }, []);
+  }, [book]);
 
   const handleEdit = useCallback(() => {
     onEdit(book);
-  }, []);
+  }, [book]);
 
   const handleDelete = useCallback(() => {
-    onDelete(book);
-  }, []);
-console.log(book?.audioFile)
+    onDelete(book?._id);
+  }, [book]);
+
   return (
     <div className="p-4 bg-[var(--primary-color)] rounded border border-gray-200/40 shadow-md">
       <BookImage banner={imageUrl(book?.bookCover)} bookName={book?.bookName} />

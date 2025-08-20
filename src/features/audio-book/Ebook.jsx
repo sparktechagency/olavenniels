@@ -1,23 +1,21 @@
 import React, { useEffect, useState } from "react";
 import BookCard from "../../components/books/BookCard";
-import { ConfigProvider, Input, Modal, Select } from "antd";
-import BookCreate from "../../components/books/components/BookCreate";
+import { Modal } from "antd";
 import BookInfoModal from "../../components/books/components/BookInfoModal";
 import toast from "react-hot-toast";
-import { useAllBooksQuery } from "../../Redux/Apis/books/eBookApi";
+import { useAllBooksQuery, useDeleteEBookMutation, useUpdateEBookMutation } from "../../Redux/Apis/books/eBookApi";
+import CategorSelect from "../../components/books/components/share/CategorSelect";
+import Loader from "../../components/Loader/Loader";
+import EbookCreate from "../../components/books/components/book-creation/next/EbookCreate";
 
 function Ebook() {
-  const [data, setData] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [search, setSearch] = useState("")
   const [showBookDetails, setShowBookDetails] = useState(false)
   const [selectedItem, setSelectedItem] = useState(null)
-  const { data: booksData } = useAllBooksQuery()
-  console.log(booksData?.ebooks)
-  useEffect(() => {
-    fetch("/dummy2.json")
-      .then((res) => res.json())
-      .then((data) => setData(data));
-  }, []);
+  const { data: ebooks, isLoading } = useAllBooksQuery()
+  const [updateEBook] = useUpdateEBookMutation()
+  const [deleteEBook] = useDeleteEBookMutation()
   const handleView = (item) => {
     setSelectedItem(item)
     setShowBookDetails(true)
@@ -26,36 +24,32 @@ function Ebook() {
     setSelectedItem(item)
     setShowModal(true)
   };
-  const handleDelete = (item) => {
-    console.log(item);
-    toast.success("Delete functionality is not implemented yet")
+  const handleDelete = async (item) => {
+    console.log(item)
+    try {
+      await deleteEBook({ id: item }).unwrap().then((res) => {
+        if (res?.success) {
+          toast.success(res?.message || "Ebook Deleted Successfully")
+        }
+      })
+    } catch (error) {
+      toast.error(error?.data?.message || "Something went wrong")
+    }
   };
+  //for filter by category
+  const handleCategoryChange = (value) => {
+    console.log(value)
+  }
+
+  if (isLoading) {
+    return <Loader message="Loading Ebook..." />
+  }
   return (
     <div>
       <div className="flex items-center justify-between">
-        <h2 className="titleStyle">E - Book</h2>
+        <h2 className="titleStyle">Audio Book</h2>
         <div className="flex items-center gap-2">
-          <ConfigProvider
-            theme={{
-              components: {
-                Select: {
-                  colorBgElevated: "rgb(250,186,0)",
-                  colorBgContainer: "rgb(87,87,87)",
-                  colorBorder: "rgb(255,255,255)",
-                  colorText: "rgb(255,255,255)",
-                  optionSelectedBg: "rgb(250,140,22)",
-                },
-              },
-            }}
-          >
-            <Input placeholder="Search" style={{ width: 250 }} />
-            <Select placeholder="Category" style={{ width: 170 }}>
-              <Select.Option value="fiction">Fiction</Select.Option>
-              <Select.Option value="download">Downloaded</Select.Option>
-              <Select.Option value="inProgress">In Progress</Select.Option>
-              <Select.Option value="finished">Finished</Select.Option>
-            </Select>
-          </ConfigProvider>
+          <CategorSelect style={{ width: "200px" }} onChange={handleCategoryChange} setSearch={setSearch} /> {/*for filter by category*/}
           <button
             onClick={() => setShowModal(true)}
             className="px-4 cursor-pointer py-[6px] rounded-md !text-sm !text-[var(--font-color)] !bg-[var(--secondary-color)]"
@@ -65,29 +59,37 @@ function Ebook() {
         </div>
       </div>
       <div className="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {booksData?.ebooks?.map((book) => (
-          <BookCard
-            key={book?._id}
-            book={book}
-            onView={handleView}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-          />
-        ))}
+        {Array.isArray(ebooks?.ebooks) && ebooks?.ebooks?.length > 0 ? ebooks?.ebooks?.map((book) => {
+          return (
+            <BookCard
+              key={book?._id}
+              book={book}
+              onView={handleView}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+              e_book={book?.pdfFile}
+            />
+          )
+        }) : <p className="text-center text-white">No Audio Books Found</p>}
       </div>
-
       <Modal
         open={showModal}
         onCancel={() => setShowModal(false)}
         centered
         footer={null}
         width={800}
+        closeIcon={false}
+        maskClosable={false}
+        destroyOnClose
       >
-        <BookCreate setShowModal={setShowModal} />
+        <EbookCreate item={selectedItem} setShowModal={setShowModal} />
       </Modal>
       <Modal
         open={showBookDetails}
-        onCancel={() => setShowBookDetails(false)}
+        onCancel={() => {
+          setSelectedItem(null)
+          setShowBookDetails(false)
+        }}
         centered
         footer={null}
         width={600}

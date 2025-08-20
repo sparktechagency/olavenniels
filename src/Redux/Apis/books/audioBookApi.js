@@ -10,7 +10,7 @@ const audioBookApi = baseApis.injectEndpoints({
       providesTags: ["AudioBook"],
     }),
     getBookById: build.query({
-      query: (id) => ({
+      query: ({ id }) => ({
         url: `/api/audio-books/get/${id}`,
         method: "GET",
       }),

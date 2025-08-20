@@ -1,6 +1,6 @@
 import baseApis from "../../baseApis";
 
-const eBookApi = baseApis.injectEndpoints({
+const bothFormatBook = baseApis.injectEndpoints({
   endpoints: (build) => ({
     allBooks: build.query({
       query: () => ({
@@ -17,7 +17,7 @@ const eBookApi = baseApis.injectEndpoints({
       providesTags: ["eBook"],
     }),
     addEBook: build.mutation({
-      query: ({ data }) => ({
+      query: (data) => ({
         url: "/api/ebooks/create",
         method: "POST",
         body: data,
@@ -33,7 +33,7 @@ const eBookApi = baseApis.injectEndpoints({
       invalidatesTags: ["eBook"],
     }),
     deleteEBook: build.mutation({
-      query: ({ id }) => ({
+      query: (id) => ({
         url: `/api/ebooks/delete/${id}`,
         method: "DELETE",
       }),
@@ -43,9 +43,4 @@ const eBookApi = baseApis.injectEndpoints({
 });
 
 export const {
-  useAllBooksQuery,
-  useGetBookByIdQuery,
-  useAddEBookMutation,
-  useUpdateEBookMutation,
-  useDeleteEBookMutation,
-} = eBookApi;
+} = bothFormatBook;

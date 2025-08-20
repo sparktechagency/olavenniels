@@ -6,6 +6,9 @@
   --secondary-color: #faba00;
   --font-color: #fff;
 }
+body{
+  background-color: var(--primary-color);
+}
 
 .ant-pagination-item {
   border-radius: 100% !important;

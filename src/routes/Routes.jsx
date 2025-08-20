@@ -18,13 +18,17 @@ import BothFormatBook from "../features/audio-book/BothFormatBook";
 import NotificationPage from "../features/notifications/NotificationPage";
 import Contact from "../features/setting/Contact";
 import MakeAdmin from "../features/user/ui/MakeAdmin";
-import SubscriptionManagement from "../features/subscription/SubscriptionManagement";
+// import SubscriptionManagement from "../features/subscription/SubscriptionManagement";
 import CongratulationPage from "../features/auth/CongratulationPage";
 export const Routes = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout />,
     children: [
+      {
+        index: true,
+        element: <Dashboard />
+      },
       {
         path: "/",
         element: <Dashboard />,

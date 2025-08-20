@@ -6,6 +6,8 @@ export const useAudioBookForm = () => {
   const [audioFile, setAudioFile] = useState(null);
   const [audioUrl, setAudioUrl] = useState(null);
   const [fileList, setFileList] = useState([]);
+  const [pdfFile, setPdfFile] = useState(null);
+  const pdfInputRef = useRef(null);
   const audioInputRef = useRef(null);
 
   const handleImageChange = ({ fileList: newFileList }) => {
@@ -40,6 +42,21 @@ export const useAudioBookForm = () => {
     }
   };
 
+  const handlePdfUpload = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (file.type === "application/pdf") {
+      setPdfFile(file);
+      return { isValid: true };
+    } else {
+      return {
+        isValid: false,
+        error: "Please upload a valid PDF file",
+      };
+    }
+  };
+
   const resetImageState = () => {
     setImage(null);
     setPreview(null);
@@ -66,8 +83,11 @@ export const useAudioBookForm = () => {
     audioUrl,
     fileList,
     audioInputRef,
+    pdfFile,
+    pdfInputRef,
     handleImageChange,
     handleAudioUpload,
+    handlePdfUpload,
     resetImageState,
     resetAudioState,
     resetAllState,
@@ -76,6 +96,7 @@ export const useAudioBookForm = () => {
     setAudioFile,
     setAudioUrl,
     setFileList,
+    setPdfFile,
   };
 };
 
@@ -83,8 +104,10 @@ export const prepareFormData = (
   values,
   audioFile,
   image,
+  pdfFile,
   existingAudioUrl = null,
-  existingImageUrl = null
+  existingImageUrl = null,
+  existingPdfUrl = null
 ) => {
   const formData = new FormData();
   const data = { ...values };
@@ -107,13 +130,23 @@ export const prepareFormData = (
     formData.append("existingImageUrl", existingImageUrl);
   }
 
+  // Handle pdf file
+  if (pdfFile instanceof File) {
+    // New pdf file uploaded
+    formData.append("pdfFile", pdfFile);
+  } else if (existingPdfUrl && typeof existingPdfUrl === "string") {
+    // Keep existing pdf URL
+    formData.append("existingPdfUrl", existingPdfUrl);
+  }
+
   // Append other form data
   Object.keys(data).forEach((key) => {
     if (
       data[key] !== undefined &&
       data[key] !== null &&
       key !== "audioFile" &&
-      key !== "bookCover"
+      key !== "bookCover" &&
+      key !== "pdfFile"
     ) {
       // Convert non-file fields to string if they're not already
       const value =

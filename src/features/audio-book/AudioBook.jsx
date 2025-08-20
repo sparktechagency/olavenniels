@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from "react";
 import BookCard from "../../components/books/BookCard";
-import { Select, Input, ConfigProvider, Modal } from "antd";
+import { Modal } from "antd";
 import AudioBookCreate from "../../components/books/components/audio_related/AudioBookCreate";
 import BookInfoModal from "../../components/books/components/BookInfoModal";
 import toast from "react-hot-toast";
@@ -19,10 +19,11 @@ function AudioBook() {
     setSelectedItem(item)
     setShowBookDetails(true)
   }, [])
-  const handleEdit = useCallback((item) => {
+  const handleEdit = (item) => {
+    console.log(item)
     setSelectedItem(item)
     setShowModal(true)
-  }, [])
+  }
   const handleDelete = useCallback(async (item) => {
     await deleteAudioBook({ id: item?._id }).unwrap().then((res) => {
       if (res?.success) {
@@ -34,6 +35,7 @@ function AudioBook() {
   if (isAudioBooksLoading) {
     return <Loader message="Loading Audio Books..." />
   }
+  //for filter by category
   const handleCategoryChange = (value) => {
     console.log(value)
   }
@@ -42,7 +44,7 @@ function AudioBook() {
       <div className="flex items-center justify-between">
         <h2 className="titleStyle">Audio Book</h2>
         <div className="flex items-center gap-2">
-          <CategorSelect onChange={handleCategoryChange} setSearch={setSearch} />
+          <CategorSelect style={{ width: "200px" }} onChange={handleCategoryChange} setSearch={setSearch} /> {/*for filter by category*/}
           <button
             onClick={() => setShowModal(true)}
             className="px-4 cursor-pointer py-[6px] rounded-md !text-sm !text-[var(--font-color)] !bg-[var(--secondary-color)]"
@@ -61,7 +63,7 @@ function AudioBook() {
             onDelete={handleDelete}
             e_book={false}
           />
-        )) : <p>No Audio Books Found</p>}
+        )) : <p className="text-center text-white">No Audio Books Found</p>}
       </div>
       <Modal
         open={showModal}

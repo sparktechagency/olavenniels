@@ -1,7 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Button, Popconfirm } from 'antd';
-import { FaEye, FaEdit, FaTrash } from 'react-icons/fa';
+import { Button, Popconfirm, Tooltip } from 'antd';
+import { FaEye, FaEdit, FaTrash, FaBook } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
+import { imageUrl } from '../../../utils/server';
 
 const ActionButtons = React.memo(({ onView, onEdit, onDelete, e_book }) => (
     <motion.div
@@ -11,25 +13,38 @@ const ActionButtons = React.memo(({ onView, onEdit, onDelete, e_book }) => (
         exit={{ opacity: 0, y: 20 }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
     >
-        <Button
-            icon={<FaEye className='text-xs' />}
-            onClick={onView}
-            shape='circle'
-        />
-
-        <Button
-            icon={<FaEdit className='text-xs' />}
-            onClick={onEdit}
-            shape='circle'
-        />
+        <Tooltip title="Quick View Book">
+            <Button
+                icon={<FaEye className='text-xs' />}
+                onClick={onView}
+                shape='circle'
+            />
+        </Tooltip>
+        <Tooltip title="Edit Book">
+            <Button
+                icon={<FaEdit className='text-xs' />}
+                onClick={() => onEdit()}
+                shape='circle'
+            /></Tooltip>
 
         <Popconfirm placement='rightBottom' title="Are you sure you want to delete this book?" onConfirm={onDelete} okText="Yes" cancelText="No">
             <Button
                 icon={<FaTrash className='text-xs' />}
                 shape='circle'
-                disabled={e_book}
             />
         </Popconfirm>
+        {
+            e_book && (
+                <Tooltip title="View Ebook">
+                    <Link target='_blank' to={`${imageUrl(e_book)}`}>
+                        <Button
+                            icon={<FaBook className='text-xs' />}
+                            shape='circle'
+                        />
+                    </Link>
+                </Tooltip>
+            )
+        }
     </motion.div>
 ));
 
