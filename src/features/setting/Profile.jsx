@@ -4,7 +4,7 @@ import { Button } from 'antd';
 import { FaCameraRetro } from 'react-icons/fa6';
 import ProfileEdit from '../../components/ProfilePage/ProfileEdit.jsx';
 import ChangePassword from '../../components/ProfilePage/ChangePassword.jsx';
-import { useGetProfileDataQuery } from '../../Redux/services/profileApis.js';
+import { useGetProfileDataQuery } from '../../Redux/Apis/service/profileApis';
 import { imageUrl } from '../../utils/server.js';
 
 const Tabs = ['Edit Profile', 'Change Password'];

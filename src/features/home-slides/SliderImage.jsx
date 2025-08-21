@@ -4,9 +4,10 @@ import { FaTrash, FaUpload } from 'react-icons/fa';
 import toast from 'react-hot-toast';
 import { useBannerQuery, useAddBannerMutation, useDeleteBannerMutation } from '../../Redux/Apis/service/bannerApis';
 import { imageUrl } from '../../utils/server';
+import Loader from '../../components/Loader/Loader';
 
 const SliderImage = () => {
-  const { data } = useBannerQuery()
+  const { data, isLoading: bannerLoading } = useBannerQuery()
   const [deleteBanner, { isLoading: deleteLoading }] = useDeleteBannerMutation()
   const [addBanner, { isLoading: addLoading }] = useAddBannerMutation()
 
@@ -92,6 +93,12 @@ const SliderImage = () => {
       toast.error(error?.data?.message || 'Image deleted failed');
     }
   };
+
+  if (bannerLoading) {
+    return <div className='flex items-center justify-center'>
+      <Loader message={"Banner Loading..."} />
+    </div>
+  }
 
   return (
     <div className="p-4">

@@ -1,4 +1,4 @@
-import baseApis from "../baseApis";
+import baseApis from "../../baseApis";
 
 
 const profileApis = baseApis.injectEndpoints({

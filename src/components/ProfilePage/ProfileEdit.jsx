@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
-import { Button, ConfigProvider, Form, Input } from "antd";
+import { Button, Form } from "antd";
 import toast from "react-hot-toast";
-import { useUpdateProfileDataMutation } from "../../Redux/services/profileApis";
 import CustomInput from "../form-component/CustomInput";
+import { useUpdateProfileDataMutation } from "../../Redux/Apis/service/profileApis";
 const ProfileEdit = ({ image, data }) => {
   const [form] = Form.useForm();
   const [setProfileUpdate, { isLoading: isProfileUpdate }] =
@@ -45,7 +45,7 @@ const ProfileEdit = ({ image, data }) => {
       type: "text",
       placeholder: "Name",
       disabled: false,
-      },
+    },
     {
       label: "Email",
       name: "email",

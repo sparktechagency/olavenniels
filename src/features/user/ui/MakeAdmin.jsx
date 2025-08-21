@@ -8,8 +8,10 @@ import { useDeleteAdminMutation, useGetAdminsQuery } from '../../../Redux/Apis/s
 function MakeAdmin() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [page, setPage] = useState(1)
-  const { data } = useGetAdminsQuery({ page })
-  const [deleteAdminMutation] = useDeleteAdminMutation();
+  const [searchTerm, setSearchTerm] = useState("")
+  const { data, isLoading } = useGetAdminsQuery({ page, search: searchTerm })
+  const [deleteAdminMutation, { isLoading: isDeleting }] = useDeleteAdminMutation();
+  const [deleteID, setDeleteID] = useState(null)
   const columns = [
     {
       title: 'Name',
@@ -25,28 +27,36 @@ function MakeAdmin() {
       title: 'Action',
       key: 'action',
       render: (text, record) => (
-        <Popconfirm title="Are you sure to delete this Admin?" onConfirm={() => deleteAdmin(record?._id)}>
-          <Button size='large' shape='circle' icon={<FaTrash />} />
+        <Popconfirm title="Are you sure to delete this Admin?" onConfirm={() => {
+          deleteAdmin(record?._id)
+          setDeleteID(record?._id)
+        }}>
+          <Button loading={deleteID === record?._id} disabled={deleteID === record?._id} size='large' shape='circle' icon={<FaTrash />} />
         </Popconfirm>
       ),
     },
   ];
   const deleteAdmin = async (key) => {
-    console.log(key)
     try {
       await deleteAdminMutation({ id: key }).unwrap().then((res) => {
         if (res?.success) {
           toast.success(res?.message);
           setPage(1);
+          setDeleteID(null)
         }
       });
     } catch (error) {
       toast.error(error?.data?.message || 'Something went wrong');
+      setDeleteID(null)
+    }
+    finally {
+      setDeleteID(null)
     }
   };
 
   const handleSearch = (value) => {
-    // setData((prev) => prev.filter((item) => item.name.toLowerCase().includes(value.toLowerCase())));
+    setSearchTerm(value)
+    setPage(1)
   };
   return (
     <div>
@@ -78,6 +88,7 @@ function MakeAdmin() {
         }
       }}>
         <Table
+          loading={isLoading}
           bordered
           columns={columns}
           dataSource={data?.admins}
@@ -92,8 +103,7 @@ function MakeAdmin() {
             defaultCurrent: 1,
             total: data?.admins?.length,
             onChange: (page, pageSize) => {
-              console.log("Page:", page);
-              console.log("Page Size:", pageSize);
+              setPage(page)
             },
           }}
           scroll={{ x: "max-content" }}

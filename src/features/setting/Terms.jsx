@@ -2,14 +2,15 @@ import React, { useEffect, useState } from 'react';
 import JoditComponent from '../../components/common/JoditComponent';
 import { Button } from 'antd';
 import { useTermsQuery, useUpdateTermsMutation } from '../../Redux/Apis/service/termsApis';
+import toast from 'react-hot-toast';
 
 function Terms() {
   const [content, setContent] = useState('');
   const { data: terms, isLoading } = useTermsQuery();
   const [updateTerms] = useUpdateTermsMutation();
   useEffect(() => {
-    if (terms) {
-      setContent(terms?.termsAndConditions?.description || 'description');
+    if (terms?.success) {
+      setContent(terms?.data?.description || 'description');
     }
   }, [terms]);
   if (isLoading) {
@@ -18,14 +19,13 @@ function Terms() {
 
   const updateTermsHandle = async () => {
     try {
-
-      await updateTerms({ id: terms?.termsAndConditions?._id, data: { description: content } }).unwrap().then((res) => {
+      await updateTerms({ description: content }).unwrap().then((res) => {
         if (res?.success) {
           toast.success(res?.message);
         }
       })
     } catch (error) {
-
+      toast.error(error?.data?.message);
     }
   };
   return (

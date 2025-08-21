@@ -11,7 +11,7 @@ function PrivacyPolicy() {
   const [updatePrivacyPolicy] = useUpdatePrivacyPolicyMutation();
   useEffect(() => {
     if (privacyPolicy) {
-      setContent(privacyPolicy?.privacies?.description || 'description');
+      setContent(privacyPolicy?.data?.description || '');
     }
   }, [privacyPolicy]);
 
@@ -21,10 +21,9 @@ function PrivacyPolicy() {
 
   const updatePrivacyPolicyHandle = async () => {
     try {
-      const data = {
+      await updatePrivacyPolicy({
         description: content
-      }
-      await updatePrivacyPolicy({ data }).unwrap().then((res) => {
+      }).unwrap().then((res) => {
         if (res?.success) {
           toast.success(res?.message);
         }

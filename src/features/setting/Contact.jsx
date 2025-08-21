@@ -1,13 +1,21 @@
-import React, { useState } from 'react';
-import { Input, Button } from 'antd';
+import React, { useState, useEffect } from 'react';
 import { PlusOutlined, CloseOutlined } from '@ant-design/icons';
 import toast from 'react-hot-toast';
+import { useGetContactDataQuery, useUpdateContactDataMutation } from '../../Redux/Apis/service/contactApis';
+import { Button } from 'antd';
 
 const Contact = () => {
-    const [emails, setEmails] = useState([
-        { id: 1, value: 'xxxxxxx@gmail.com' },
-        { id: 2, value: 'xxxxxxx@gmail.com' }
-    ]);
+    const { data: contactData } = useGetContactDataQuery();
+    const [updateContactData] = useUpdateContactDataMutation();
+
+    const [emails, setEmails] = useState([{ id: Date.now(), value: '' }]);
+
+    // Initialize emails from API data
+    useEffect(() => {
+        if (contactData?.data?.emails?.length) {
+            setEmails(contactData.data.emails.map((email) => ({ id: Date.now() + Math.random(), value: email })));
+        }
+    }, [contactData]);
 
     const addEmailField = () => {
         if (emails.length >= 5) {
@@ -26,14 +34,11 @@ const Contact = () => {
     };
 
     const handleEmailChange = (id, value) => {
-        setEmails(emails.map(email =>
-            email.id === id ? { ...email, value } : email
-        ));
+        setEmails(emails.map(email => email.id === id ? { ...email, value } : email));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Validate email format
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const invalidEmails = emails.some(email => !emailRegex.test(email.value));
 
@@ -42,114 +47,58 @@ const Contact = () => {
             return;
         }
 
-        // Here you would typically make an API call to save the emails
-        console.log('Saving emails:', emails);
-        toast.success('Contact information saved successfully!');
-    };
+        const data = {
+            emails: emails.map(e => e.value)
+        }
 
-    // Styles from the design JSON
-    const styles = {
-        container: {
-            backgroundColor: '#282828',
-            padding: '20px',
-            minHeight: 'calc(100vh - 200px)',
-            color: '#FFFFFF',
-        },
-        card: {
-            backgroundColor: '#424242',
-            borderRadius: '8px',
-            padding: '20px',
-            maxWidth: '600px',
-            margin: '0 auto',
-        },
-        title: {
-            fontSize: '24px',
-            marginBottom: '20px',
-            color: '#FFFFFF',
-        },
-        sectionTitle: {
-            fontSize: '18px',
-            margin: '20px 0 10px',
-            color: '#FFFFFF',
-        },
-        input: {
-            backgroundColor: '#424242',
-            color: '#FFC107',
-            borderColor: '#FFC107',
-            borderRadius: '8px',
-            marginBottom: '10px',
-        },
-        button: {
-            backgroundColor: 'transparent',
-            borderColor: '#FFC107',
-            color: '#FFC107',
-            borderRadius: '8px',
-            marginTop: '10px',
-        },
-        icon: {
-            color: '#FFC107',
-        },
-        inputContainer: {
-            display: 'flex',
-            gap: '10px',
-            alignItems: 'center',
-            marginBottom: '10px',
-        },
+        try {
+            await updateContactData(data).unwrap();
+            toast.success('Contact information saved successfully!');
+        } catch (err) {
+            toast.error('Failed to save contact information');
+        }
     };
 
     return (
-        <div style={styles.container}>
-            <h1 style={styles.title}>Contact Us</h1>
-            <div style={styles.card}>
-                <h2 style={styles.sectionTitle}>Write To Us</h2>
+        <div className="bg-[var(--primary-color)] p-6 text-white">
+            <h1 className="text-3xl font-bold mb-6 text-center">Contact Us</h1>
+            <div className="border border-dashed border-[var(--secondary-color)] rounded-lg p-6 max-w-2xl mx-auto">
+                <h2 className="text-xl font-semibold mb-4">Write To Us</h2>
 
                 <form onSubmit={handleSubmit}>
-                    {emails.map((email) => (
-                        <div key={email.id} style={styles.inputContainer}>
-                            <Input
-                                size='large'
+                    {emails.map((email, index) => (
+                        <div key={email.id} className="flex items-center gap-3 mb-3">
+                            <input
                                 type="email"
                                 value={email.value}
                                 onChange={(e) => handleEmailChange(email.id, e.target.value)}
-                                placeholder="xxxxxxx@gmail.com"
-                                style={styles.input}
-                                suffix={
-                                    emails.length > 1 && (
-                                        <CloseOutlined
-                                            style={{ ...styles.icon, cursor: 'pointer' }}
-                                            onClick={() => removeEmailField(email.id)}
-                                        />
-                                    )
-                                }
+                                placeholder="Enter email"
+                                className="flex-1 p-3 border-dashed rounded-md bg-gray-700 border border-yellow-400 text-yellow-300 focus:outline-none focus:ring-2 focus:ring-yellow-500"
                             />
+                            {emails.length > 1 && (
+                                <CloseOutlined
+                                    className="text-yellow-400 cursor-pointer text-xl"
+                                    onClick={() => removeEmailField(email.id)}
+                                />
+                            )}
                         </div>
                     ))}
 
                     {emails.length < 5 && (
-                        <Button
-                            size='large'
-                            type="dashed"
+                        <button
+                            type="button"
                             onClick={addEmailField}
-                            icon={<PlusOutlined style={styles.icon} />}
-                            style={styles.button}
+                            className="flex items-center gap-2 px-4 py-2 border border-yellow-400 text-yellow-400 rounded-md hover:bg-yellow-400 hover:text-black transition mb-4"
                         >
-                            Add Email
-                        </Button>
+                            <PlusOutlined /> Add Email
+                        </button>
                     )}
 
-                    <div style={{ marginTop: '20px' }}>
+                    <div className="mt-6">
                         <Button
+                            htmlType='submit'
                             size='large'
-                            type="primary"
-                            htmlType="submit"
-                            style={{
-                                backgroundColor: '#FFC107',
-                                borderColor: '#FFC107',
-                                color: '#000',
-                                fontWeight: 'bold',
-                                width: '200px',
-                                border:'1px dashed #111'
-                            }}
+                            className="!w-full !bg-yellow-400 !text-black !font-bold !rounded-md hover:bg-yellow-500 transition"
                         >
                             Save Changes
                         </Button>

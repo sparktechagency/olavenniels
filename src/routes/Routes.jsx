@@ -20,10 +20,15 @@ import Contact from "../features/setting/Contact";
 import MakeAdmin from "../features/user/ui/MakeAdmin";
 // import SubscriptionManagement from "../features/subscription/SubscriptionManagement";
 import CongratulationPage from "../features/auth/CongratulationPage";
+import PrivateRoute from "./PrivetRoute";
 export const Routes = createBrowserRouter([
   {
     path: "/",
-    element: <MainLayout />,
+    element: (
+      <PrivateRoute>
+        <MainLayout />
+      </PrivateRoute>
+    ),
     children: [
       {
         index: true,

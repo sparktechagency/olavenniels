@@ -17,6 +17,7 @@ import toast from 'react-hot-toast';
 import { useFaqQuery, useAddFaqMutation, useUpdateFaqMutation, useDeleteFaqMutation } from '../../Redux/Apis/service/faqApis';
 
 function FrequentlyAskedQuestions() {
+  const [id, setId] = useState(null)
   const { data, isLoading } = useFaqQuery()
   const [addFaq] = useAddFaqMutation()
   const [updateFaq] = useUpdateFaqMutation()
@@ -38,36 +39,45 @@ function FrequentlyAskedQuestions() {
 
   const handleSubmit = async (values) => {
     try {
+      const data = {
+        question: values.question,
+        description: values.description,
+      }
       if (isEditing) {
-        await updateFaq(values).unwrap().then((res) => {
-          console.log(res)
-          setShowModal(false);
-          setIsEditing(false);
-          toast.success('FAQ updated successfully!');
+        await updateFaq({ id, data }).unwrap().then((res) => {
+          if (res?.success) {
+            toast.success(res?.message);
+            setShowModal(false);
+            setIsEditing(false);
+            setId(null)
+            form.resetFields()
+          }
         })
       } else {
-        await addFaq(values).unwrap().then((res) => {
-          console.log(res)
-          setShowModal(false);
-          setIsEditing(false);
-          toast.success('FAQ added successfully!');
+        await addFaq(data).unwrap().then((res) => {
+          if (res?.success) {
+            setShowModal(false);
+            setIsEditing(false);
+            toast.success(res?.message);
+            form.resetFields()
+          }
         })
       }
     } catch (error) {
-      toast.error('An error occurred while saving FAQ.');
-      console.error(error);
+      toast.error(error?.data?.message);
+      form.resetFields()
     }
   };
 
   const handleDelete = async (index) => {
     try {
       await deleteFaq(index).unwrap().then((res) => {
-        console.log(res)
-        toast.success('FAQ deleted successfully!');
+        if (res?.success) {
+          toast.success(res?.message);
+        }
       })
     } catch (error) {
-      toast.error('Failed to delete FAQ.');
-      console.error(error);
+      toast.error(error?.data?.message);
     }
   };
 
@@ -106,7 +116,10 @@ function FrequentlyAskedQuestions() {
               <div className="flex items-center justify-between my-4">
                 <h1>{faq?.question}</h1>
                 <Space>
-                  <Button onClick={() => handleEdit(faq)}>
+                  <Button onClick={() => {
+                    setId(faq?._id)
+                    handleEdit(faq)
+                  }}>
                     <FaEdit />
                   </Button>
                   <Popconfirm
@@ -122,12 +135,12 @@ function FrequentlyAskedQuestions() {
                   </Popconfirm>
                 </Space>
               </div>
-              <p>{faq?.answer}</p>
+              <p>{faq?.description}</p>
             </Card>
           ))
         ) : (
           <div className="col-span-2">
-            <Empty description="No Frequently Asked Questions Available" />
+            <Empty description={<p className="text-white">No Frequently Asked Questions Available</p>} />
           </div>
         )}
       </div>
@@ -154,7 +167,7 @@ function FrequentlyAskedQuestions() {
 
           <Form.Item
             label="Answer"
-            name="answer"
+            name="description"
             rules={[{ required: true, message: 'Please enter an answer' }]}
           >
             <TextArea placeholder="Enter your answer" rows={4} />

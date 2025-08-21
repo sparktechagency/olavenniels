@@ -1,17 +1,18 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { useGetProfileDataQuery } from '../Redux/services/profileApis';
+import { useGetProfileDataQuery } from '../Redux/Apis/service/profileApis';
 const PrivateRoute = ({ children }) => {
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const location = useLocation();
-  const { data, isLoading: isProfileLoading } = useGetProfileDataQuery();
+  const { data, isLoading: isProfileLoading, status } = useGetProfileDataQuery();
+
   useEffect(() => {
     const checkAuthorization = () => {
-      const role = data?.data?.user?.role;
+      const role = data?.admin?.role;
       try {
-        if (role === 'superAdmin' || role === 'admin') {
+        if (role === 'SUPER_ADMIN' || role === 'ADMIN') {
           setIsAuthorized(true);
         } else {
           setIsAuthorized(false);
@@ -26,7 +27,7 @@ const PrivateRoute = ({ children }) => {
       checkAuthorization();
       setIsLoading(false);
     }
-  }, [data?.data?.role, isProfileLoading]);
+  }, [data?.admin?.role, isProfileLoading]);
 
   if (isLoading) {
     return (

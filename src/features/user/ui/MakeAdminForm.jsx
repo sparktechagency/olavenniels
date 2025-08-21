@@ -3,9 +3,8 @@ import React from 'react'
 import { useCreateAdminMutation } from '../../../Redux/Apis/service/adminApis'
 import toast from 'react-hot-toast';
 function MakeAdminForm({ open, onCancel }) {
-    const [createAdmin] = useCreateAdminMutation()
+    const [createAdmin, { isLoading }] = useCreateAdminMutation()
     const onFinish = async (values) => {
-        console.log(values)
         const information = {
             name: values.name,
             email: values.email,
@@ -56,7 +55,7 @@ function MakeAdminForm({ open, onCancel }) {
                 </Form.Item>
 
                 <Form.Item>
-                    <Button size='large' type="primary" htmlType="submit" style={{ backgroundColor: "var(--secondary-color)", color: "white" }}>
+                    <Button loading={isLoading} disabled={isLoading} size='large' type="primary" htmlType="submit" style={{ backgroundColor: "var(--secondary-color)", color: "white" }}>
                         Submit
                     </Button>
                 </Form.Item>

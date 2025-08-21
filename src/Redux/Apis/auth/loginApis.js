@@ -7,6 +7,7 @@ const loginApis = baseApis.injectEndpoints({
         url: "/api/admin/login-admin",
         method: "POST",
         body: data,
+        invalidatesTags: ["Profile"],
       }),
     }),
   }),

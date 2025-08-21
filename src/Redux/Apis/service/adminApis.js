@@ -3,10 +3,10 @@ import baseApis from "../../baseApis";
 const adminApis = baseApis.injectEndpoints({
   endpoints: (build) => ({
     getAdmins: build.query({
-      query: ({ page }) => ({
+      query: ({ page, search }) => ({
         url: "/api/admin/get-all-admins",
         method: "GET",
-        params: { page },
+        params: { page, search },
       }),
       providesTags: ["Admins"],
     }),

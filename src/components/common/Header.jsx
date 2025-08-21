@@ -4,13 +4,17 @@ import { UserOutlined, LogoutOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import logo from '../../assets/brand-black.png';
 import { FaBell } from 'react-icons/fa';
-import { useGetProfileDataQuery } from '../../Redux/services/profileApis';
 import { imageUrl } from '../../utils/server';
+import Loader from '../Loader/Loader';
+import { useGetProfileDataQuery } from '../../Redux/Apis/service/profileApis';
 
 function Header() {
   const { data, isLoading } = useGetProfileDataQuery()
+
   if (isLoading) {
-    return <div className='w-full h-16 animate-pulse bg-[var(--primary-color)]' ></div>;
+    return <div className='fixed bg-[var(--primary-color)] top-0 left-0 w-full h-screen z-[9999] flex items-center justify-center'>
+      <Loader message="Loading..." />
+    </div>;
   }
   const user = {
     fullName: data?.admin?.name,
