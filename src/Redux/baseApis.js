@@ -15,6 +15,7 @@ const baseApis = createApi({
     "SubCategories",
     "Profile",
     "PrivacyPolicy",
+    "Status",
   ],
   endpoints: () => ({}),
 });

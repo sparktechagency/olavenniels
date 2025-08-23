@@ -1,4 +1,5 @@
 import React from 'react';
+import { imageUrl } from '../../../utils/server';
 
 function UserDetails({ selectedItem }) {
   return (
@@ -9,44 +10,32 @@ function UserDetails({ selectedItem }) {
         {/* Profile Image */}
         <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-md mb-3">
           <img
-            src={selectedItem?.userImage}
+            src={imageUrl(selectedItem?.profilePicture)}
             alt="User"
             className="w-full h-full object-cover"
           />
         </div>
 
         {/* Name & Role */}
-        <h2 className="text-lg font-semibold">{selectedItem?.name}</h2>
+        <h2 className="text-md font-semibold">{selectedItem?.firstName + ' ' + selectedItem?.lastName}</h2>
         <p className="text-sm text-gray-700">User</p>
       </div>
 
       {/* User Details Section */}
-      <div className="bg-white px-6 py-6 space-y-4">
+      <div className="bg-amber-50 px-6 py-6 space-y-4">
         <div>
-          <p className="text-gray-500 text-sm">Name</p>
-          <p className="text-black font-medium">{selectedItem?.name}</p>
+          <p className="text-black text-md">Name</p>
+          <p className="text-gray-600 font-medium">{selectedItem?.firstName + ' ' + selectedItem?.lastName}</p>
         </div>
 
         <div>
-          <p className="text-gray-500 text-sm">Email</p>
+          <p className="text-black text-md">Email</p>
           <p className="text-gray-600">{selectedItem?.email}</p>
         </div>
 
         <div>
-          <p className="text-gray-500 text-sm">Country</p>
-          <div className="flex items-center gap-2">
-            <span role="img" aria-label="flag">
-              🇧🇩
-            </span>
-            <p className="text-black font-medium">{selectedItem?.country}</p>
-          </div>
-        </div>
-
-        <div>
-          <p className="text-gray-500 text-sm">Subscription</p>
-          <span className="px-3 py-1 border border-yellow-500 text-yellow-600 text-sm rounded-full inline-block">
-            {selectedItem?.userType}
-          </span>
+          <p className="text-black text-md">Bio</p>
+          <p className="text-gray-600">{selectedItem?.bio || 'No bio'}</p>
         </div>
       </div>
     </div>

@@ -1,116 +1,39 @@
 import React, { useCallback, useState } from "react";
-import { Table, Button, Space, message, Input, Tag, ConfigProvider, Modal } from "antd";
-import { LockOutlined, UnlockOutlined } from "@ant-design/icons";
-import { FaEye } from "react-icons/fa";
+import { Table, Input, ConfigProvider, Modal } from "antd";
 import UserDetails from "./UserDetails";
 import toast from "react-hot-toast";
-import CircleButton from "../../../components/buttons/CircleButton";
+import { useStatusQuery, useUserBlockMutation, useUserUnblockMutation } from "../../../Redux/Apis/service/statusApis";
+import { userColumns } from "./userColumns";
 
 function AllUser() {
   const [showUserDetails, setShowUserDetails] = useState(false)
   const [selectedItem, setSelectedItem] = useState(null)
-  const [userData, setUserData] = useState([
-    {
-      key: "1",
-      name: "John Doe",
-      userImage:
-        "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?semt=ais_hybrid&w=740",
-      userType: "Free",
-      country: "Bangladesh",
-      email: "john.doe@example.com",
-      isBlocked: false,
-    },
-    {
-      key: "2",
-      name: "Jane Smith",
-      userImage:
-        "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?semt=ais_hybrid&w=740",
-      userType: "Premium",
-      country: "Bangladesh",
-      email: "jane.smith@example.com",
-      isBlocked: false,
-    },
-    {
-      key: "3",
-      name: "John Doe",
-      userImage:
-        "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?semt=ais_hybrid&w=740",
-      userType: "Not Subscribed",
-      country: "Bangladesh",
-      email: "john.doe@example.com",
-      isBlocked: false,
-    },
-  ]);
+  const [page, setPage] = useState(1)
+  const [search, setSearch] = useState("")
+  const { data: status, isLoading } = useStatusQuery({ search })
+  const [userBlock, { isLoading: blockLoading }] = useUserBlockMutation()
+  const [userUnblock, { isLoading: unblockLoading }] = useUserUnblockMutation()
 
-  const columns = [
-    {
-      title: "User’s Name",
-      dataIndex: "name",
-      key: "name",
-      render: (text, record) => (
-        <Space>
-          <img
-            src={record.userImage}
-            alt="User"
-            style={{ width: 50, height: 50, borderRadius: "50%" }}
-          />
-          <span>{text}</span>
-        </Space>
-      ),
-    },
-    {
-      title: "Email",
-      dataIndex: "email",
-      key: "email",
-    },
-    {
-      title: "Country",
-      dataIndex: "country",
-      key: "country",
-    },
-    {
-      title: "Subscription",
-      dataIndex: "userType",
-      key: "userType",
-      render: (text, record) => (
-        <Tag color={record.userType === "Premium" ? "green" : record.userType === "Free" ? "blue" : "red"}>
-          {text}
-        </Tag>
-      ),
-    },
-    {
-      title: "Action",
-      key: "action",
-      render: (_, record) => (
-        <Space>
-          <CircleButton btnIcon={<FaEye />} btnOnClick={() => handleViewUser(record)} />
-          <CircleButton
-            danger={!record.isBlocked}
-            btnClassName={{
-              backgroundColor: record.isBlocked ? "#1890ff" : "#ff4d4f",
-              color: record.isBlocked ? "white" : "white",
-            }}
-            btnIcon={record.isBlocked ? <UnlockOutlined /> : <LockOutlined />}
-            btnOnClick={() => handleToggleBlock(record)}
-          />
-        </Space>
-      ),
-    },
-  ];
 
-  const handleToggleBlock = (record) => {
-    const updatedData = userData.map((user) =>
-      user.key === record.key
-        ? {
-          ...user,
-          isBlocked: !user.isBlocked,
-        }
-        : user
-    );
-    setUserData(updatedData);
-    toast.success(
-      `User ${record.name} is now ${record.isBlocked ? "unblocked" : "blocked"}`
-    );
+  const handleToggleBlock = async (record) => {
+    try {
+      if (record.isBlocked) {
+        await userUnblock({ userID: record?._id }).unwrap().then((res) => {
+          console.log(res)
+          if (res?.success) {
+            toast.success("User Unblocked")
+          }
+        })
+      } else {
+        await userBlock({ userID: record?._id }).unwrap().then((res) => {
+          if (res?.success) {
+            toast.success("User Blocked")
+          }
+        })
+      }
+    } catch (error) {
+      toast.error(error?.data?.message || 'Something went wrong')
+    }
   };
 
 
@@ -120,8 +43,8 @@ function AllUser() {
   }, [setShowUserDetails, setSelectedItem]);
 
   const handleSearch = useCallback((value) => {
-    console.log(value);
-  }, [setShowUserDetails]);
+    setSearch(value.target.value)
+  }, [setSearch]);
 
   return (
     <div className="p-4">
@@ -144,24 +67,24 @@ function AllUser() {
         }
       }}>
         <Table
+          loading={blockLoading || unblockLoading || isLoading}
           scroll={{ x: "max-content" }}
-          columns={columns}
+          columns={userColumns(handleViewUser, handleToggleBlock)}
           bordered
           pagination={{
             pageSize: 10,
             showSizeChanger: false,
-            showQuickJumper: true,
+            showQuickJumper: false,
             showTotal: false,
             position: ["bottomCenter"],
             size: "large",
-            defaultCurrent: 1,
-            total: userData.length,
-            onChange: (page, pageSize) => {
-              console.log("Page:", page);
-              console.log("Page Size:", pageSize);
+            defaultCurrent: page,
+            total: status?.users?.length,
+            onChange: (page) => {
+              setPage(page)
             },
           }}
-          dataSource={userData}
+          dataSource={status?.users}
         /></ConfigProvider>
       <Modal
         open={showUserDetails}

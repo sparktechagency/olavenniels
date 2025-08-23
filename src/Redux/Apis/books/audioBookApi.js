@@ -4,7 +4,7 @@ const audioBookApi = baseApis.injectEndpoints({
   endpoints: (build) => ({
     allAudioBooks: build.query({
       query: ({ categoryName }) => ({
-        url: "/api/audio-books/get",
+        url: "/audio-books/get",
         method: "GET",
         params: {
           categoryName,
@@ -14,14 +14,14 @@ const audioBookApi = baseApis.injectEndpoints({
     }),
     getBookById: build.query({
       query: ({ id }) => ({
-        url: `/api/audio-books/get/${id}`,
+        url: `/audio-books/get/${id}`,
         method: "GET",
       }),
       providesTags: ["AudioBook"],
     }),
     addAudioBook: build.mutation({
       query: ({ data }) => ({
-        url: "/api/audio-books/create",
+        url: "/audio-books/create",
         method: "POST",
         body: data,
       }),
@@ -29,7 +29,7 @@ const audioBookApi = baseApis.injectEndpoints({
     }),
     updateAudioBook: build.mutation({
       query: ({ id, data }) => ({
-        url: `/api/audio-books/update/${id}`,
+        url: `/audio-books/update/${id}`,
         method: "PUT",
         body: data,
       }),
@@ -37,7 +37,7 @@ const audioBookApi = baseApis.injectEndpoints({
     }),
     deleteAudioBook: build.mutation({
       query: ({ id }) => ({
-        url: `/api/audio-books/delete/${id}`,
+        url: `/audio-books/delete/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["AudioBook"],

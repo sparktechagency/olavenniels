@@ -4,7 +4,7 @@ const bothFormatBook = baseApis.injectEndpoints({
   endpoints: (build) => ({
     bothFormatBooks: build.query({
       query: ({ categoryName, search }) => ({
-        url: "/api/books/get",
+        url: "/books/get",
         method: "GET",
         params: {
           categoryName,
@@ -15,7 +15,7 @@ const bothFormatBook = baseApis.injectEndpoints({
     }),
     addBothFormatBook: build.mutation({
       query: ({ data }) => ({
-        url: "/api/books/create",
+        url: "/books/create",
         method: "POST",
         body: data,
       }),
@@ -23,7 +23,7 @@ const bothFormatBook = baseApis.injectEndpoints({
     }),
     updateBothFormatBook: build.mutation({
       query: ({ id, data }) => ({
-        url: `/api/books/update/${id}`,
+        url: `/books/update/${id}`,
         method: "PUT",
         body: data,
       }),
@@ -31,7 +31,7 @@ const bothFormatBook = baseApis.injectEndpoints({
     }),
     deleteBothFormatBook: build.mutation({
       query: ({ id }) => ({
-        url: `/api/books/delete/${id}`,
+        url: `/books/delete/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["eBook"],

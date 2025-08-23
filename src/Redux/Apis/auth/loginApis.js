@@ -4,7 +4,7 @@ const loginApis = baseApis.injectEndpoints({
   endpoints: (build) => ({
     login: build.mutation({
       query: (data) => ({
-        url: "/api/admin/login-admin",
+        url: "/admin/login-admin",
         method: "POST",
         body: data,
         invalidatesTags: ["Profile"],

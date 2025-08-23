@@ -22,6 +22,10 @@ body{
   color: var(--font-color) !important;
 }
 
+.ant-pagination-item-link{
+  color: var(--font-color) !important;
+}
+
 /* .anticon {
   color: var(--font-color) !important;
 } */

@@ -33,7 +33,7 @@ export const baseQueryWithReauth = async (args, api, extraOptions) => {
 
     const refreshResult = await baseQuery(
       {
-        url: "/api/auth/refresh-token",
+        url: "/auth/refresh-token",
         method: "POST",
         body: { refreshToken },
       },
@@ -48,12 +48,12 @@ export const baseQueryWithReauth = async (args, api, extraOptions) => {
     } else {
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
-      window.location.href = "/auth/login";
+      // window.location.href = "/auth/login";
     }
   } catch (error) {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
-    window.location.href = "/auth/login";
+    // window.location.href = "/auth/login";
   }
 
   return result;

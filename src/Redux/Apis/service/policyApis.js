@@ -4,14 +4,14 @@ const policyApis = baseApis.injectEndpoints({
   endpoints: (build) => ({
     getPrivacyPolicy: build.query({
       query: () => ({
-        url: "/api/manage/get-privacy-policy",
+        url: "/manage/get-privacy-policy",
         method: "GET",
       }),
       providesTags: ["PrivacyPolicy"],
     }),
     updatePrivacyPolicy: build.mutation({
       query: (description) => ({
-        url: "/api/manage/add-privacy-policy",
+        url: "/manage/add-privacy-policy",
         method: "POST",
         body: description,
       }),

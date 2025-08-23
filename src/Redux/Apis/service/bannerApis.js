@@ -4,14 +4,14 @@ const bannerApis = baseApis.injectEndpoints({
   endpoints: (build) => ({
     banner: build.query({
       query: () => ({
-        url: "/api/banner/get",
+        url: "/banner/get",
         method: "GET",
       }),
       providesTags: ["Banner"],
     }),
     addBanner: build.mutation({
       query: ({data}) => ({
-        url: "/api/banner/create",
+        url: "/banner/create",
         method: "POST",
         body: data,
       }),
@@ -19,7 +19,7 @@ const bannerApis = baseApis.injectEndpoints({
     }),
     updateBanner: build.mutation({
       query: ({ id, data }) => ({
-        url: `/api/banner/update/${id}`,
+        url: `/banner/update/${id}`,
         method: "PUT",
         body: data,
       }),
@@ -27,7 +27,7 @@ const bannerApis = baseApis.injectEndpoints({
     }),
     deleteBanner: build.mutation({
       query: (id) => ({
-        url: `/api/banner/delete/${id}`,
+        url: `/banner/delete/${id}`,
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
