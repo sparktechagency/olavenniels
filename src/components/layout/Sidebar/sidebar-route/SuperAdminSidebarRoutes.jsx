@@ -6,7 +6,7 @@ import { BiCategory } from "react-icons/bi";
 import { GiBookshelf } from "react-icons/gi";
 import { RiAdminFill } from "react-icons/ri";
 
-export const SidebarRoutes = [
+export const SuperAdminSidebarRoutes = [
   {
     key: "dashboard",
     label: "Dashboard",
@@ -60,6 +60,12 @@ export const SidebarRoutes = [
   //   icon: RiAdminFill,
   //   link: "/subscription-management",
   // },
+  {
+    key: "make-admin",
+    label: "Make Admin",
+    icon: RiAdminFill,
+    link: "/make-admin",
+  },
   {
     key: "settings",
     label: "Settings",

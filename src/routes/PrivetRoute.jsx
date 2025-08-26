@@ -1,19 +1,28 @@
-import React from 'react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useGetProfileDataQuery } from '../Redux/Apis/service/profileApis';
+import toast from 'react-hot-toast';
+
 const PrivateRoute = ({ children }) => {
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const location = useLocation();
-  const { data, isLoading: isProfileLoading, status } = useGetProfileDataQuery();
+  const { data, isLoading: isProfileLoading } = useGetProfileDataQuery();
 
   useEffect(() => {
     const checkAuthorization = () => {
       const role = data?.admin?.role;
+
       try {
-        if (role === 'SUPER_ADMIN' || role === 'ADMIN') {
+        if (role === 'SUPER_ADMIN') {
           setIsAuthorized(true);
+        } else if (role === 'ADMIN') {
+          if (location.pathname === '/make-admin') {
+            toast.error("You don't have access to this page");
+            setIsAuthorized(false);
+          } else {
+            setIsAuthorized(true);
+          }
         } else {
           setIsAuthorized(false);
         }
@@ -27,7 +36,7 @@ const PrivateRoute = ({ children }) => {
       checkAuthorization();
       setIsLoading(false);
     }
-  }, [data?.admin?.role, isProfileLoading]);
+  }, [data?.admin?.role, isProfileLoading, location.pathname]);
 
   if (isLoading) {
     return (

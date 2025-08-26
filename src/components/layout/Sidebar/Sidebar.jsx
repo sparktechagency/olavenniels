@@ -4,6 +4,8 @@ import { IoIosLogOut } from "react-icons/io";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { SidebarRoutes } from "./sidebar-route/SidebarRoutes";
+import { useGetProfileDataQuery } from "../../../Redux/Apis/service/profileApis";
+import { SuperAdminSidebarRoutes } from "./sidebar-route/SuperAdminSidebarRoutes";
 
 const SideBar = () => {
   const [selectedKey, setSelectedKey] = useState("dashboard");
@@ -11,26 +13,40 @@ const SideBar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const contentRef = useRef({});
-
+  const { data: profileData } = useGetProfileDataQuery();
   useEffect(() => {
+    const userRole = profileData?.admin?.role;
     const currentPath = location.pathname;
     let activeParent = null;
-    SidebarRoutes.forEach((item) => {
-      if (item.link === currentPath) {
-        activeParent = item;
-      } else if (
-        item.children &&
-        item.children.some((child) => child.link === currentPath)
-      ) {
-        activeParent = item;
-      }
-    });
+    if (userRole !== "ADMIN") {
+      SuperAdminSidebarRoutes.forEach((item) => {
+        if (item.link === currentPath) {
+          activeParent = item;
+        } else if (
+          item.children &&
+          item.children.some((child) => child.link === currentPath)
+        ) {
+          activeParent = item;
+        }
+      });
+    } else {
+      SidebarRoutes.forEach((item) => {
+        if (item.link === currentPath) {
+          activeParent = item;
+        } else if (
+          item.children &&
+          item.children.some((child) => child.link === currentPath)
+        ) {
+          activeParent = item;
+        }
+      });
+    }
 
     if (activeParent) {
       setSelectedKey(
         activeParent.children
           ? activeParent.children.find((child) => child.link === currentPath)
-              ?.key || activeParent.key
+            ?.key || activeParent.key
           : activeParent.key
       );
 
@@ -87,11 +103,10 @@ const SideBar = () => {
               <div key={item.key} className="mb-1">
                 <Link
                   to={item.link || "#"}
-                  className={`flex items-center px-4 py-3 text-base font-medium rounded-lg transition-all duration-200 ${
-                    isActive
-                      ? "bg-[var(--secondary-color)] text-white shadow-md"
-                      : "text-white hover:bg-[var(--primary-color)]/60 hover:text-white"
-                  }`}
+                  className={`flex items-center px-4 py-3 text-base font-medium rounded-lg transition-all duration-200 ${isActive
+                    ? "bg-[var(--secondary-color)] text-white shadow-md"
+                    : "text-white hover:bg-[var(--primary-color)]/60 hover:text-white"
+                    }`}
                   onClick={(e) => {
                     if (item.children) {
                       e.preventDefault();
@@ -105,20 +120,18 @@ const SideBar = () => {
                   <span className="flex-1 text-left">{item.label}</span>
                   {item.children && (
                     <FaChevronRight
-                      className={`ml-2 transition-transform duration-200 ${
-                        expandedKeys.includes(item.key)
-                          ? "transform rotate-90"
-                          : ""
-                      }`}
+                      className={`ml-2 transition-transform duration-200 ${expandedKeys.includes(item.key)
+                        ? "transform rotate-90"
+                        : ""
+                        }`}
                     />
                   )}
-              </Link>
+                </Link>
 
                 {item.children && (
                   <div
-                    className={`overflow-hidden transition-all duration-300 ${
-                      expandedKeys.includes(item.key) ? "my-2" : "m-0"
-                    }`}
+                    className={`overflow-hidden transition-all duration-300 ${expandedKeys.includes(item.key) ? "my-2" : "m-0"
+                      }`}
                     style={{
                       maxHeight: expandedKeys.includes(item.key)
                         ? `${contentRef.current[item.key]?.scrollHeight}px`
@@ -131,11 +144,10 @@ const SideBar = () => {
                         <Link
                           key={child.key}
                           to={child.link}
-                          className={`block px-3 py-2 text-base rounded-md transition-colors duration-150 ${
-                            selectedKey === child.key
-                              ? "bg-[var(--secondary-color)] text-white shadow-md"
-                              : "text-white hover:bg-[var(--primary-color)]/60 hover:text-white"
-                          }`}
+                          className={`block px-3 py-2 text-base rounded-md transition-colors duration-150 ${selectedKey === child.key
+                            ? "bg-[var(--secondary-color)] text-white shadow-md"
+                            : "text-white hover:bg-[var(--primary-color)]/60 hover:text-white"
+                            }`}
                           onClick={() => {
                             setSelectedKey(child.key);
                           }}
