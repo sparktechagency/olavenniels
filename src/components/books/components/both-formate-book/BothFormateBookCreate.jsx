@@ -88,11 +88,11 @@ const AudioUploadField = ({
     );
 };
 
-const BothFormateBookCreate = ({ setShowModal, item }) => {
+const BothFormateBookCreate = ({ setShowModal, item, setSelectedItem }) => {
     const [form] = Form.useForm();
     const { data: categories, isLoading: categoriesLoading } = useGetCategoriesQuery({});
     const [addBothFormatBook, { isLoading: isSubmitting }] = useAddBothFormatBookMutation();
-    const [updateBothFormatBook, { isLoading: isUpdating }] = useUpdateBothFormatBookMutation();
+    const [updateBothFormatBook] = useUpdateBothFormatBookMutation();
     const {
         preview,
         image,
@@ -211,7 +211,7 @@ const BothFormateBookCreate = ({ setShowModal, item }) => {
                     />
                     <Button
                         className="!bg-[var(--secondary-color)] !mt-3 hover:!bg-[var(--secondary-color)] border-none !text-white"
-                        onClick={() => setShowModal(false)}
+                        onClick={() => { setShowModal(false), setSelectedItem(null) }}
                     >
                         Close
                     </Button>

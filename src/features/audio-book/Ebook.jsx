@@ -72,7 +72,7 @@ function Ebook() {
             />
           )
         }) : <div className="col-span-4">
-          <NoBookFound title="The E-book library appears to be empty right now. Don't worry, great stories are on their way!" />
+          <NoBookFound title2="Oops! No E-books Found" title="The E-book library appears to be empty right now. Don't worry, great stories are on their way!" />
         </div>}
       </div>
       <Modal

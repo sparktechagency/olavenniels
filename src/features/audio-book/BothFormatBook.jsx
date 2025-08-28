@@ -70,7 +70,7 @@ function BothFormatBook() {
             onDelete={handleDelete}
             e_book={book?.pdfFile}
           />
-        )) : <div className="col-span-4"> <NoBookFound /></div>}
+        )) : <div className="col-span-4"> <NoBookFound title2="Oops! No Both Format Books Found" title="The Both Format Book library appears to be empty right now. Don't worry, great stories are on their way!" /></div>}
       </div>
       <Modal
         open={showModal}
@@ -78,9 +78,10 @@ function BothFormatBook() {
         centered
         footer={null}
         width={800}
+        closable={false}
         destroyOnClose
       >
-        <BothFormateBookCreate item={selectedItem} setShowModal={setShowModal} />
+        <BothFormateBookCreate item={selectedItem} setSelectedItem={setSelectedItem} setShowModal={setShowModal} />
       </Modal>
 
       <Modal

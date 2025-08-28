@@ -69,7 +69,7 @@ function AudioBook() {
             e_book={false}
           />
         )) : <div className="col-span-4">
-          <NoBookFound title="The audio book library appears to be empty right now. Don't worry, great stories are on their way!" />
+          <NoBookFound title2={"Oops! No Audio Books Found"} title="The audio book library appears to be empty right now. Don't worry, great stories are on their way!" />
         </div>}
       </div>
       <Modal

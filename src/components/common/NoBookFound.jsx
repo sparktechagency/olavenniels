@@ -5,7 +5,8 @@ const NoBookFound = ({
     onClearSearch = () => { },
     showRetryButton = true,
     showClearButton = true,
-    title = "No Books Found"
+    title = "No Books Found",
+    title2 = "No Books Found"
 }) => {
     const onRetry = () => {
         window.location.reload()
@@ -49,9 +50,9 @@ const NoBookFound = ({
             <div className="max-w-md z-10">
                 <h1
                     className="text-3xl font-bold mb-4"
-                    style={{ color: '#2A2A2A' }}
+                    style={{ color: 'white' }}
                 >
-                    Oops! No Audio Books Found
+                    {title2}
                 </h1>
 
                 {searchQuery ? (
