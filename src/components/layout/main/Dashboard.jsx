@@ -7,7 +7,8 @@ import { useStatusQuery } from "../../../Redux/Apis/service/statusApis";
 const UserGrowthChart = lazy(() => import("./charts/UserGrowthChart"));
 
 const Dashboard = () => {
-  const { data: status, isLoading } = useStatusQuery()
+  const { data: status, isLoading } = useStatusQuery({})
+  console.log(status)
   const data = [
     {
       title: "Total Book",

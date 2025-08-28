@@ -12,7 +12,6 @@ const PrivateRoute = ({ children }) => {
   useEffect(() => {
     const checkAuthorization = () => {
       const role = data?.admin?.role;
-
       try {
         if (role === 'SUPER_ADMIN') {
           setIsAuthorized(true);

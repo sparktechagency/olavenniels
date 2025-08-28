@@ -7,14 +7,14 @@ const categoryApis = baseApi.injectEndpoints({
         url: "/book-categories/get",
         method: "GET",
       }),
-      providesTags: ["Categories"],
+      providesTags: ["categories"],
     }),
     singleCategory: build.query({
       query: (id) => ({
         url: `/book-categories/get/${id}`,
         method: "GET",
       }),
-      providesTags: ["Categories"],
+      providesTags: ["categories"],
     }),
     createCategory: build.mutation({
       query: ({ data }) => ({
@@ -22,7 +22,7 @@ const categoryApis = baseApi.injectEndpoints({
         method: "POST",
         body: data,
       }),
-      invalidatesTags: ["Categories"],
+      invalidatesTags: ["categories"],
     }),
     updateCategory: build.mutation({
       query: ({ id, data }) => ({
@@ -30,14 +30,14 @@ const categoryApis = baseApi.injectEndpoints({
         method: "PATCH",
         body: data,
       }),
-      invalidatesTags: ["Categories"],
+      invalidatesTags: ["categories"],
     }),
     deleteCategory: build.mutation({
       query: ({ id }) => ({
         url: `/book-categories/delete/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["Categories"],
+      invalidatesTags: ["categories"],
     }),
   }),
 });

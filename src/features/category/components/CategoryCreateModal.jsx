@@ -67,8 +67,8 @@ const CategoryCreateModal = ({
             if (initialData?._id) {
                 await updateCategory({ id: initialData._id, data: formData }).unwrap().then((res) => {
                     if (res?.success) {
-                        toast.success(res?.message);
                         refetch()
+                        toast.success(res?.message);
                         handleClose();
                     } else {
                         toast.error(res?.message);
@@ -77,6 +77,7 @@ const CategoryCreateModal = ({
             } else {
                 await addCategory({ data: formData }).unwrap().then((res) => {
                     if (res?.success) {
+                        refetch()
                         toast.success(res?.message);
                         handleClose();
                     } else {

@@ -75,9 +75,6 @@ const SliderImage = () => {
 
     try {
       await deleteBanner(id).unwrap().then((res) => {
-        clearInterval(progressInterval);
-        setDeleteProgress(100);
-
         if (res?.success) {
           toast.success(res?.message || 'Image deleted successfully');
           setTimeout(() => {

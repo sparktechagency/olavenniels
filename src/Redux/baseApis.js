@@ -11,7 +11,7 @@ const baseApis = createApi({
     "Banner",
     "Faq",
     "Terms",
-    "Categories",
+    "categories",
     "SubCategories",
     "Profile",
     "PrivacyPolicy",
