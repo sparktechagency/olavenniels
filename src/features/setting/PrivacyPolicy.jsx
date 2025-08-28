@@ -8,7 +8,7 @@ import Loader from '../../components/Loader/Loader';
 function PrivacyPolicy() {
   const [content, setContent] = useState('');
   const { data: privacyPolicy, isLoading } = useGetPrivacyPolicyQuery();
-  const [updatePrivacyPolicy] = useUpdatePrivacyPolicyMutation();
+  const [updatePrivacyPolicy, { isLoading: updating }] = useUpdatePrivacyPolicyMutation();
   useEffect(() => {
     if (privacyPolicy) {
       setContent(privacyPolicy?.data?.description || '');
@@ -37,6 +37,8 @@ function PrivacyPolicy() {
       <h1 className="text-2xl text-white font-bold mb-4">Privacy Policy</h1>
       <JoditComponent content={content} setContent={setContent} />
       <Button
+        loading={updating}
+        disabled={updating}
         style={{
           width: '200px',
           backgroundColor: 'var(--secondary-color)',

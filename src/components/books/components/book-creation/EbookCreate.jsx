@@ -27,7 +27,7 @@ const EbookCreate = ({ setShowModal, item }) => {
     setPdfFile,
   } = useAudioBookForm();
 
-  const { data: categories, isLoading: categoriesLoading } = useGetCategoriesQuery();
+  const { data: categories, isLoading: categoriesLoading } = useGetCategoriesQuery({});
   const [addEBook, { isLoading: isSubmitting }] = useAddEBookMutation();
   const [updateEBook, { isLoading: isUpdating }] = useUpdateEBookMutation();
 

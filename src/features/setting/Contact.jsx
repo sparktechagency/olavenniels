@@ -3,10 +3,11 @@ import { PlusOutlined, CloseOutlined } from '@ant-design/icons';
 import toast from 'react-hot-toast';
 import { useGetContactDataQuery, useUpdateContactDataMutation } from '../../Redux/Apis/service/contactApis';
 import { Button } from 'antd';
+import Loader from '../../components/Loader/Loader';
 
 const Contact = () => {
-    const { data: contactData } = useGetContactDataQuery();
-    const [updateContactData] = useUpdateContactDataMutation();
+    const { data: contactData, isLoading } = useGetContactDataQuery();
+    const [updateContactData, { isLoading: updating }] = useUpdateContactDataMutation();
 
     const [emails, setEmails] = useState([{ id: Date.now(), value: '' }]);
 
@@ -59,6 +60,10 @@ const Contact = () => {
         }
     };
 
+    if (isLoading) {
+        return <Loader message="Loading..." />;
+    }
+
     return (
         <div className="bg-[var(--primary-color)] p-6 text-white">
             <h1 className="text-3xl font-bold mb-6 text-center">Contact Us</h1>
@@ -96,6 +101,8 @@ const Contact = () => {
 
                     <div className="mt-6">
                         <Button
+                            loading={updating}
+                            disabled={updating}
                             htmlType='submit'
                             size='large'
                             className="!w-full !bg-yellow-400 !text-black !font-bold !rounded-md hover:bg-yellow-500 transition"

@@ -90,7 +90,7 @@ const AudioUploadField = ({
 
 const BothFormateBookCreate = ({ setShowModal, item }) => {
     const [form] = Form.useForm();
-    const { data: categories, isLoading: categoriesLoading } = useGetCategoriesQuery();
+    const { data: categories, isLoading: categoriesLoading } = useGetCategoriesQuery({});
     const [addBothFormatBook, { isLoading: isSubmitting }] = useAddBothFormatBookMutation();
     const [updateBothFormatBook, { isLoading: isUpdating }] = useUpdateBothFormatBookMutation();
     const {

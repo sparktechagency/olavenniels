@@ -3,9 +3,12 @@ import baseApi from "../../baseApis";
 const categoryApis = baseApi.injectEndpoints({
   endpoints: (build) => ({
     getCategories: build.query({
-      query: () => ({
+      query: ({ search }) => ({
         url: "/book-categories/get",
         method: "GET",
+        params: {
+          search,
+        },
       }),
       providesTags: ["categories"],
     }),

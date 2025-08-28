@@ -3,11 +3,12 @@ import baseApis from "../../baseApis";
 const eBookApi = baseApis.injectEndpoints({
   endpoints: (build) => ({
     allBooks: build.query({
-      query: ({ categoryName }) => ({
+      query: ({ categoryName, search }) => ({
         url: "/ebooks/get",
         method: "GET",
         params: {
           categoryName,
+          search,
         },
       }),
       providesTags: ["eBook"],

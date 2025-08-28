@@ -7,7 +7,7 @@ const statusApis = baseApis.injectEndpoints({
         url: "/user-management/get-all-users",
         method: "GET",
         params: {
-          search: search,
+          search,
         },
       }),
       providesTags: ["Status"],

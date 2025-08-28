@@ -14,8 +14,9 @@ function AudioBook() {
   const [showBookDetails, setShowBookDetails] = useState(false)
   const [selectedItem, setSelectedItem] = useState(null)
   const [search, setSearch] = useState("")
+  console.log(search)
   const [category, setCategory] = useState("")
-  const { data: audioBooks, isLoading: isAudioBooksLoading } = useAllAudioBooksQuery({ categoryName: category });
+  const { data: audioBooks, isLoading: isAudioBooksLoading } = useAllAudioBooksQuery({ categoryName: category, search });
   const [deleteAudioBook, { isLoading }] = useDeleteAudioBookMutation()
   const handleView = useCallback((item) => {
     setSelectedItem(item)

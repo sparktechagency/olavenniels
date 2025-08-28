@@ -7,7 +7,8 @@ import { useGetCategoriesQuery, useDeleteCategoryMutation } from "../../Redux/Ap
 import { imageUrl } from "../../utils/server";
 
 function Category() {
-  const { data: categories, isLoading: isCategoriesLoading, refetch } = useGetCategoriesQuery();
+  const [search, setSearch] = useState("")
+  const { data: categories, isLoading: isCategoriesLoading, refetch } = useGetCategoriesQuery({ search });
   const [deleteCategory, { isLoading: isDeleteLoading }] = useDeleteCategoryMutation();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [data, setData] = useState(null);
@@ -71,7 +72,7 @@ function Category() {
   };
 
   const handleSearch = (value) => {
-    console.log(value);
+    setSearch(value.target.value);
   };
   const handleAddCategory = () => {
     setIsModalOpen(true);

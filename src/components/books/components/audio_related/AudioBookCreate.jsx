@@ -92,7 +92,7 @@ const AudioUploadField = ({
 
 const AudioBookCreate = ({ setShowModal, item }) => {
   const [form] = Form.useForm();
-  const { data: categories, isLoading: categoriesLoading } = useGetCategoriesQuery();
+  const { data: categories, isLoading: categoriesLoading } = useGetCategoriesQuery({});
   const [addAudioBook, { isLoading: isSubmitting }] = useAddAudioBookMutation();
   const [updateAudioBook, { isLoading: isUpdating }] = useUpdateAudioBookMutation();
   const {

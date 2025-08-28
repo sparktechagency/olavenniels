@@ -3,7 +3,7 @@ import { Avatar, Badge, Dropdown, Image, Menu } from 'antd';
 import { UserOutlined, LogoutOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import logo from '../../assets/brand-black.png';
-import { FaBell } from 'react-icons/fa';
+// import { FaBell } from 'react-icons/fa';
 import { imageUrl } from '../../utils/server';
 import Loader from '../Loader/Loader';
 import { useGetProfileDataQuery } from '../../Redux/Apis/service/profileApis';
@@ -57,13 +57,13 @@ function Header() {
         <img className="h-6" src={logo} alt="" />
       </div>
       <div className="flex items-center gap-4 text-2xl">
-        <Link to="/notifications">
+        {/* <Link to="/notifications">
           <Badge dot={true}>
             <Avatar shape="circle" size="large">
               <FaBell style={{ color: 'var(--secondary-color)' }} />
             </Avatar>
           </Badge>
-        </Link>
+        </Link> */}
         <div className="flex items-center gap-3">
           <Dropdown placement="bottomRight" overlay={menu} trigger={['click']}>
             <Avatar

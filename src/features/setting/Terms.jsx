@@ -7,7 +7,7 @@ import toast from 'react-hot-toast';
 function Terms() {
   const [content, setContent] = useState('');
   const { data: terms, isLoading } = useTermsQuery();
-  const [updateTerms] = useUpdateTermsMutation();
+  const [updateTerms, { isLoading: updating }] = useUpdateTermsMutation();
   useEffect(() => {
     if (terms?.success) {
       setContent(terms?.data?.description || 'description');
@@ -33,6 +33,8 @@ function Terms() {
       <h1 className="text-2xl text-white font-bold mb-4">Terms & Condition</h1>
       <JoditComponent content={content} setContent={setContent} />
       <Button
+        loading={updating}
+        disabled={updating}
         style={{
           width: '200px',
           backgroundColor: 'var(--secondary-color)',

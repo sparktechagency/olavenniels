@@ -3,7 +3,7 @@ import BookCard from "../../components/books/BookCard";
 import { Modal } from "antd";
 import BookInfoModal from "../../components/books/components/BookInfoModal";
 import toast from "react-hot-toast";
-import { useAllBooksQuery, useDeleteEBookMutation, useUpdateEBookMutation } from "../../Redux/Apis/books/eBookApi";
+import { useAllBooksQuery, useDeleteEBookMutation } from "../../Redux/Apis/books/eBookApi";
 import CategorSelect from "../../components/books/components/share/CategorSelect";
 import Loader from "../../components/Loader/Loader";
 import EbookCreate from "../../components/books/components/book-creation/EbookCreate";
@@ -15,8 +15,7 @@ function Ebook() {
   const [showBookDetails, setShowBookDetails] = useState(false)
   const [selectedItem, setSelectedItem] = useState(null)
   const [category, setCategory] = useState("")
-  const { data: ebooks, isLoading } = useAllBooksQuery({ categoryName: category })
-  const [updateEBook] = useUpdateEBookMutation()
+  const { data: ebooks, isLoading } = useAllBooksQuery({ categoryName: category, search })
   const [deleteEBook] = useDeleteEBookMutation()
   const handleView = (item) => {
     setSelectedItem(item)

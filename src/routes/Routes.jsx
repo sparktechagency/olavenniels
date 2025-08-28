@@ -15,7 +15,7 @@ import SliderImage from "../features/home-slides/SliderImage";
 import AudioBook from "../features/audio-book/AudioBook";
 import Ebook from "../features/audio-book/Ebook";
 import BothFormatBook from "../features/audio-book/BothFormatBook";
-import NotificationPage from "../features/notifications/NotificationPage";
+// import NotificationPage from "../features/notifications/NotificationPage";
 import Contact from "../features/setting/Contact";
 import MakeAdmin from "../features/user/ui/MakeAdmin";
 // import SubscriptionManagement from "../features/subscription/SubscriptionManagement";
@@ -82,10 +82,10 @@ export const Routes = createBrowserRouter([
         path: "/make-admin",
         element: <MakeAdmin />,
       },
-      {
-        path: "/notifications",
-        element: <NotificationPage />,
-      },
+      // {
+      //   path: "/notifications",
+      //   element: <NotificationPage />,
+      // },
       {
         path: "/dashboard/Settings/ContactUs",
         element: <Contact />,
