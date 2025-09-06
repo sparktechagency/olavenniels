@@ -61,6 +61,12 @@ export const SuperAdminSidebarRoutes = [
     link: "/make-admin",
   },
   {
+    key: "subscription-management",
+    label: "Subscription management",
+    icon: RiAdminFill,
+    link: "/subscription-management",
+  },
+  {
     key: "settings",
     label: "Settings",
     icon: FaCog,

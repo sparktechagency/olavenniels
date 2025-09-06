@@ -18,9 +18,9 @@ const ProfileEdit = ({ image, data }) => {
     const formData = new FormData();
     formData.append("name", values?.name);
     if (image === null) {
-      formData.delete("profile_image");
+      formData.delete("profilePicture");
     } else {
-      formData.append("profile_image", image);
+      formData.append("profilePicture", image);
     }
 
     try {

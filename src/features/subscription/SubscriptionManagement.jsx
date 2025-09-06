@@ -142,7 +142,7 @@ function SubscriptionManagement() {
 
       {/* Plan Content */}
       <div className="border-2 border-white rounded-lg shadow-sm">
-        <div className="p-6 border-b">
+        <div className="p-6 border-b border-white border-dashed">
           <div>
             <div className="flex justify-between items-center">
               <div>

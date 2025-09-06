@@ -16,7 +16,7 @@ const PrivateRoute = ({ children }) => {
         if (role === 'SUPER_ADMIN') {
           setIsAuthorized(true);
         } else if (role === 'ADMIN') {
-          if (location.pathname === '/make-admin') {
+          if (location.pathname === '/make-admin' || location.pathname === '/subscription-management') {
             toast.error("You don't have access to this page");
             setIsAuthorized(false);
           } else {
