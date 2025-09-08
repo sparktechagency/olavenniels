@@ -27,7 +27,7 @@ export const baseQueryWithReauth = async (args, api, extraOptions) => {
 
     if (!refreshToken) {
       localStorage.removeItem("accessToken");
-      window.location.href = "/auth/login";
+      // window.location.href = "/auth/login";
       return result;
     }
 

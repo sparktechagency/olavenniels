@@ -51,7 +51,7 @@ const SideBar = () => {
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
     navigate('/auth/login');
-    window.location.reload();
+    // window.location.reload();
   };
 
   const isRouteActive = (item) => {
