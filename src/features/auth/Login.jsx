@@ -25,7 +25,7 @@ const Login = () => {
             }
 
             toast.success("Login successfully");
-            // window.location.href = "/";
+            window.location.href = "/";
           }
         })
         .catch((error) => {
