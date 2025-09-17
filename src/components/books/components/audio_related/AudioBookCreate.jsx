@@ -3,7 +3,6 @@ import { Form, Input, Select, Button, Tabs } from "antd";
 import { CloseOutlined } from "@ant-design/icons";
 import { useGetCategoriesQuery } from "../../../../Redux/Apis/service/categoryApis";
 import { useAddAudioBookMutation, useUpdateAudioBookMutation } from "../../../../Redux/Apis/books/audioBookApi";
-
 import ImageUploadSection from "./ImageUploadSection.jsx";
 import toast from "react-hot-toast";
 import { imageUrl } from "../../../../utils/server.js";
@@ -42,7 +41,7 @@ const AudioUploadField = ({
     <div>
       <div className="mb-2">
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          Audio File {!existingAudioUrl && <span className="text-red-500">*</span>}
+          Audio File {!existingAudioUrl && <span className="text-red-500">*</span>} {existingAudioUrl && <small>please browse to upload new audio</small>}
         </label>
         <Form.Item
           name="audio"
@@ -90,7 +89,7 @@ const AudioUploadField = ({
 
 // AudioBookCreate
 
-const AudioBookCreate = ({ setShowModal, item }) => {
+const AudioBookCreate = ({ setShowModal, item, setSelectedItem }) => {
   const [form] = Form.useForm();
   const { data: categories, isLoading: categoriesLoading } = useGetCategoriesQuery({});
   const [addAudioBook, { isLoading: isSubmitting }] = useAddAudioBookMutation();
@@ -206,7 +205,7 @@ const AudioBookCreate = ({ setShowModal, item }) => {
           />
           <Button
             className="!bg-[var(--secondary-color)] !mt-3 hover:!bg-[var(--secondary-color)] border-none !text-white"
-            onClick={() => setShowModal(false)}
+            onClick={() => { setShowModal(false), setSelectedItem(null) }}
           >
             Close
           </Button>
@@ -270,7 +269,7 @@ const AudioBookCreate = ({ setShowModal, item }) => {
               <Form.Item className="flex items-center justify-end !mt-2">
                 <Button
                   className="!bg-[var(--secondary-color)] !mr-2 hover:!bg-[var(--secondary-color)] border-none !text-white"
-                  onClick={() => setShowModal(false)}
+                  onClick={() => { setShowModal(false), setSelectedItem(null) }}
                 >
                   Close
                 </Button>

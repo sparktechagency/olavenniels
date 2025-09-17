@@ -85,7 +85,7 @@ function Ebook() {
         maskClosable={false}
         destroyOnClose
       >
-        <EbookCreate item={selectedItem} setShowModal={setShowModal} />
+        <EbookCreate item={selectedItem} setShowModal={setShowModal} setSelectedItem={setSelectedItem} />
       </Modal>
       <Modal
         open={showBookDetails}

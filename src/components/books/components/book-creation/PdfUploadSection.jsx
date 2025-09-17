@@ -4,15 +4,17 @@ import { UploadOutlined } from "@ant-design/icons";
 import { Form } from "antd";
 
 const PdfUploadSection = ({ pdfFile, setPdfFile, form }) => {
+    console.log(pdfFile)
     const handlePdfChange = (info) => {
         console.log(info)
         setPdfFile(info?.fileList[0]?.originFileObj)
         form.setFields([{ name: "pdfFile", errors: [] }]);
     };
 
+
     return (
         <Form.Item
-            label="Upload PDF"
+            label={<span>Upload PDF {pdfFile && <small>please click on upload to replace</small>}</span>}
             name="pdfFile"
             rules={[{ required: true, message: "Please upload PDF file" }]}
             form={form}
@@ -27,11 +29,15 @@ const PdfUploadSection = ({ pdfFile, setPdfFile, form }) => {
             >
                 <Button icon={<UploadOutlined />}>Click to Upload PDF</Button>
             </Upload>
-            {pdfFile && (
-                <p className="mt-2 text-sm text-gray-600">
-                    Selected: <span className="font-medium">{pdfFile.name}</span>
-                </p>
-            )}
+            {pdfFile && <div className="mt-3">
+                <iframe
+                    src={pdfFile instanceof File ? URL.createObjectURL(pdfFile) : pdfFile}
+                    title={pdfFile?.name}
+                    width="100%"
+                    height="300px"
+                />
+            </div>}
+
         </Form.Item>
     );
 };

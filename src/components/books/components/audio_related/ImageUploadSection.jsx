@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { motion } from 'framer-motion'
-import ImgCrop from 'antd-img-crop'
 import { Upload } from 'antd'
 import { CloseOutlined } from '@ant-design/icons'
 
@@ -37,16 +36,14 @@ function ImageUploadSection({ preview,
                     className="object-fill !w-[178px] !h-[200px] rounded"
                 />
             ) : (
-            <ImgCrop rotate aspect={178 / 200}>
-                    <Upload
-                        listType="picture-card"
-                        fileList={fileList}
-                        onChange={handleImageChange}
-                        onPreview={onPreview}
-                    >
-                        {fileList.length < 5 && '+ Upload'}
-                    </Upload>
-                </ImgCrop>
+                <Upload
+                    listType="picture-card"
+                    fileList={fileList}
+                    onChange={handleImageChange}
+                    onPreview={onPreview}
+                >
+                    {fileList.length < 5 && '+ Upload'}
+                </Upload>
             )}
 
             {preview && (

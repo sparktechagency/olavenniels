@@ -80,6 +80,7 @@ function BothFormatBook() {
         width={800}
         closable={false}
         destroyOnClose
+        maskClosable={false}
       >
         <BothFormateBookCreate item={selectedItem} setSelectedItem={setSelectedItem} setShowModal={setShowModal} />
       </Modal>

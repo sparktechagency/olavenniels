@@ -11,7 +11,7 @@ import ImageUploadSection from "../audio_related/ImageUploadSection.jsx";
 
 const { TabPane } = Tabs;
 
-const EbookCreate = ({ setShowModal, item }) => {
+const EbookCreate = ({ setShowModal, item, setSelectedItem }) => {
   const [form] = Form.useForm();
   const {
     preview,
@@ -123,7 +123,7 @@ const EbookCreate = ({ setShowModal, item }) => {
           />
           <Button
             className="!bg-[var(--secondary-color)] !mt-3 hover:!bg-[var(--secondary-color)] border-none !text-white"
-            onClick={() => setShowModal(false)}
+            onClick={() => { setShowModal(false), setSelectedItem(null) }}
           >
             Close
           </Button>
@@ -178,7 +178,7 @@ const EbookCreate = ({ setShowModal, item }) => {
               <Form.Item className="flex items-center justify-end !mt-2">
                 <Button
                   className="!bg-[var(--secondary-color)] !mr-2 hover:!bg-[var(--secondary-color)] border-none !text-white"
-                  onClick={() => setShowModal(false)}
+                  onClick={() => { setShowModal(false), setSelectedItem(null) }}
                 >
                   Close
                 </Button>

@@ -67,24 +67,18 @@ function BookCreate({ setShowModal }) {
                 className="object-cover !w-[178px] !h-[200px] rounded"
               />
             ) : (
-              <ImgCrop
-                rotationSlider
-                aspect={178 / 200} // Fixed ratio
-                quality={1}
+              <Upload
+                accept="image/*"
+                listType="picture-card"
+                fileList={fileList}
+                onChange={handleImageChange}
+                beforeUpload={() => false}
               >
-                <Upload
-                  accept="image/*"
-                  listType="picture-card"
-                  fileList={fileList}
-                  onChange={handleImageChange}
-                  beforeUpload={() => false} // prevent auto-upload
-                >
-                  <div className="flex flex-col items-center justify-center">
-                    <span className="text-2xl">📷</span>
-                    <span>Upload book cover image</span>
-                  </div>
-                </Upload>
-              </ImgCrop>
+                <div className="flex flex-col items-center justify-center">
+                  <span className="text-2xl">📷</span>
+                  <span>Upload book cover image</span>
+                </div>
+              </Upload>
             )}
 
             {preview && (

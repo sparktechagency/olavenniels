@@ -82,7 +82,7 @@ function AudioBook() {
         maskClosable={false}
         destroyOnClose
       >
-        <AudioBookCreate item={selectedItem} setShowModal={setShowModal} />
+        <AudioBookCreate item={selectedItem} setShowModal={setShowModal} setSelectedItem={setSelectedItem} />
       </Modal>
       <Modal
         open={showBookDetails}

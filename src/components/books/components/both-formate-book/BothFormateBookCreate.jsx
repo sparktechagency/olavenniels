@@ -75,13 +75,13 @@ const AudioUploadField = ({
                         controls
                         className="w-full h-[100px] rounded"
                     />
-                    <button
+                    {!existingAudioUrl && <button
                         onClick={handleRemoveAudio}
                         className="absolute top-2 right-2 w-6 h-6 flex items-center justify-center cursor-pointer bg-white rounded-full shadow"
                         aria-label="Remove audio"
                     >
                         <CloseOutlined className="!text-red-500" />
-                    </button>
+                    </button>}
                 </div>
             )}
         </div>
@@ -285,7 +285,7 @@ const BothFormateBookCreate = ({ setShowModal, item, setSelectedItem }) => {
                             <Form.Item className="flex items-center justify-end !mt-2">
                                 <Button
                                     className="!bg-[var(--secondary-color)] !mr-2 hover:!bg-[var(--secondary-color)] border-none !text-white"
-                                    onClick={() => setShowModal(false)}
+                                    onClick={() => { setShowModal(false), setSelectedItem(null) }}
                                 >
                                     Close
                                 </Button>
