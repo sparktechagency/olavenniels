@@ -3,14 +3,45 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 
 // https://vite.dev/config/
+// export default defineConfig({
+//   plugins: [react(), tailwindcss()],
+//   server: {
+//     port: 3001,
+//     host: "0.0.0.0",
+//   },
+//   preview: {
+//     port: 3001,
+//     host: "0.0.0.0",
+//   },
+// });
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  optimizeDeps: {
+    include: ["react", "react-dom", "antd"],
+  },
   server: {
-    port: 3001,
     host: "0.0.0.0",
+    port: 3001,
+    allowedHosts: ["13.49.70.96"],
   },
   preview: {
-    port: 3001,
     host: "0.0.0.0",
+    port: 3001,
+    allowedHosts: ["13.49.70.96"],
+  },
+  plugins: [react(), tailwindcss()],
+  build: {
+    rollupOptions: {
+      onwarn(warning, defaultHandler) {
+        if (warning.code === "MODULE_LEVEL_DIRECTIVE") {
+          return;
+        }
+        defaultHandler(warning);
+      },
+    },
+  },
+  esbuild: {
+    supported: {
+      "top-level-await": true,
+    },
   },
 });
