@@ -8,10 +8,12 @@ export default defineConfig({
   server: {
     port: 3001,
     host: "0.0.0.0",
+    allowedHosts: ["13.62.91.46"],
   },
   preview: {
     port: 3001,
     host: "0.0.0.0",
+    allowedHosts: ["13.62.91.46"],
   },
 });
 // export default defineConfig({
