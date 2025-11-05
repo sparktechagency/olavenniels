@@ -13,7 +13,7 @@ export default defineConfig({
   preview: {
     port: 3001,
     host: "0.0.0.0",
-    allowedHosts: ["13.62.91.46"],
+    allowedHosts: ["13.62.91.46","dashboard.grambix.com"],
   },
 });
 // export default defineConfig({
