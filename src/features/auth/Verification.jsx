@@ -1,26 +1,82 @@
-import React, { useState } from 'react';
-import { Typography, Input, Button, Card } from 'antd';
-import { useNavigate } from 'react-router';
-// import toast from 'react-hot-toast';
-import authA1 from '../../assets/auth-assets3.png';
-// import {
-//   useForgetEmailPostMutation,
-//   useVerifyOtpCodeMutation,
-// } from '../../Redux/services/AuthApis/authApis';
+import React, { useState } from "react";
+import { Typography, Input, Button, Card, Form } from "antd";
+import { useNavigate, useSearchParams } from "react-router";
 
-const { Title, Text } = Typography;
+import authA1 from "../../assets/auth-assets3.png";
+import {
+  useResendPasswordMutation,
+  useResetPasswordMutation,
+} from "../../Redux/Apis/auth/loginApis";
+import toast from "react-hot-toast";
+const { Text } = Typography;
 
 const Verification = () => {
-  const router = useNavigate();
-  // const [verifyOtp, { isLoading }] = useVerifyOtpCodeMutation();
-  // const [resendOtp] = useForgetEmailPostMutation();
-  const [otp, setOtp] = useState('');
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const email = searchParams.get("email");
+  const [otp, setOtp] = useState("");
+  const [newPassword, setNwPassword] = useState("");
+  const [resetPassword, { isLoading: resetLoading }] =
+    useResetPasswordMutation();
+  const [resendPass, { isLoading: passowrdLoading }] =
+    useResendPasswordMutation();
+
   const handleContinue = async () => {
-    console.log(otp);
-    router('/auth/reset-password');
+    try {
+      if (!email) {
+        throw new Error("Please email verify first!");
+      }
+      if (otp === "") {
+        throw new Error("please provide one time password!");
+      }
+      if (newPassword === "") {
+        throw new Error("please provide valid new password!");
+      }
+      const data = {
+        email: email,
+        code: otp,
+        newPassword: newPassword,
+      };
+
+      const res = await resetPassword(data).unwrap();
+      if (!res?.success) {
+        throw new Error(
+          res?.data?.message ||
+            res?.message ||
+            "somthing went wrong while reset password!"
+        );
+      }
+      toast.success(res?.message);
+      navigate("/auth/login");
+    } catch (error) {
+      toast.error(
+        error?.data?.message ||
+          error?.message ||
+          "something is wrong while reset the password!"
+      );
+    }
   };
   const resendOtpHandler = async () => {
-    console.log('resendOtpHandler');
+    try {
+      if (!email) {
+        throw new Error("Please email verify first!");
+      }
+      const data = {
+        email: email,
+      };
+      const res = await resendPass(data).unwrap();
+      if (!res?.success) {
+        throw new Error(
+          res?.message || "Something is wrong while resend one time password!"
+        );
+      }
+    } catch (error) {
+      toast.error(
+        error?.data?.message ||
+          error?.message ||
+          "Something is wrong while resend one time password!"
+      );
+    }
   };
 
   return (
@@ -32,25 +88,40 @@ const Verification = () => {
             Please check your email and enter the code
           </h1>
         </div>
-        <div className="flex justify-center my-4">
-          <Input.OTP
-            size='large'
-            length={6}
-            value={otp}
-            onChange={setOtp}
-            className="text-center text-xl w-full"
-          />
+        <div className="my-2">
+          <Form
+            className="flex justify-center flex-col items-center gap-3 my-4"
+            layout="vertical"
+            requiredMark={false}
+          >
+            <Input.OTP
+              size="large"
+              length={6}
+              value={otp}
+              onChange={setOtp}
+              className="text-center text-xl w-full"
+            />
+            <Form.Item className="w-full" label="New Password">
+              <Input
+                onChange={(e) => setNwPassword(e.target.value)}
+                value={newPassword}
+                name="newPassword"
+                size="large"
+                placeholder="Enter New passowrd"
+              />
+            </Form.Item>
+          </Form>
         </div>
 
         <Button
           type="primary"
           className="w-full !bg-[var(--secondary-color)] hover:!bg-[var(--secondary-color)] !text-white"
           disabled={otp.length < 6}
-          // loading={isLoading}
-          size='large'
+          loading={resetLoading}
+          size="large"
           onClick={handleContinue}
         >
-          Verify code
+          Change passowrd
         </Button>
 
         <div className="mt-3">
@@ -60,20 +131,20 @@ const Verification = () => {
               onClick={() => resendOtpHandler()}
               className="!text-[var(--secondary-color)] cursor-pointer hover:underline"
             >
-              {/* {isLoading ? (
+              {passowrdLoading ? (
                 <div class="flex flex-row gap-2">
                   <div class="w-2 h-2 rounded-full bg-white animate-bounce"></div>
                   <div class="w-2 h-2 rounded-full bg-white animate-bounce [animation-delay:-.3s]"></div>
                   <div class="w-2 h-2 rounded-full bg-white animate-bounce [animation-delay:-.5s]"></div>
-                </div> */}
-              {/* ) : ( */}
-              Resend OTP
-              {/* )} */}
+                </div>
+              ) : (
+                "Resend OTP"
+              )}
             </Text>
           </div>
         </div>
       </Card>
-      <div className='w-2/5 hidden lg:block'>
+      <div className="w-2/5 hidden lg:block">
         <img src={authA1} alt="brand-logo" className=" mx-auto" />
       </div>
     </div>

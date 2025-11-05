@@ -10,7 +10,33 @@ const loginApis = baseApis.injectEndpoints({
         invalidatesTags: ["Profile"],
       }),
     }),
+    forgotPassword: build.mutation({
+      query: (data) => ({
+        url: "/auth/forgot-password",
+        method: "POST",
+        body: data,
+      }),
+    }),
+    resetPassword: build.mutation({
+      query: (data) => ({
+        url: "/auth/reset-password",
+        method: "POST",
+        body: data,
+      }),
+    }),
+    resendPassword: build.mutation({
+      query: (data) => ({
+        url: "/auth/resend-verification",
+        method: "POST",
+        body: data,
+      }),
+    }),
   }),
 });
 
-export const { useLoginMutation } = loginApis;
+export const {
+  useLoginMutation,
+  useForgotPasswordMutation,
+  useResetPasswordMutation,
+  useResendPasswordMutation,
+} = loginApis;

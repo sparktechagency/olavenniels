@@ -1,34 +1,29 @@
-import React from 'react';
-import { Form, Input, Button, Typography } from 'antd';
-import 'antd/dist/reset.css';
-import authA1 from '../../assets/auth-assets2.png';
-import { useNavigate } from 'react-router';
-// import toast from 'react-hot-toast';
-// import { useForgetEmailPostMutation } from '../../Redux/services/AuthApis/authApis';
+import React from "react";
+import { Form, Input, Button, Typography } from "antd";
+import "antd/dist/reset.css";
+import authA1 from "../../assets/auth-assets2.png";
+import { useNavigate } from "react-router";
+import { useForgotPasswordMutation } from "../../Redux/Apis/auth/loginApis";
+import toast from "react-hot-toast";
 
 const { Title, Text } = Typography;
 
 const ForgetPassword = () => {
-  // const [forgotPassword, { data, isLoading }] = useForgetEmailPostMutation();
+  const [forgotPassword, { isLoading }] = useForgotPasswordMutation();
   const navigate = useNavigate();
   const onFinish = async (values) => {
-    // console.log(values);
-    localStorage.removeItem('email');
-    localStorage.setItem('email', values.email);
-    navigate('/auth/varification');
-    // const data = {
-    //   email: values.email,
-    // };
-    // await forgotPassword({ data })
-    //   .unwrap()
-    //   .then((res) => {
-    //     if (res?.success) {
-    //       toast.success('please check your email for otp');
-    //       route('/otp');
-    //     } else {
-    //       console.log('error', res);
-    //     }
-    //   });
+    try {
+      const data = {
+        email: values.email,
+      };
+      const res = await forgotPassword(data).unwrap();
+      if (!res?.success) {
+        throw new Error(res?.message || "Something went wrong");
+      }
+      navigate(`/auth/varification?email=${values?.email}`);
+    } catch (error) {
+      toast.error(error?.message || "Something went wrong");
+    }
   };
 
   return (
@@ -48,44 +43,44 @@ const ForgetPassword = () => {
             label="Email address"
             name="email"
             rules={[
-              { required: true, message: 'Please enter your email!' },
-              { type: 'email', message: 'Enter a valid email address!' },
+              { required: true, message: "Please enter your email!" },
+              { type: "email", message: "Enter a valid email address!" },
             ]}
             style={{
               marginTop: 10,
               marginBottom: 10,
-              textAlign: 'start',
+              textAlign: "start",
             }}
           >
             <Input
-            size='large'
+              size="large"
               placeholder="exmple@gmail.com"
               type="email"
               style={{
-                width: '100%',
+                width: "100%",
               }}
             />
           </Form.Item>
           <Button
             type="primary"
-            size='large'
+            size="large"
             htmlType="submit"
             className="w-full !bg-[var(--secondary-color)] hover:!bg-[var(--secondary-color)] !text-white"
             style={{ marginTop: 10 }}
           >
-            {/* {isLoading ? (
+            {isLoading ? (
               <div class="flex flex-row gap-2">
                 <div class="w-2 h-2 rounded-full bg-white animate-bounce"></div>
                 <div class="w-2 h-2 rounded-full bg-white animate-bounce [animation-delay:-.3s]"></div>
                 <div class="w-2 h-2 rounded-full bg-white animate-bounce [animation-delay:-.5s]"></div>
               </div>
-            ) : ( */}
-            Get OTP
-            {/* )} */}
+            ) : (
+              "Get OTP"
+            )}
           </Button>
         </Form>
       </div>
-      <div className='w-2/5 hidden lg:block'>
+      <div className="w-2/5 hidden lg:block">
         <img src={authA1} alt="brand-logo" className=" mx-auto" />
       </div>
     </div>
