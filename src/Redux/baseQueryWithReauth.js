@@ -1,5 +1,6 @@
 import { fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { baseUrl } from "../utils/server";
+import toast from "react-hot-toast";
 
 const baseQuery = fetchBaseQuery({
   baseUrl,
@@ -53,6 +54,7 @@ export const baseQueryWithReauth = async (args, api, extraOptions) => {
   } catch (error) {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
+    toast.error(error?.data?.message || error?.message || 'your login session has ended, usually due to inactivity or a security measure')
     // window.location.href = "/auth/login";
   }
 

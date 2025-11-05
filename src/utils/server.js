@@ -1,7 +1,7 @@
 // export const baseUrl = "http://10.10.20.54:5600";
-export const baseUrl = "http://13.62.165.184:3000/api";
+export const baseUrl = "https://server.grambix.com/api";
 // export const baseUrl = "http://192.168.0.101:3000";
-export const imageBaseUrl = "http://13.62.165.184:3000";
+export const imageBaseUrl = "https://server.grambix.com";
 
 export const imageUrl = (image) => {
   return image
