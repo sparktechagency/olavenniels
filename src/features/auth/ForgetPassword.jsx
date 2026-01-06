@@ -12,6 +12,11 @@ const ForgetPassword = () => {
   const [forgotPassword, { isLoading }] = useForgotPasswordMutation();
   const navigate = useNavigate();
   const onFinish = async (values) => {
+    const existingToken = localStorage.getItem("accessToken");
+    if (existingToken) {
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+    }
     try {
       const data = {
         email: values.email,
@@ -22,7 +27,7 @@ const ForgetPassword = () => {
       }
       navigate(`/auth/varification?email=${values?.email}`);
     } catch (error) {
-      toast.error(error?.message || "Something went wrong");
+      toast.error(error?.data?.message || error?.message || "Something went wrong");
     }
   };
 
@@ -69,10 +74,10 @@ const ForgetPassword = () => {
             style={{ marginTop: 10 }}
           >
             {isLoading ? (
-              <div class="flex flex-row gap-2">
-                <div class="w-2 h-2 rounded-full bg-white animate-bounce"></div>
-                <div class="w-2 h-2 rounded-full bg-white animate-bounce [animation-delay:-.3s]"></div>
-                <div class="w-2 h-2 rounded-full bg-white animate-bounce [animation-delay:-.5s]"></div>
+              <div className="flex flex-row gap-2">
+                <div className="w-2 h-2 rounded-full bg-white animate-bounce"></div>
+                <div className="w-2 h-2 rounded-full bg-white animate-bounce [animation-delay:-.3s]"></div>
+                <div className="w-2 h-2 rounded-full bg-white animate-bounce [animation-delay:-.5s]"></div>
               </div>
             ) : (
               "Get OTP"

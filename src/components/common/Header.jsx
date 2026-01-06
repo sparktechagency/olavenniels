@@ -25,7 +25,7 @@ function Header() {
   const handleSignOut = () => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
-    // window.location.href = '/auth/login';
+    window.location.href = '/auth/login';
   };
 
 

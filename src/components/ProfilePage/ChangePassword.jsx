@@ -8,21 +8,21 @@ const ChangePassword = () => {
   const [changePassword, { isLoading: isNewPassChange }] = useChangePasswordMutation();
 
   const onFinish = async (values) => {
-    console.log(values)
     const ChangePasswordDatas = {
       oldPassword: values.oldPassword,
       newPassword: values.newPassword,
       confirmNewPassword: values.confirmPassword,
     };
     try {
-      await changePassword({ data: ChangePasswordDatas }).unwrap().then((res) => {
-        if (res?.data?.success) {
-          toast.success("Password Changed successfully.");
-        }
-      })
+      const response = await changePassword(ChangePasswordDatas).unwrap()
+      if (!response?.success) {
+        throw new Error(response?.message || "Failed to change Password.");
+      }
+      toast.success("Password Changed successfully.");
+      form.resetFields();
     } catch (error) {
       console.error("Failed to change password:", error);
-      toast.error("Failed to change Password.");
+      toast.error(error?.data?.message || error?.message || "Failed to change Password.");
     }
   };
   return (

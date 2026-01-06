@@ -9,10 +9,15 @@ const Login = () => {
   const [loginUser, { isLoading }] = useLoginMutation();
   const onFinish = async (values) => {
     const data = { email: values?.email, password: values?.password };
+    const existingToken = localStorage.getItem("accessToken");
+    if (existingToken) {
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+    }
     if (data?.email && data?.password) {
       await loginUser(data)
         .unwrap()
-        .then((res) => {
+        .then((res) => {  
           if (res?.success) {
             const accessToken = res?.token;
             const refreshToken = res?.refreshToken;

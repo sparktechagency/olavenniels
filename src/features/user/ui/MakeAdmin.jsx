@@ -9,7 +9,7 @@ function MakeAdmin() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [page, setPage] = useState(1)
   const [searchTerm, setSearchTerm] = useState("")
-  const { data, isLoading } = useGetAdminsQuery({ page, search: searchTerm })
+  const { data, isLoading } = useGetAdminsQuery({ page, search: searchTerm, limit: 5 })
   const [deleteAdminMutation, { isLoading: isDeleting }] = useDeleteAdminMutation();
   const [deleteID, setDeleteID] = useState(null)
   const columns = [
@@ -96,13 +96,13 @@ function MakeAdmin() {
           pagination={{
             pageSize: 10,
             showSizeChanger: false,
-            showQuickJumper: true,
+            showQuickJumper: false,
             showTotal: false,
             position: ["bottomCenter"],
             size: "large",
             defaultCurrent: 1,
             total: data?.admins?.length,
-            onChange: (page, pageSize) => {
+            onChange: (page) => {
               setPage(page)
             },
           }}

@@ -67,20 +67,25 @@ const Dashboard = () => {
       </div>
       {/* Recent Activity */}
       <div className="bg-[var(--primary-color)] border border-gray-200/40 rounded-lg shadow mt-6">
-        <div className={`w-full h-[420px] p-4 grid gap-4 ${role === 'SUPER_ADMIN' ? 'grid-cols-2' : 'grid-cols-1'}`}>
+        <div className={`w-full h-[420px] p-4 grid gap-4`}>
+          <Suspense fallback={<SmallLoader />}>
+            <UserGrowthChart />
+          </Suspense>
+        </div>
+        {/* <div className={`w-full h-[420px] p-4 grid gap-4 ${role === 'SUPER_ADMIN' ? 'grid-cols-2' : 'grid-cols-1'}`}>
           <Suspense fallback={<SmallLoader />}>
             <UserGrowthChart />
           </Suspense>
           {role === 'SUPER_ADMIN' && <Suspense fallback={<SmallLoader />}>
             <SubscriptionGrowth />
           </Suspense>}
-        </div>
+        </div> */}
       </div>
-      {role === 'SUPER_ADMIN' && <div className="bg-[var(--primary-color)] h-[420px] p-2 border border-gray-200/40 rounded-lg shadow mt-6">
+      {/* {role === 'SUPER_ADMIN' && <div className="bg-[var(--primary-color)] h-[420px] p-2 border border-gray-200/40 rounded-lg shadow mt-6">
         <Suspense fallback={<SmallLoader />}>
           <EarningGrowth />
         </Suspense>
-      </div>}
+      </div>} */}
     </div>
   );
 };
