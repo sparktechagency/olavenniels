@@ -38,6 +38,7 @@ function ImageUploadSection({ preview,
             ) : (
                 <Upload
                     listType="picture-card"
+                    accept=".jpg,.jpeg,.png"
                     fileList={fileList}
                     onChange={handleImageChange}
                     onPreview={onPreview}

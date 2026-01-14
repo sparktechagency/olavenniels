@@ -11,5 +11,5 @@ const changePasswordApis = baseApis.injectEndpoints({
         }),
     })  
 });
-
+ 
 export const { useChangePasswordMutation } = changePasswordApis;

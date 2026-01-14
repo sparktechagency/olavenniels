@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
-import { Form, Input, Select, Button, Tabs } from "antd";
+import { Form, Input, Select, Button, Tabs, TimePicker } from "antd";
+import dayjs from 'dayjs';
 import { CloseOutlined } from "@ant-design/icons";
 import { useGetCategoriesQuery } from "../../../../Redux/Apis/service/categoryApis";
 import { useAddAudioBookMutation, useUpdateAudioBookMutation } from "../../../../Redux/Apis/books/audioBookApi";
@@ -112,13 +113,24 @@ const AudioBookCreate = ({ setShowModal, item, setSelectedItem }) => {
   } = useAudioBookForm();
 
   useEffect(() => {
+    console.log(item)
     if (item) {
       // Reset form fields with current item data
+      // Convert seconds to HH:mm:ss format
+      const formatDuration = (seconds) => {
+        if (!seconds) return null;
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+        const secs = seconds % 60;
+        return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+      };
+
       form.setFieldsValue({
         bookName: item?.bookName,
         synopsis: item?.synopsis,
         category: item?.category?._id,
         tags: item?.tags,
+        duration: item?.duration ? dayjs(formatDuration(item?.duration), 'HH:mm:ss') : null,
       });
 
       // Reset image preview and file list
@@ -255,6 +267,16 @@ const AudioBookCreate = ({ setShowModal, item, setSelectedItem }) => {
               </Form.Item>
 
               <TagsSelect form={form} item={item} />
+              <Form.Item
+                label="Duration"
+                name="duration"
+                getValueProps={(value) => ({
+                  value: value ? dayjs(value, 'HH:mm:ss') : null
+                })}
+                normalize={(value) => value ? value.format('HH:mm:ss') : null}
+              >
+                <TimePicker format="HH:mm:ss" style={{ width: '100%' }} />
+              </Form.Item>
 
               <AudioUploadField
                 audioInputRef={audioInputRef}
