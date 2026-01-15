@@ -146,7 +146,7 @@ const EbookCreate = ({ setShowModal, item, setSelectedItem }) => {
                 name="synopsis"
                 rules={[{ required: true, message: "Please enter synopsis" }]}
               >
-                <Input.TextArea rows={3} placeholder="Type here" showCount maxLength={500} />
+                <Input.TextArea rows={3} placeholder="Type here" showCount maxLength={2000} />
               </Form.Item>
 
               <Form.Item

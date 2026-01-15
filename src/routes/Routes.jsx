@@ -62,10 +62,10 @@ export const Routes = createBrowserRouter([
         path: "/both-format-book",
         element: <BothFormatBook />,
       },
-      {
-        path: "/subscription-management",
-        element: <SubscriptionManagement />,
-      },
+      // {
+      //   path: "/subscription-management",
+      //   element: <SubscriptionManagement />,
+      // },
       {
         path: "/terms",
         element: <Terms />,

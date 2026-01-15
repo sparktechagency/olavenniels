@@ -10,7 +10,7 @@ function AllUser() {
   const [selectedItem, setSelectedItem] = useState(null)
   const [page, setPage] = useState(1)
   const [search, setSearch] = useState("")
-  const { data: status, isLoading } = useStatusQuery({ search })
+  const { data: status, isLoading } = useStatusQuery({ search , limit:999})
   const [userBlock, { isLoading: blockLoading }] = useUserBlockMutation()
   const [userUnblock, { isLoading: unblockLoading }] = useUserUnblockMutation()
 
@@ -72,7 +72,7 @@ function AllUser() {
           columns={userColumns(handleViewUser, handleToggleBlock)}
           bordered
           pagination={{
-            pageSize: 10,
+            pageSize: 5,
             showSizeChanger: false,
             showQuickJumper: false,
             showTotal: false,
